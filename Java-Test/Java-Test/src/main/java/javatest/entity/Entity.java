@@ -3,11 +3,12 @@ package main.java.javatest.entity;
 import java.awt.Graphics;
 
 import main.java.javatest.util.GameObject;
+import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
 public abstract class Entity extends GameObject {
 	
-	protected Vec2d velocity = new Vec2d();
+	private Vec2d velocity = new Vec2d();
 	
 	public Entity(double x, double y) {
 		super(x, y);
@@ -18,14 +19,41 @@ public abstract class Entity extends GameObject {
 		
 	}
 	
+	@Override
+	public void gameTick() {
+		
+	}
+	
+	/** Ticks that occur while alive */
 	public abstract void tickAlive();
+	/** Game Ticks that occurs while alive */
+	public abstract void gameTickAlive();
 	
 	@Override
 	public void render(Graphics g) {
 		
 	}
 	
-	public abstract void doVelocity();
+	@Override
+	public void doVelocity() {
+		if (getVelocityX() != 0) {
+			addPositionX(getVelocityX());
+			if (getVelocityX() > 0) {
+				setVelocityX(MathHelper.clamp(getVelocityX() - 0.2, 0, Double.MAX_VALUE));
+			} else if (getVelocityX() < 0) {
+				setVelocityX(MathHelper.clamp(getVelocityX() + 0.2, -Double.MAX_VALUE, 0));
+			}
+		}
+		
+		if (getVelocityY() != 0) {
+			addPositionY(getVelocityY());
+			if (getVelocityY() > 0) {
+				setVelocityY(MathHelper.clamp(getVelocityY() - 0.2, 0, Double.MAX_VALUE));
+			} else if (getVelocityY() < 0) {
+				setVelocityY(MathHelper.clamp(getVelocityY() + 0.2, -Double.MAX_VALUE, 0));
+			}
+		}
+	}
 	
 	/** Adds to the entities velocity */
 	public void addVelocity(double x, double y) {
@@ -81,4 +109,7 @@ public abstract class Entity extends GameObject {
 	public double getVelocityY() {
 		return velocity.y;
 	}
+	
+	/** Kills the entity */
+	public abstract void killEntity();
 }

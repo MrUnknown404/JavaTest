@@ -6,67 +6,72 @@ import main.java.javatest.util.math.Vec2d;
 
 public abstract class GameObject {
 	
-	protected Vec2d pos;
+	private Vec2d pos;
 	
 	public GameObject(double x, double y) {
-		this.pos = new Vec2d(x, y);
+		pos = new Vec2d(x, y);
 	}
 	
+	/** Runs 60 time a second */
 	public abstract void tick();
+	/** Runs 20 time a second */
+	public abstract void gameTick();
 	public abstract void render(Graphics g);
+	
+	public abstract void doVelocity();
 	
 	/** Adds to the objects position */
 	public void addPosition(double x, double y) {
-		this.pos = this.pos.add(x, y);
+		pos = pos.add(x, y);
 	}
 	
 	/** Adds to the objects position */
 	public void addPosition(Vec2d vec) {
-		this.pos = this.pos.add(vec);
+		pos = pos.add(vec);
 	}
 	
 	/** Adds to the objects X position */
 	public void addPositionX(double x) {
-		this.pos.x += x;
+		pos.x += x;
 	}
 	
 	/** Adds to the objects Y position */
 	public void addPositionY(double y) {
-		this.pos.y += y;
+		pos.y += y;
 	}
 	
 	/** Sets the objects position */
 	public void setPosition(double x, double y) {
-		this.pos = new Vec2d(x, y);
+		pos = new Vec2d(x, y);
 	}
 	
 	/** Sets the objects position */
 	public void setPosition(Vec2d vec) {
-		this.pos = vec;
+		pos = vec;
 	}
 	
 	/** Sets the objects X position */
 	public void setX(double x) {
-		this.pos.x = x;
+		pos.x = x;
 	}
 	
 	/** Sets the objects Y position */
 	public void setY(double y) {
-		this.pos.y = y;
+		pos.y = y;
 	}
 	
 	/** Gets the objects position */
 	public Vec2d getPosition() {
-		return this.pos;
+		return pos;
 	}
 	
 	/** Gets the objects X position */
 	public double getX() {
-		return this.pos.x;
+		return pos.x;
 	}
 	
 	/** Gets the objects Y position */
 	public double getY() {
-		return this.pos.y;
+		return pos.y;
 	}
 }

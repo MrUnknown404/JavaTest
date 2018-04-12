@@ -1,37 +1,39 @@
-package main.java.javatest.util;
+package main.java.javatest.client;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import main.java.javatest.entity.entityliving.EntityPlayer;
+import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
 
 public class KeyInput extends KeyAdapter {
 
-	private ObjectHandler handler;
-	
-	public KeyInput(ObjectHandler handler) {
-		this.handler = handler;
-	}
-	
+	private static final double MOVE_SPEED = 2.5;
+
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		for (int i = 0; i < handler.object.size(); i++) {
-			GameObject tObj = handler.object.get(i);
+		for (int i = 0; i < ObjectHandler.object.size(); i++) {
+			GameObject tObj = ObjectHandler.object.get(i);
 			
 			if (tObj instanceof EntityPlayer) {
 				EntityPlayer obj = (EntityPlayer) tObj;
+				
+				if (key == KeyEvent.VK_K) {
+					obj.killEntity();
+				}
+				
 				if (key == KeyEvent.VK_W) {
-					obj.setMoveDirY(-1);
+					obj.setMoveDirY(-MOVE_SPEED);
 				} else if (key == KeyEvent.VK_S) {
-					obj.setMoveDirY(1);
+					obj.setMoveDirY(MOVE_SPEED);
 				}
 				
 				if (key == KeyEvent.VK_A) {
-					obj.setMoveDirX(-1);
+					obj.setMoveDirX(-MOVE_SPEED);
 				} else if (key == KeyEvent.VK_D) {
-					obj.setMoveDirX(1);
+					obj.setMoveDirX(MOVE_SPEED);
 				}
 			}
 		}
@@ -41,8 +43,8 @@ public class KeyInput extends KeyAdapter {
 		
 		int key = e.getKeyCode();
 		
-		for (int i = 0; i < handler.object.size(); i++) {
-			GameObject tObj = handler.object.get(i);
+		for (int i = 0; i < ObjectHandler.object.size(); i++) {
+			GameObject tObj = ObjectHandler.object.get(i);
 			
 			if (tObj instanceof EntityPlayer) {
 				EntityPlayer obj = (EntityPlayer) tObj;

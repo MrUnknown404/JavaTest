@@ -9,7 +9,7 @@ public class Console {
 	public static final EnumWarningType DEFAULT_TYPE = EnumWarningType.Debug;
 	
 	/** Adds console info Example --> [12:34:56 AM] [Fatal Error] [ExampleClass] : Hello! */
-	public static String getInfo(EnumWarningType type) {
+	public static String info(EnumWarningType type) {
 		Date date = new Date();
 		String strDateFormat = "hh:mm:ss a";
 		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
@@ -19,7 +19,7 @@ public class Console {
 	}
 	
 	/** Adds console info Example --> [12:34:56 AM] [Fatal Error] [ExampleClass] : Hello! */
-	public static String getInfo() {
+	public static String info() {
 		Date date = new Date();
 		String strDateFormat = "hh:mm:ss a";
 		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);

@@ -6,4 +6,9 @@ public class MathHelper {
 		int i = (int)value;
 		return value < (double)i ? i - 1 : i;
 	}
+	
+	/** Returns the value of the first parameter, clamped to be within the lower and upper limits given by the second and third parameters */
+	public static double clamp(double num, double min, double max) {
+		return num < min ? min : (num > max ? max : num);
+	}
 }

@@ -9,39 +9,45 @@ import main.java.javatest.util.GameObject;
 
 public class ObjectHandler {
 
-	public LinkedList<Entity> object = new LinkedList<Entity>();
+	public static LinkedList<Entity> object = new LinkedList<Entity>();
 	
 	public void tick() {
 		for (int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
+			GameObject obj = object.get(i);
 			
-			tempObject.tick();
+			obj.tick();
+			if (obj instanceof EntityLiving) {
+				EntityLiving EObj = (EntityLiving) obj;
+				EObj.tickAlive();
+			}
 		}
 	}
 	
-	public void tickAlive() {
+	public void gameTick() {
 		for (int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
+			GameObject obj = object.get(i);
 			
-			if (tempObject instanceof EntityLiving) {
-				((EntityLiving)tempObject).tickAlive();
+			obj.gameTick();
+			if (obj instanceof EntityLiving) {
+				EntityLiving EObj = (EntityLiving) obj;
+				EObj.gameTickAlive();
 			}
 		}
 	}
 	
 	public void render(Graphics g) {
 		for (int i = 0; i < object.size(); i++) {
-			GameObject tempObject = object.get(i);
+			GameObject obj = object.get(i);
 			
-			tempObject.render(g);
+			obj.render(g);
 		}
 	}
 	
-	public void addObject(Entity entity) {
-		this.object.add(entity);
+	public static void addObject(Entity entity) {
+		object.add(entity);
 	}
 	
-	public void removeObject(Entity entity) {
-		this.object.remove(entity);
+	public static void removeObject(Entity entity) {
+		object.remove(entity);
 	}
 }
