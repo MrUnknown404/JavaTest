@@ -11,11 +11,11 @@ import main.java.javatest.util.GameObject;
 
 public class ObjectHandler {
 
-	public static LinkedList<Entity> object = new LinkedList<Entity>();
+	public static LinkedList<Entity> objects = new LinkedList<Entity>();
 	
 	public void tick() {
-		for (int i = 0; i < object.size(); i++) {
-			GameObject obj = object.get(i);
+		for (int i = 0; i < objects.size(); i++) {
+			GameObject obj = objects.get(i);
 			
 			obj.tick();
 			if (obj instanceof EntityLiving) {
@@ -26,8 +26,8 @@ public class ObjectHandler {
 	}
 	
 	public void gameTick() {
-		for (int i = 0; i < object.size(); i++) {
-			GameObject obj = object.get(i);
+		for (int i = 0; i < objects.size(); i++) {
+			GameObject obj = objects.get(i);
 			
 			obj.gameTick();
 			if (obj instanceof EntityLiving) {
@@ -38,22 +38,30 @@ public class ObjectHandler {
 	}
 	
 	public void render(Graphics g) {
-		for (int i = 0; i < object.size(); i++) {
-			GameObject obj = object.get(i);
+		for (int i = 0; i < objects.size(); i++) {
+			GameObject obj = objects.get(i);
 			
 			obj.render(g);
 		}
 	}
 	
 	public static void addObject(Entity entity) {
-		object.add(entity);
-	}
-	
-	public static void removeObject(Entity entity) {
-		if (object.contains(entity)) {
-			object.remove(entity);
+		if (entity != null) {
+			objects.add(entity);
 		} else {
 			System.out.println(Console.info(EnumWarningType.Error) + "entity is null!");
 		}
+	}
+	
+	public static void removeObject(Entity entity) {
+		if (objects.contains(entity)) {
+			objects.remove(entity);
+		} else {
+			System.out.println(Console.info(EnumWarningType.Error) + "entity is null!");
+		}
+	}
+	
+	public static LinkedList<Entity> getObjectList() {
+		return objects;
 	}
 }

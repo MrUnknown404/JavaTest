@@ -9,13 +9,14 @@ import main.java.javatest.util.handlers.ObjectHandler;
 
 public class KeyInput extends KeyAdapter {
 
-	private static final double MOVE_SPEED = 2.5;
+	private static final double MOVE_SPEED = 3;
+	private boolean didPressJump = false;
 
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		for (int i = 0; i < ObjectHandler.object.size(); i++) {
-			GameObject tObj = ObjectHandler.object.get(i);
+		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
+			GameObject tObj = ObjectHandler.objects.get(i);
 			
 			if (tObj instanceof EntityPlayer) {
 				EntityPlayer obj = (EntityPlayer) tObj;
@@ -24,10 +25,9 @@ public class KeyInput extends KeyAdapter {
 					obj.killEntity();
 				}
 				
-				if (key == KeyEvent.VK_W) {
-					obj.setMoveDirY(-MOVE_SPEED);
-				} else if (key == KeyEvent.VK_S) {
-					obj.setMoveDirY(MOVE_SPEED);
+				if (key == KeyEvent.VK_W && obj.canJump && !didPressJump) {
+					obj.addVelocityY(-MOVE_SPEED * 3);
+					didPressJump = true;
 				}
 				
 				if (key == KeyEvent.VK_A) {
@@ -40,18 +40,15 @@ public class KeyInput extends KeyAdapter {
 	}
 	
 	public void keyReleased(KeyEvent e) {
-		
 		int key = e.getKeyCode();
 		
-		for (int i = 0; i < ObjectHandler.object.size(); i++) {
-			GameObject tObj = ObjectHandler.object.get(i);
+		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
+			GameObject tObj = ObjectHandler.objects.get(i);
 			
 			if (tObj instanceof EntityPlayer) {
 				EntityPlayer obj = (EntityPlayer) tObj;
 				if (key == KeyEvent.VK_W) {
-					obj.setMoveDirY(0);
-				} else if (key == KeyEvent.VK_S) {
-					obj.setMoveDirY(0);
+					didPressJump = false;
 				}
 				
 				if (key == KeyEvent.VK_A) {

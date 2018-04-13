@@ -24,13 +24,13 @@ public class JavaGameTest extends Canvas implements Runnable {
 	public JavaGameTest() {
 		addKeyListener(new KeyInput());
 		
-		new Window(WIDTH, HEIGHT, "Project Cards!", this);
+		new Window(WIDTH, HEIGHT, "Java Test!", this);
 		
-		for (int i = 0; i < 100; i++) {
-			ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 32, (HEIGHT / 2) - 32));
+		for (int i = 0; i < 50; i++) {
+			ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 24, (HEIGHT / 2) -24, 24, 24));
 		}
 		
-		ObjectHandler.addObject(new EntityPlayer((WIDTH / 2) - 24, (HEIGHT / 2) - 24));
+		ObjectHandler.addObject(new EntityPlayer((WIDTH / 2) - 32, (HEIGHT / 2) - 256, 32, 32));
 	}
 	
 	public synchronized void start() {

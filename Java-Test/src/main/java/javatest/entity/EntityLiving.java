@@ -1,15 +1,19 @@
 package main.java.javatest.entity;
 
 import main.java.javatest.util.handlers.ObjectHandler;
-import main.java.javatest.util.math.Vec2d;
 
 public class EntityLiving extends Entity {
 
 	protected boolean isDead = false;
-	private Vec2d moveDir = new Vec2d();
+	private double moveDirX = 0;
 	
-	public EntityLiving(double x, double y) {
-		super(x, y);
+	public EntityLiving(double x, double y, int width, int height) {
+		super(x, y, width, height);
+	}
+	
+	@Override
+	public void tick() {
+		
 	}
 	
 	/** Ticks that occur while alive */
@@ -19,11 +23,8 @@ public class EntityLiving extends Entity {
 		}
 		doVelocity();
 		
-		if (moveDir.x != 0) {
-			addPositionX(moveDir.x);
-		}
-		if (moveDir.y != 0) {
-			addPositionY(moveDir.y);
+		if (moveDirX != 0) {
+			addPositionX(moveDirX);
 		}
 	}
 	
@@ -32,19 +33,9 @@ public class EntityLiving extends Entity {
 		
 	}
 	
-	/** Get move direction */
-	public Vec2d getMoveDir() {
-		return moveDir;
-	}
-	
 	/** Get move direction X */
 	public double getMoveDirX() {
-		return moveDir.x;
-	}
-	
-	/** Get move direction Y */
-	public double getMoveDirY() {
-		return moveDir.y;
+		return moveDirX;
 	}
 	
 	/** Gets isDead */
@@ -52,19 +43,9 @@ public class EntityLiving extends Entity {
 		return isDead;
 	}
 	
-	/** Set move direction */
-	public void setMoveDir(Vec2d vec) {
-		moveDir = vec;
-	}
-	
 	/** Set move direction X */
 	public void setMoveDirX(double x) {
-		moveDir.x = x;
-	}
-	
-	/** Set move direction Y */
-	public void setMoveDirY(double y) {
-		moveDir.y = y;
+		moveDirX = x;
 	}
 	
 	/** Sets isDead */
