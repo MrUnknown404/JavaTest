@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.EntityLiving;
+import main.java.javatest.util.Console;
+import main.java.javatest.util.EnumWarningType;
 import main.java.javatest.util.GameObject;
 
 public class ObjectHandler {
@@ -48,6 +50,10 @@ public class ObjectHandler {
 	}
 	
 	public static void removeObject(Entity entity) {
-		object.remove(entity);
+		if (object.contains(entity)) {
+			object.remove(entity);
+		} else {
+			System.out.println(Console.info(EnumWarningType.Error) + "entity is null!");
+		}
 	}
 }

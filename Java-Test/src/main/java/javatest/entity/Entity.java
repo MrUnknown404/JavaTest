@@ -3,10 +3,11 @@ package main.java.javatest.entity;
 import java.awt.Graphics;
 
 import main.java.javatest.util.GameObject;
+import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
-public abstract class Entity extends GameObject {
+public class Entity extends GameObject {
 	
 	private Vec2d velocity = new Vec2d();
 	
@@ -23,11 +24,6 @@ public abstract class Entity extends GameObject {
 	public void gameTick() {
 		
 	}
-	
-	/** Ticks that occur while alive */
-	public abstract void tickAlive();
-	/** Game Ticks that occurs while alive */
-	public abstract void gameTickAlive();
 	
 	@Override
 	public void render(Graphics g) {
@@ -111,5 +107,7 @@ public abstract class Entity extends GameObject {
 	}
 	
 	/** Kills the entity */
-	public abstract void killEntity();
+	public void killEntity() {
+		ObjectHandler.removeObject(this);
+	}
 }

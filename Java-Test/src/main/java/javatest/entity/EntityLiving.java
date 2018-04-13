@@ -12,7 +12,7 @@ public class EntityLiving extends Entity {
 		super(x, y);
 	}
 	
-	@Override
+	/** Ticks that occur while alive */
 	public void tickAlive() {
 		if (isDead) {
 			return;
@@ -27,7 +27,7 @@ public class EntityLiving extends Entity {
 		}
 	}
 	
-	@Override
+	/** Game Ticks that occurs while alive */
 	public void gameTickAlive() {
 		
 	}
