@@ -8,20 +8,30 @@ public class Console {
 	
 	public static final EnumWarningType DEFAULT_TYPE = EnumWarningType.Debug;
 	
-	/** Adds console info Example --> [12:34:56 AM] [Fatal Error] [ExampleClass] : Hello! */
+	/** Adds console info Example: <p> [12:34:56:789] [Info] [ExampleClass] [Hour/Minute/Second/Millisecond] */
+	public static String getTimeExample() {
+		Date date = new Date();
+		String strDateFormat = "hh:mm:ss:SSS";
+		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
+		String formattedDate = dateFormat.format(date);
+		
+		return "[" + formattedDate + "] [" + EnumWarningType.Info + "] [" + getCallerClassName() + "] [Hour/Minute/Second/Millisecond]";
+	}
+	
+	/** Adds console info Example: <p> [12:34:56:789] [Fatal Error] [ExampleClass] : Hello! */
 	public static String info(EnumWarningType type) {
 		Date date = new Date();
-		String strDateFormat = "hh:mm:ss a";
+		String strDateFormat = "hh:mm:ss:SSS";
 		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
 		String formattedDate = dateFormat.format(date);
 		
 		return "[" + formattedDate + "] [" + type.toString() +  "] [" + getCallerClassName() + "] : ";
 	}
 	
-	/** Adds console info Example --> [12:34:56 AM] [Fatal Error] [ExampleClass] : Hello! */
+	/** Adds console info Example: <p> [12:34:56:789] [Debug] [ExampleClass] : Hello! */
 	public static String info() {
 		Date date = new Date();
-		String strDateFormat = "hh:mm:ss a";
+		String strDateFormat = "hh:mm:ss:SSS";
 		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
 		String formattedDate = dateFormat.format(date);
 		

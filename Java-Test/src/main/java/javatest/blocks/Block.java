@@ -6,6 +6,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import main.java.javatest.client.JavaGameTest;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.MathHelper;
@@ -14,6 +15,7 @@ import main.java.javatest.util.math.Vec2d;
 public class Block extends GameObject {
 
 	public final static int SIZE = 16;
+	protected boolean isActive = true;
 	private Color color;
 	private BlockPos pos;
 	
@@ -32,12 +34,34 @@ public class Block extends GameObject {
 
 	@Override
 	public void tick() {
-		
+		activeTick();
 	}
 
 	@Override
 	public void gameTick() {
+		activeGameTick();
 		updatePosition();
+		updateActive();
+	}
+	
+	protected void updateActive() {
+		if (isActive && (getBlockPosX() < 0) || (getBlockPosX() > JavaGameTest.BLOCK_WIDTH)) {
+			isActive = false;
+		} else if (!isActive && getBlockPosX() > 0 && getBlockPosX() < JavaGameTest.BLOCK_WIDTH) {
+			isActive = true;
+		}
+	}
+	
+	public void activeTick() {
+		if (!isActive) {
+			return;
+		}
+	}
+	
+	public void activeGameTick() {
+		if (!isActive) {
+			return;
+		}
 	}
 	
 	private void updatePosition() {
@@ -86,10 +110,16 @@ public class Block extends GameObject {
 		return pos.y;
 	}
 	
+	public boolean getIsActive() {
+		return isActive;
+	}
+	
 	@Override
 	public void render(Graphics g) {
-		g.setColor(color);
-		g.fillRect(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width, height);
+		if (isActive) {
+			g.setColor(color);
+			g.fillRect(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width, height);
+		}
 		
 		/* draw hitboxes
 		Graphics2D g2d = (Graphics2D) g;

@@ -25,8 +25,13 @@ public class EntityLiving extends Entity {
 		doVelocity();
 		
 		if (moveDirX != 0) {
-			GameObject o = getRight(-moveDirX);
-			GameObject o2 = getLeft(-moveDirX);
+			GameObject o = null, o2 = null;
+			if (moveDirX > 0) {
+				o = getRight(-moveDirX);
+			} else if (moveDirX < 0) {
+				o2 = getLeft(-moveDirX);
+			}
+			
 			if ((o != null || o2 != null) && doCollision) {
 				if (o != null) {
 					double x = o.getPositionX() - getPositionX();
@@ -34,10 +39,15 @@ public class EntityLiving extends Entity {
 						addPositionX(x - width);
 					}
 				} else if (o2 != null) {
-					double x = o2.getPositionY() - getPositionY();
-					if (x > moveDirX) {
-						addPositionX(o2.getPositionX() - getPositionX() + o2.width);
-					}
+					//double x = o2.getPositionY() - getPositionY();
+					//if (x > moveDirX) {
+					//System.out.println("Left");
+					addPositionX(o2.getPositionX() - getPositionX() + o2.width);
+					//addPositionX(x);
+					//} else {
+					//addPositionX(o2.getPositionX() - getPositionX() + o2.width);
+					//System.out.println("1");
+					//}
 				}
 			} else {
 				addPositionX(moveDirX);

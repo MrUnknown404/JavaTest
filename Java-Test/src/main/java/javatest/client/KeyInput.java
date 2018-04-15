@@ -11,30 +11,35 @@ public class KeyInput extends KeyAdapter {
 
 	private static final double MOVE_SPEED = 3;
 	private boolean didPressJump = false;
-
-	public void keyPressed(KeyEvent e) {
-		int key = e.getKeyCode();
-		
+	private EntityPlayer player;
+	
+	public KeyInput() {
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject tObj = ObjectHandler.objects.get(i);
 			
 			if (tObj instanceof EntityPlayer) {
-				EntityPlayer obj = (EntityPlayer) tObj;
-				
-				if (key == KeyEvent.VK_K) {
-					obj.killEntity();
-				}
-				
-				if (key == KeyEvent.VK_W && obj.canJump && !didPressJump) {
-					obj.addVelocityY(-MOVE_SPEED * MOVE_SPEED);
-					didPressJump = true;
-				}
-				
-				if (key == KeyEvent.VK_A) {
-					obj.setMoveDirX(-MOVE_SPEED);
-				} else if (key == KeyEvent.VK_D) {
-					obj.setMoveDirX(MOVE_SPEED);
-				}
+				player = (EntityPlayer) tObj;
+			}
+		}
+	}
+	
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		
+		if (player != null) {
+			if (key == KeyEvent.VK_K) {
+				player.killEntity();
+			}
+			
+			if (key == KeyEvent.VK_W && player.canJump && !didPressJump) {
+				player.addVelocityY(-MOVE_SPEED * MOVE_SPEED);
+				didPressJump = true;
+			}
+			
+			if (key == KeyEvent.VK_A) {
+				player.setMoveDirX(-MOVE_SPEED);
+			} else if (key == KeyEvent.VK_D) {
+				player.setMoveDirX(MOVE_SPEED);
 			}
 		}
 	}
