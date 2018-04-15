@@ -1,7 +1,6 @@
 package main.java.javatest.entity;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.GameObject;
@@ -15,9 +14,10 @@ public class Entity extends GameObject {
 	private static final double FRICTION = 0.2;
 	private static final double MAX_FALL_SPEED = (GRAVITY * GRAVITY) * ((GRAVITY * GRAVITY) * (GRAVITY * GRAVITY));
 	
+	public boolean canJump = false;
+	protected boolean doCollision = true;
 	private double gravityY = 0;
 	private boolean doGravity = true;
-	public boolean canJump = false;
 	private Vec2d velocity = new Vec2d();
 	
 	public Entity(double x, double y, int width, int height) {
@@ -38,26 +38,26 @@ public class Entity extends GameObject {
 	public void render(Graphics g) {
 		
 	}
-	
-	/** Gets whats immediately below */
-	public GameObject getBelow() {
-		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
-			GameObject obj = ObjectHandler.objects.get(i);
-			if (obj != this) {
-				if (getBoundsBottom().intersects(new Rectangle(obj.getBounds().x, (int) (obj.getBounds().y - GRAVITY), (int) obj.getBounds().getWidth(), (int) obj.getBounds().getHeight()))) {
-					return obj;
-				}
-			}
-		}
-		return null;
-	}
-	
-	/** Gets whats below + argument */
+
+	/** Gets what's below the entity plus the argument */
 	public GameObject getBelow(double y) {
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject obj = ObjectHandler.objects.get(i);
 			if (obj != this) {
-				if (getBoundsBottom().intersects(new Rectangle(obj.getBounds().x, (int) (obj.getBounds().y - GRAVITY + y), (int) obj.getBounds().getWidth(), (int) obj.getBounds().getHeight()))) {
+				if (getBoundsBottom().intersects(obj.getBoundsTop().x, obj.getBoundsTop().y - GRAVITY + y, obj.getBoundsTop().getWidth(), obj.getBoundsTop().getHeight())) {
+					return obj;
+				}
+			}
+		}
+		return null;
+	}
+
+	/** Gets what's above the entity plus the argument */
+	public GameObject getAbove(double y) {
+		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
+			GameObject obj = ObjectHandler.objects.get(i);
+			if (obj != this) {
+				if (getBoundsTop().intersects(obj.getBoundsBottom().x, obj.getBoundsBottom().y - GRAVITY + y, obj.getBoundsBottom().getWidth(), obj.getBoundsBottom().getHeight())) {
 					return obj;
 				}
 			}
@@ -65,21 +65,35 @@ public class Entity extends GameObject {
 		return null;
 	}
 	
-	private void setGravityY(double amount) {
-		gravityY = amount;
+	/** Gets what's left the entity plus the argument */
+	public GameObject getLeft(double x) {
+		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
+			GameObject obj = ObjectHandler.objects.get(i);
+			if (obj != this) {
+				if (getBoundsLeft().intersects(obj.getBoundsRight().x + x, obj.getBoundsRight().y, obj.getBoundsRight().getWidth(), obj.getBoundsRight().getHeight())) {
+					return obj;
+				}
+			}
+		}
+		return null;
 	}
 	
-	private double getGravityY() {
-		return gravityY;
-	}
-	
-	private void addGravityY(double amount) {
-		gravityY += amount;
+	/** Gets what's right the entity plus the argument */
+	public GameObject getRight(double x) {
+		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
+			GameObject obj = ObjectHandler.objects.get(i);
+			if (obj != this) {
+				if (getBoundsRight().intersects(obj.getBoundsLeft().x + x, obj.getBoundsLeft().y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
+					return obj;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public void doVelocity() {
 		if (doGravity) {
-			GameObject obj = getBelow();
+			GameObject obj = getBelow(0);
 			if (obj != null && !canJump) {
 				setPositionY(obj.getPositionY() - height);
 				addVelocityY(-getVelocityY());
@@ -99,6 +113,7 @@ public class Entity extends GameObject {
 		
 		if (getVelocityX() != 0) {
 			addPositionX(getVelocityX());
+			
 			if (getVelocityX() > 0) {
 				setVelocityX(MathHelper.clamp(getVelocityX() - FRICTION, 0, Double.MAX_VALUE));
 			} else if (getVelocityX() < 0) {
@@ -108,10 +123,19 @@ public class Entity extends GameObject {
 		
 		if (getVelocityY() != 0) {
 			GameObject o = getBelow(-getVelocityY());
-			if (o != null && this instanceof EntityPlayer) {
-				double y = o.getPositionY() - getPositionY();
-				if (y > getVelocityY()) {
-					addPositionY(y - height);
+			GameObject o2 = getAbove(-getVelocityY());
+			if ((o != null || o2 != null) && doCollision) {
+				if (o != null) {
+					double y = o.getPositionY() - getPositionY();
+					if (y > getVelocityY()) {
+						addPositionY(y - height);
+					}
+				} else if (o2 != null) {
+					double y = o2.getPositionY() - getPositionY();
+					if (y < getVelocityY()) {
+						addPositionY(y + o2.height);
+						setVelocityY(0);
+					}
 				}
 			} else {
 				addPositionY(getVelocityY());
@@ -188,6 +212,18 @@ public class Entity extends GameObject {
 		return velocity;
 	}
 	
+	private void setGravityY(double amount) {
+		gravityY = amount;
+	}
+	
+	private double getGravityY() {
+		return gravityY;
+	}
+	
+	private void addGravityY(double amount) {
+		gravityY += amount;
+	}
+	
 	/** Gets the entities X velocity */
 	public double getVelocityX() {
 		return velocity.x;
@@ -206,5 +242,10 @@ public class Entity extends GameObject {
 	/** Disables gravity for this entity */
 	protected void disableGravity() {
 		doGravity = false;
+	}
+	
+	/** Disables collision for this entity */
+	protected void disableCollision() {
+		doCollision = false;
 	}
 }

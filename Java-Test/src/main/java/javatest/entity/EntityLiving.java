@@ -1,5 +1,6 @@
 package main.java.javatest.entity;
 
+import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
 
 public class EntityLiving extends Entity {
@@ -24,7 +25,12 @@ public class EntityLiving extends Entity {
 		doVelocity();
 		
 		if (moveDirX != 0) {
-			addPositionX(moveDirX);
+			GameObject o = getRight(-moveDirX);
+			GameObject o2 = getLeft(-moveDirX);
+			if ((o != null || o2 != null) && doCollision) {
+			} else {
+				addPositionX(moveDirX);
+			}
 		}
 	}
 	

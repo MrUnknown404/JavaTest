@@ -26,11 +26,54 @@ public class JavaGameTest extends Canvas implements Runnable {
 		
 		new Window(WIDTH, HEIGHT, "Java Test!", this);
 		
-		for (int i = 0; i < 50; i++) {
-			ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 24, (HEIGHT / 2) -24, 24, 24));
-		}
+		//* do this in a for loop
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 336, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 312, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 288, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 264, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 240, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 216, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 192, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 168, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 144, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 120, (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 96,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 72,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 48,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 24,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2),       (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 24,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 72,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 96,  (HEIGHT / 2) - 24, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 120, (HEIGHT / 2) - 24, 24, 24));
 		
-		ObjectHandler.addObject(new EntityPlayer((WIDTH / 2) - 32, (HEIGHT / 2) - 256, 32, 32));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48, (HEIGHT / 2) - 48, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48, (HEIGHT / 2) - 72, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48, (HEIGHT / 2) - 96, 24, 24));
+		
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 120, (HEIGHT / 2) - 48,  24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 144, (HEIGHT / 2) - 72,  24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 168, (HEIGHT / 2) - 96,  24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 192, (HEIGHT / 2) - 120, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 216, (HEIGHT / 2) - 96,  24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 240, (HEIGHT / 2) - 72,  24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 264, (HEIGHT / 2) - 48,  24, 24));
+		
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 72,  (HEIGHT / 2) - 96,  24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 96,  (HEIGHT / 2) - 120, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 120, (HEIGHT / 2) - 144, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 144, (HEIGHT / 2) - 168, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 168, (HEIGHT / 2) - 192, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 192, (HEIGHT / 2) - 216, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 216, (HEIGHT / 2) - 192, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 240, (HEIGHT / 2) - 168, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 264, (HEIGHT / 2) - 144, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 288, (HEIGHT / 2) - 120, 24, 24));
+		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 312, (HEIGHT / 2) - 96,  24, 24));
+		//*/
+		
+		ObjectHandler.addObject(new EntityPlayer((WIDTH / 2) - 24, (HEIGHT / 2) - 256, 24, 48));
 	}
 	
 	public synchronized void start() {

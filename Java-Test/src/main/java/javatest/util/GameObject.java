@@ -3,6 +3,7 @@ package main.java.javatest.util;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
 public abstract class GameObject {
@@ -78,28 +79,28 @@ public abstract class GameObject {
 		return pos.y;
 	}
 	
-	/** Gets the entities bounds */
-	public Rectangle getBounds() {
-		return new Rectangle((int) getPositionX(), (int) getPositionY(), width, height);
+	/** Gets the entities entire bounds */
+	public Rectangle getBoundsAll() {
+		return new Rectangle(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width, height);
 	}
 	
 	/** Gets the entities top bounds */
 	public Rectangle getBoundsTop() {
-		return new Rectangle((int) getPositionX(), (int) getPositionY(), width, height / 4);
+		return new Rectangle(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width, height / 4);
 	}
 	
 	/** Gets the entities bottom bounds */
 	public Rectangle getBoundsBottom() {
-		return new Rectangle((int) getPositionX(), (int) getPositionY() + (height - (width / 4)), width, height / 4);
+		return new Rectangle(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()) + (height - (height / 4)), width, height / 4);
 	}
 	
 	/** Gets the entities left bounds */
 	public Rectangle getBoundsLeft() {
-		return new Rectangle((int) getPositionX(), (int) getPositionY() + 1, width / 4, height - 2);
+		return new Rectangle(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width / 4, height);
 	}
 	
 	/** Gets the entities right bounds */
 	public Rectangle getBoundsRight() {
-		return new Rectangle((int) getPositionX() + (width - (width / 4)), (int) getPositionY() + 1, width / 4, height - 2);
+		return new Rectangle(MathHelper.floor(getPositionX() + (width - (width / 4))), MathHelper.floor(getPositionY()), width / 4, height);
 	}
 }
