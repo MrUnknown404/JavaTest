@@ -28,6 +28,17 @@ public class EntityLiving extends Entity {
 			GameObject o = getRight(-moveDirX);
 			GameObject o2 = getLeft(-moveDirX);
 			if ((o != null || o2 != null) && doCollision) {
+				if (o != null) {
+					double x = o.getPositionX() - getPositionX();
+					if (x > moveDirX) {
+						addPositionX(x - width);
+					}
+				} else if (o2 != null) {
+					double x = o2.getPositionY() - getPositionY();
+					if (x > moveDirX) {
+						addPositionX(o2.getPositionX() - getPositionX() + o2.width);
+					}
+				}
 			} else {
 				addPositionX(moveDirX);
 			}

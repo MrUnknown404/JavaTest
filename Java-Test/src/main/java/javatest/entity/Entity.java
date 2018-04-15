@@ -114,6 +114,8 @@ public class Entity extends GameObject {
 		if (getVelocityX() != 0) {
 			addPositionX(getVelocityX());
 			
+			//do later
+			
 			if (getVelocityX() > 0) {
 				setVelocityX(MathHelper.clamp(getVelocityX() - FRICTION, 0, Double.MAX_VALUE));
 			} else if (getVelocityX() < 0) {

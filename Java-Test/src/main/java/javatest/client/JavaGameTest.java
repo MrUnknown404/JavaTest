@@ -5,75 +5,38 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.entityliving.EntityPlayer;
-import main.java.javatest.entity.entityliving.EntityTest;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.EnumWarningType;
 import main.java.javatest.util.handlers.ObjectHandler;
+import main.java.javatest.util.math.BlockPos;
 
 public class JavaGameTest extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = -2518563563721413864L;
 	
-	public static final int WIDTH = 854, HEIGHT = 480;
+	private static final int WIDTH = 854, HEIGHT = 480;
+	private static final int BLOCK_WIDTH = WIDTH / Block.SIZE, BLOCK_HEIGHT = HEIGHT / Block.SIZE;
 	
 	private boolean running = false;
 	private Thread thread;
 	private ObjectHandler objectHandler = new ObjectHandler();
+	
 	
 	public JavaGameTest() {
 		addKeyListener(new KeyInput());
 		
 		new Window(WIDTH, HEIGHT, "Java Test!", this);
 		
-		//* do this in a for loop
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 336, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 312, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 288, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 264, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 240, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 216, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 192, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 168, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 144, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 120, (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 96,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 72,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 48,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 24,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2),       (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 24,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 72,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 96,  (HEIGHT / 2) - 24, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 120, (HEIGHT / 2) - 24, 24, 24));
+		for (int i = 0; i < BLOCK_WIDTH; i++) {
+			ObjectHandler.addObject(new Block(new BlockPos(i, (BLOCK_HEIGHT / 2)), null));
+			for (int i2 = 0; i2 < (BLOCK_HEIGHT / 2) - 1; i2++) {
+				//ObjectHandler.addObject(new Block(new BlockPos(i, BLOCK_HEIGHT / 2 + i2), null));
+			}
+		}
 		
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48, (HEIGHT / 2) - 48, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48, (HEIGHT / 2) - 72, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) + 48, (HEIGHT / 2) - 96, 24, 24));
-		
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 120, (HEIGHT / 2) - 48,  24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 144, (HEIGHT / 2) - 72,  24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 168, (HEIGHT / 2) - 96,  24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 192, (HEIGHT / 2) - 120, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 216, (HEIGHT / 2) - 96,  24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 240, (HEIGHT / 2) - 72,  24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 264, (HEIGHT / 2) - 48,  24, 24));
-		
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 72,  (HEIGHT / 2) - 96,  24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 96,  (HEIGHT / 2) - 120, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 120, (HEIGHT / 2) - 144, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 144, (HEIGHT / 2) - 168, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 168, (HEIGHT / 2) - 192, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 192, (HEIGHT / 2) - 216, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 216, (HEIGHT / 2) - 192, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 240, (HEIGHT / 2) - 168, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 264, (HEIGHT / 2) - 144, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 288, (HEIGHT / 2) - 120, 24, 24));
-		ObjectHandler.addObject(new EntityTest((WIDTH / 2) - 312, (HEIGHT / 2) - 96,  24, 24));
-		//*/
-		
-		ObjectHandler.addObject(new EntityPlayer((WIDTH / 2) - 24, (HEIGHT / 2) - 256, 24, 48));
+		ObjectHandler.addObject(new EntityPlayer((WIDTH / 2) - 24, (HEIGHT / 2) - 256, 24, 44));
 	}
 	
 	public synchronized void start() {

@@ -3,7 +3,6 @@ package main.java.javatest.util.handlers;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.EntityLiving;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.EnumWarningType;
@@ -11,7 +10,7 @@ import main.java.javatest.util.GameObject;
 
 public class ObjectHandler {
 
-	public static LinkedList<Entity> objects = new LinkedList<Entity>();
+	public static LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
 	public void tick() {
 		for (int i = 0; i < objects.size(); i++) {
@@ -45,23 +44,19 @@ public class ObjectHandler {
 		}
 	}
 	
-	public static void addObject(Entity entity) {
-		if (entity != null) {
-			objects.add(entity);
+	public static void addObject(GameObject object) {
+		if (object != null) {
+			objects.add(object);
 		} else {
 			System.out.println(Console.info(EnumWarningType.Error) + "entity is null!");
 		}
 	}
 	
-	public static void removeObject(Entity entity) {
-		if (objects.contains(entity)) {
-			objects.remove(entity);
+	public static void removeObject(GameObject object) {
+		if (objects.contains(object)) {
+			objects.remove(object);
 		} else {
 			System.out.println(Console.info(EnumWarningType.Error) + "entity is null!");
 		}
-	}
-	
-	public static LinkedList<Entity> getObjectList() {
-		return objects;
 	}
 }

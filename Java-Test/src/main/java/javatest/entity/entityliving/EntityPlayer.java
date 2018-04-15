@@ -20,7 +20,7 @@ public class EntityPlayer extends EntityLiving {
 		/* draw hitboxes
 		Graphics2D g2d = (Graphics2D) g;
 		g.setColor(Color.CYAN);
-		g2d.draw(getBounds());
+		g2d.draw(getBoundsAll());
 		g.setColor(Color.RED);
 		g2d.draw(getBoundsTop());
 		g.setColor(Color.BLUE);

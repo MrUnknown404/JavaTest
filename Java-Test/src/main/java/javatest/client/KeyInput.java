@@ -26,7 +26,7 @@ public class KeyInput extends KeyAdapter {
 				}
 				
 				if (key == KeyEvent.VK_W && obj.canJump && !didPressJump) {
-					obj.addVelocityY(-MOVE_SPEED * 3);
+					obj.addVelocityY(-MOVE_SPEED * MOVE_SPEED);
 					didPressJump = true;
 				}
 				

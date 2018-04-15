@@ -2,7 +2,7 @@ package main.java.javatest.util.math;
 
 public class Vec2d {
 	
-	public static final Vec2d ZERO = new Vec2d(0.0D, 0.0D);
+	public static final Vec2d ZERO = new Vec2d();
 	public double x;
 	public double y;
 
@@ -25,14 +25,6 @@ public class Vec2d {
 	
 	public Vec2d(Vec2i vec) {
 		this((double) vec.getX(), (double) vec.getY());
-	}
-	
-	public Vec2d subtract(Vec2d vec) {
-		return subtract(vec.x, vec.y);
-	}
-	
-	public Vec2d subtract(double x, double y) {
-		return new Vec2d(this.x - x, this.y - y);
 	}
 
 	public Vec2d add(Vec2d vec) {

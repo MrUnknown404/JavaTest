@@ -2,7 +2,7 @@ package main.java.javatest.util.math;
 
 public class Vec2i {
 	
-	public static final Vec2i NULL_VECTOR = new Vec2i(0, 0);
+	public static final Vec2i NULL_VECTOR = new Vec2i();
 	private final int x;
 	private final int y;
 
@@ -15,6 +15,10 @@ public class Vec2i {
 		this(MathHelper.floor(x), MathHelper.floor(y));
 	}
 
+	public Vec2i() {
+		this(0, 0);
+	}
+	
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
