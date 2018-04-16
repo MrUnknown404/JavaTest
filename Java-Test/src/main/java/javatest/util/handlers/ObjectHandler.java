@@ -18,8 +18,8 @@ public class ObjectHandler {
 			
 			obj.tick();
 			if (obj instanceof EntityLiving) {
-				EntityLiving EObj = (EntityLiving) obj;
-				EObj.tickAlive();
+				EntityLiving eObj = (EntityLiving) obj;
+				eObj.tickAlive();
 			}
 		}
 	}
@@ -30,8 +30,8 @@ public class ObjectHandler {
 			
 			obj.gameTick();
 			if (obj instanceof EntityLiving) {
-				EntityLiving EObj = (EntityLiving) obj;
-				EObj.gameTickAlive();
+				EntityLiving eObj = (EntityLiving) obj;
+				eObj.gameTickAlive();
 			}
 		}
 	}

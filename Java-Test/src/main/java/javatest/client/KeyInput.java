@@ -2,8 +2,10 @@ package main.java.javatest.client;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 import main.java.javatest.entity.entityliving.EntityPlayer;
+import main.java.javatest.util.CreateLevel;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
 
@@ -14,6 +16,10 @@ public class KeyInput extends KeyAdapter {
 	private EntityPlayer player;
 	
 	public KeyInput() {
+		findPlayer();
+	}
+	
+	private void findPlayer() {
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject tObj = ObjectHandler.objects.get(i);
 			
@@ -27,8 +33,19 @@ public class KeyInput extends KeyAdapter {
 		int key = e.getKeyCode();
 		
 		if (player != null) {
-			if (key == KeyEvent.VK_K) {
-				player.killEntity();
+			if (key == KeyEvent.VK_R) {
+				LinkedList<GameObject> os = new LinkedList<GameObject>();
+				
+				for (GameObject o : ObjectHandler.objects) {
+					os.add(o);
+				}
+				
+				for (GameObject o : os) {
+					ObjectHandler.removeObject(o);
+				}
+				
+				CreateLevel.createLevel(JavaGameTest.BLOCK_WIDTH, JavaGameTest.BLOCK_HEIGHT, JavaGameTest.WIDTH, JavaGameTest.HEIGHT);
+				findPlayer();
 			}
 			
 			if (key == KeyEvent.VK_W && player.canJump && !didPressJump) {

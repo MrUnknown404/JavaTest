@@ -38,4 +38,8 @@ public class Vec2d {
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}
+	
+	public String toStringInt() {
+		return "(" + (int) x + ", " + (int) y + ")";
+	}
 }

@@ -18,17 +18,6 @@ public class Vec2i {
 	public Vec2i() {
 		this(0, 0);
 	}
-	
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		} else if (!(obj instanceof Vec2i)) {
-			return false;
-		} else {
-			Vec2i vec3i = (Vec2i) obj;
-			return getX() != vec3i.getX() ? false : (getY() != vec3i.getY());
-		}
-	}
 
 	public int getX() {
 		return x;
@@ -37,7 +26,7 @@ public class Vec2i {
 	public int getY() {
 		return y;
 	}
-
+	
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}

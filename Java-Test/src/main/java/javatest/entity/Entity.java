@@ -151,9 +151,24 @@ public class Entity extends GameObject {
 		}
 		
 		if (getVelocityX() != 0) {
-			addPositionX(getVelocityX());
 			
-			//do later
+			GameObject o = getLeft(-getVelocityX());
+			GameObject o2 = getRight(-getVelocityX());
+			if ((o != null || o2 != null) && doCollision) {
+				if (o != null) {
+					double y = o.getPositionX() - getPositionX();
+					if (y > getVelocityX()) {
+						addPositionX(getPositionX() - o.getPositionX());
+					}
+				} else if (o2 != null) {
+					double y = o2.getPositionX() - getPositionX();
+					if (y < getVelocityX()) {
+						addPositionX(o2.getPositionX() - getPositionX() + o2.width);
+					}
+				}
+			} else {
+				addPositionX(getVelocityX());
+			}
 			
 			if (getVelocityX() > 0) {
 				setVelocityX(MathHelper.clamp(getVelocityX() - FRICTION, 0, Double.MAX_VALUE));

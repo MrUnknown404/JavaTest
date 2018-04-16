@@ -1,33 +1,34 @@
 package main.java.javatest.blocks;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Random;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
 
 import main.java.javatest.client.JavaGameTest;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.BlockPos;
-import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
 public class Block extends GameObject {
 
 	public final static int SIZE = 16;
 	protected boolean isActive = true;
-	private Color color;
 	private BlockPos pos;
+	private BufferedImage image;
 	
-	public Block(BlockPos pos, @Nullable Color color) {
+	public Block(BlockPos pos) {
 		super(pos.x, pos.y, SIZE, SIZE);
 		
-		if (color == null) {
-			color = new Color(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat());
-		}
-		
 		this.pos = pos;
-		this.color = color;
+		
+		try {
+			image = ImageIO.read(new File("C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\blocks\\stone.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		updatePosition();
 	}
@@ -42,6 +43,13 @@ public class Block extends GameObject {
 		activeGameTick();
 		updatePosition();
 		updateActive();
+	}
+	
+	@Override
+	public void render(Graphics g) {
+		if (isActive) {
+			g.drawImage(image, getBlockPosX() * Block.SIZE, getBlockPosY() * Block.SIZE, width, height, null);
+		}
 	}
 	
 	protected void updateActive() {
@@ -112,27 +120,5 @@ public class Block extends GameObject {
 	
 	public boolean getIsActive() {
 		return isActive;
-	}
-	
-	@Override
-	public void render(Graphics g) {
-		if (isActive) {
-			g.setColor(color);
-			g.fillRect(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width, height);
-		}
-		
-		/* draw hitboxes
-		Graphics2D g2d = (Graphics2D) g;
-		g.setColor(Color.CYAN);
-		g2d.draw(getBoundsAll());
-		g.setColor(Color.RED);
-		g2d.draw(getBoundsTop());
-		g.setColor(Color.BLUE);
-		g2d.draw(getBoundsBottom());
-		g.setColor(Color.GREEN);
-		g2d.draw(getBoundsLeft());
-		g.setColor(Color.YELLOW);
-		g2d.draw(getBoundsRight());
-		//*/
 	}
 }

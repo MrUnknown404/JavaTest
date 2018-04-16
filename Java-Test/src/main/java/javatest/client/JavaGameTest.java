@@ -4,22 +4,20 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 import main.java.javatest.blocks.Block;
-import main.java.javatest.client.gui.Hud;
-import main.java.javatest.entity.entityliving.EntityPlayer;
+import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.Console;
+import main.java.javatest.util.CreateLevel;
 import main.java.javatest.util.EnumWarningType;
 import main.java.javatest.util.handlers.ObjectHandler;
-import main.java.javatest.util.math.BlockPos;
+import main.java.javatest.util.math.Vec2i;
 
 public class JavaGameTest extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = -2518563563721413864L;
 	
-	private static final int WIDTH = 854, HEIGHT = 480;
+	public static final int WIDTH = 854, HEIGHT = 480;
 	public static final int BLOCK_WIDTH = WIDTH / Block.SIZE, BLOCK_HEIGHT = HEIGHT / Block.SIZE;
 	
 	private int fps;
@@ -38,22 +36,13 @@ public class JavaGameTest extends Canvas implements Runnable {
 	
 	private void preInit() {
 		System.out.println(Console.info(EnumWarningType.Info) + "Pre-Initialization started!");
-		for (int i = 0; i < BLOCK_WIDTH; i++) {
-			if (new Random().nextBoolean()) {
-				if (new Random().nextBoolean()) {
-					ObjectHandler.addObject(new Block(new BlockPos(i, (BLOCK_HEIGHT / 2)), null));
-				}
-			}
-			for (int i2 = 0; i2 < (BLOCK_HEIGHT / 2) - 1; i2++) {
-				if (ThreadLocalRandom.current().nextInt(-1, i2) == 0) {
-						ObjectHandler.addObject(new Block(new BlockPos(i, BLOCK_HEIGHT / 2 + i2), null));
-				}
-			}
-		}
+		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
+		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
 		
-		ObjectHandler.addObject(new EntityPlayer((WIDTH / 2) - 24, (HEIGHT / 2) - 256, 24, 44));
+		CreateLevel.createLevel(BLOCK_WIDTH, BLOCK_HEIGHT, WIDTH, HEIGHT);
 		
 		addKeyListener(new KeyInput());
+		addMouseListener(new MouseInput());
 	}
 	
 	private void init() {
@@ -149,7 +138,8 @@ public class JavaGameTest extends Canvas implements Runnable {
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		objectHandler.render(g);
-		Hud.drawText(g, "FPS: " + fps, 1, 15);
+		DebugHud.drawText(g, "FPS: " + fps, 1, 15);
+		DebugHud.getPlayer();
 		
 		g.dispose();
 		bs.show();
