@@ -42,21 +42,18 @@ public class Entity extends GameObject {
 	
 	/** Gets what's below the entity plus the argument */
 	public GameObject getBelow(double y) {
-		//System.out.println(Console.info() + "Below");
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject obj = ObjectHandler.objects.get(i);
-			if (obj != this) {
-				if (obj instanceof Block) {
-					Block tObj = (Block) obj;
-					if (tObj.getIsActive()) {
-						if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - GRAVITY + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
-							return tObj;
-						}
+			if (obj instanceof Block && obj != this) {
+				Block tObj = (Block) obj;
+				if (tObj.getIsActive()) {
+					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - GRAVITY + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
+						return tObj;
 					}
-				} else {
-					if (getBoundsRight().intersects(obj.getBoundsLeft().x, obj.getBoundsLeft().y - GRAVITY - y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
-						return obj;
-					}
+				}
+			} else if (obj != this) {
+				if (getBoundsRight().intersects(obj.getBoundsLeft().x, obj.getBoundsLeft().y - GRAVITY - y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
+					return obj;
 				}
 			}
 		}
@@ -67,18 +64,16 @@ public class Entity extends GameObject {
 	public GameObject getAbove(double y) {
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject obj = ObjectHandler.objects.get(i);
-			if (obj != this) {
-				if (obj instanceof Block) {
-					Block tObj = (Block) obj;
-					if (tObj.getIsActive()) {
-						if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - GRAVITY + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
-							return tObj;
-						}
+			if (obj instanceof Block && obj != this) {
+				Block tObj = (Block) obj;
+				if (tObj.getIsActive()) {
+					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - GRAVITY + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
+						return tObj;
 					}
-				} else {
-					if (getBoundsRight().intersects(obj.getBoundsLeft().x, obj.getBoundsLeft().y - GRAVITY - y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
-						return obj;
-					}
+				}
+			} else if (obj != this) {
+				if (getBoundsRight().intersects(obj.getBoundsLeft().x, obj.getBoundsLeft().y - GRAVITY - y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
+					return obj;
 				}
 			}
 		}
@@ -89,20 +84,18 @@ public class Entity extends GameObject {
 	public GameObject getLeft(double x) {
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject obj = ObjectHandler.objects.get(i);
-			if (obj != this) {
-				if (obj instanceof Block) {
+			if (obj instanceof Block && obj != this) {
 					Block tObj = (Block) obj;
 					if (tObj.getIsActive()) {
 						if (getBoundsLeft().intersects(tObj.getBoundsRight().x + x, tObj.getBoundsRight().y, tObj.getBoundsRight().getWidth(), tObj.getBoundsRight().getHeight())) {
 							return tObj;
 						}
 					}
-				} else {
+				} else if (obj != this) {
 					if (getBoundsRight().intersects(obj.getBoundsLeft().x + x, obj.getBoundsLeft().y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
 						return obj;
 					}
 				}
-			}
 		}
 		return null;
 	}
@@ -111,18 +104,16 @@ public class Entity extends GameObject {
 	public GameObject getRight(double x) {
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject obj = ObjectHandler.objects.get(i);
-			if (obj != this) {
-				if (obj instanceof Block) {
-					Block tObj = (Block) obj;
-					if (tObj.getIsActive()) {
-						if (getBoundsRight().intersects(tObj.getBoundsLeft().x + x, tObj.getBoundsLeft().y, tObj.getBoundsLeft().getWidth(), tObj.getBoundsLeft().getHeight())) {
-							return tObj;
-						}
+			if (obj instanceof Block && obj != this) {
+				Block tObj = (Block) obj;
+				if (tObj.getIsActive()) {
+					if (getBoundsRight().intersects(tObj.getBoundsLeft().x + x, tObj.getBoundsLeft().y, tObj.getBoundsLeft().getWidth(), tObj.getBoundsLeft().getHeight())) {
+						return tObj;
 					}
-				} else {
-					if (getBoundsRight().intersects(obj.getBoundsLeft().x + x, obj.getBoundsLeft().y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
-						return obj;
-					}
+				}
+			} else if (obj != this) {
+				if (getBoundsRight().intersects(obj.getBoundsLeft().x + x, obj.getBoundsLeft().y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
+					return obj;
 				}
 			}
 		}

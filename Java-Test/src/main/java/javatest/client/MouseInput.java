@@ -4,50 +4,66 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import main.java.javatest.blocks.Block;
+import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.MathHelper;
+import main.java.javatest.util.math.Vec2i;
 
 public class MouseInput extends MouseAdapter {
 
-	private BlockPos pos;
+	private Vec2i pos;
+	private Block block;
+	
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		DebugHud.setMouseVec(new Vec2i(MathHelper.floor(e.getX() / Block.SIZE), MathHelper.floor(e.getY() / Block.SIZE)));
+	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == 3) {
-			BlockPos pos = new BlockPos(MathHelper.floor(e.getX() / Block.SIZE), MathHelper.floor(e.getY() / Block.SIZE));
+			Vec2i vec = new Vec2i(MathHelper.floor(e.getX() / Block.SIZE), MathHelper.floor(e.getY() / Block.SIZE));
 			
-			System.out.println("--M: " + pos.toString());
+			int tempInt = 0;
 			
-			for (int i = 0; i < ObjectHandler.objects.size(); i++) {
-				GameObject o = ObjectHandler.objects.get(i);
+			for (GameObject o : ObjectHandler.objects) {
 				if (o instanceof Block) {
 					Block b = (Block) o;
+					tempInt += 1;
 					
-					if (b.getBlockPosX() != pos.x && b.getBlockPosY() != pos.y) {
-						this.pos = pos;
-					} else if (b.getBlockPosX() == pos.x && b.getBlockPosY() == pos.y) {
-						this.pos = null;
+					if (b.getBlockPosX() != vec.getX() && b.getBlockPosY() != vec.getY()) {
+						pos = vec;
+					} else if (b.getBlockPosX() == vec.getX() && b.getBlockPosY() == vec.getY()) {
+						pos = null;
+						break;
 					}
+				}
+				if (tempInt == 0) {
+					pos = vec;
 				}
 			}
 			
-			if (this.pos != null) {
-				ObjectHandler.addObject(new Block(new BlockPos(this.pos.x, this.pos.y)));
-				this.pos = null;
+			if (pos != null) {
+				ObjectHandler.addObject(new Block(new BlockPos(this.pos.getX(), this.pos.getY())));
+				pos = null;
 			}
 		} else if (e.getButton() == 1) {
-			BlockPos pos = new BlockPos(e.getX() / Block.SIZE, e.getY() / Block.SIZE);
-			for (int i = 0; i < ObjectHandler.objects.size(); i++) {
-				GameObject o = ObjectHandler.objects.get(i);
+			Vec2i pos = new Vec2i(e.getX() / Block.SIZE, e.getY() / Block.SIZE);
+			for (GameObject o : ObjectHandler.objects) {
 				if (o instanceof Block) {
 					Block b = (Block) o;
 					
-					if (b.getBlockPosX() == pos.x && b.getBlockPosY() == pos.y) {
-						ObjectHandler.removeObject(b);
+					if (b.getBlockPosX() == pos.getX() && b.getBlockPosY() == pos.getY()) {
+						block = b;
 					}
 				}
+			}
+			
+			if (block != null) {
+				ObjectHandler.removeObject(block);
+				block = null;
 			}
 		}
 	}

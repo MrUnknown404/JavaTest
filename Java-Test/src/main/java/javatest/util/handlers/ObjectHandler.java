@@ -44,6 +44,10 @@ public class ObjectHandler {
 		}
 	}
 	
+	public static void clearObjects() {
+		objects.clear();
+	}
+	
 	public static void addObject(GameObject object) {
 		if (object != null) {
 			objects.add(object);

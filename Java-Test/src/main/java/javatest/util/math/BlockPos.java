@@ -3,8 +3,7 @@ package main.java.javatest.util.math;
 public class BlockPos {
 
 	public static final BlockPos ZERO = new BlockPos();
-	public int x;
-	public int y;
+	public int x, y;
 	
 	public BlockPos(int x, int y) {
 		this.x = x;

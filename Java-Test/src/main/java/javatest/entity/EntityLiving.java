@@ -39,15 +39,7 @@ public class EntityLiving extends Entity {
 						addPositionX(x - width);
 					}
 				} else if (o2 != null) {
-					//double x = o2.getPositionY() - getPositionY();
-					//if (x > moveDirX) {
-					//System.out.println("Left");
 					addPositionX(o2.getPositionX() - getPositionX() + o2.width);
-					//addPositionX(x);
-					//} else {
-					//addPositionX(o2.getPositionX() - getPositionX() + o2.width);
-					//System.out.println("1");
-					//}
 				}
 			} else {
 				addPositionX(moveDirX);

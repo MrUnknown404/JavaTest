@@ -8,7 +8,7 @@ import java.awt.image.BufferStrategy;
 import main.java.javatest.blocks.Block;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.Console;
-import main.java.javatest.util.CreateLevel;
+import main.java.javatest.util.CreateTestLevel;
 import main.java.javatest.util.EnumWarningType;
 import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.Vec2i;
@@ -39,10 +39,11 @@ public class JavaGameTest extends Canvas implements Runnable {
 		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
 		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
 		
-		CreateLevel.createLevel(BLOCK_WIDTH, BLOCK_HEIGHT, WIDTH, HEIGHT);
+		CreateTestLevel.createLevel(BLOCK_WIDTH, BLOCK_HEIGHT, WIDTH, HEIGHT);
 		
 		addKeyListener(new KeyInput());
 		addMouseListener(new MouseInput());
+		addMouseMotionListener(new MouseInput());
 	}
 	
 	private void init() {
@@ -75,6 +76,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 	
 	public void run() {
 		System.out.println(Console.info(EnumWarningType.Info) + "Started Run Loop");
+		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
 		double amountOfGameTicks = 20.0;
@@ -139,7 +141,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 		
 		objectHandler.render(g);
 		DebugHud.drawText(g, "FPS: " + fps, 1, 15);
-		DebugHud.getPlayer();
+		DebugHud.getInfo();
 		
 		g.dispose();
 		bs.show();

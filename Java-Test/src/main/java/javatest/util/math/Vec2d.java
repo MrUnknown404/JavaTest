@@ -3,8 +3,7 @@ package main.java.javatest.util.math;
 public class Vec2d {
 	
 	public static final Vec2d ZERO = new Vec2d();
-	public double x;
-	public double y;
+	public double x, y;
 
 	public Vec2d(double x, double y) {
 		if (x == -0.0D) {

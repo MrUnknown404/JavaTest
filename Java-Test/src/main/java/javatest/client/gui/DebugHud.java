@@ -5,10 +5,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
+import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
+import main.java.javatest.util.math.Vec2i;
 
 public class DebugHud extends Canvas {
 
@@ -17,21 +20,36 @@ public class DebugHud extends Canvas {
 	
 	private static Vec2d pos;
 	private static String posString = "";
+	private static String blockPosString = "";
+	private static String mouseString = "";
+	private static int blockCount;
 	
-	public static void getPlayer() {
+	public static void getInfo() {
+		int tempInt = 0;
 		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
 			GameObject o = ObjectHandler.objects.get(i);
+			
 			if (o instanceof EntityPlayer) {
-				pos = o.getPosition();
+				pos = new Vec2d(o.getPositionX(), o.getPositionY() + o.height);
 				posString = pos.toStringInt();
+				blockPosString = new Vec2i(MathHelper.floor(o.getPositionX() / Block.SIZE), MathHelper.floor((o.getPositionY() + o.height) / Block.SIZE)).toString();
+				tempInt += 1;
 			}
 		}
+		blockCount = ObjectHandler.objects.size() - tempInt;
+	}
+	
+	public static void setMouseVec(Vec2i vec) {
+		mouseString = vec.toString();
 	}
 	
 	public static void drawText(Graphics g, String string, int x, int y) {
 		g.setColor(Color.GREEN);
 		g.setFont(FONT);
 		g.drawString(string, x, y);
-		g.drawString("POS: " + posString, x, y += 16);
+		g.drawString("Player pos: " + posString, x, y += 30);
+		g.drawString("Player block pos: " + blockPosString, x, y += 15);
+		g.drawString("Mouse pos: " + mouseString, x, y += 15);
+		g.drawString("Block count: " + blockCount, x, y += 15);
 	}
 }
