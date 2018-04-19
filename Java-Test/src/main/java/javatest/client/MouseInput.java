@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import main.java.javatest.blocks.Block;
+import main.java.javatest.blocks.BlockStone;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
@@ -46,7 +47,7 @@ public class MouseInput extends MouseAdapter {
 			}
 			
 			if (pos != null) {
-				ObjectHandler.addObject(new Block(new BlockPos(this.pos.getX(), this.pos.getY())));
+				ObjectHandler.addObject(new BlockStone(new BlockPos(this.pos.getX(), this.pos.getY())));
 				pos = null;
 			}
 		} else if (e.getButton() == 1) {

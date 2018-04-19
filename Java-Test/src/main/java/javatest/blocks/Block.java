@@ -7,25 +7,28 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.client.JavaGameTest;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.Vec2d;
 
 public class Block extends GameObject {
-
+	
 	public final static int SIZE = 16;
 	protected boolean isActive = true;
+	protected BlockProperties type;
 	private BlockPos pos;
 	private BufferedImage image;
 	
-	public Block(BlockPos pos) {
+	public Block(BlockPos pos, BlockProperties type) {
 		super(pos.x, pos.y, SIZE, SIZE);
 		
 		this.pos = pos;
+		this.type = type;
 		
 		try {
-			image = ImageIO.read(new File("C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\blocks\\stone.png"));
+			image = ImageIO.read(new File("C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\blocks\\" + type.getBlockType().toString().toLowerCase() + ".png"));//getBlockTexture(type);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -76,6 +79,10 @@ public class Block extends GameObject {
 		if (!(getPosition().equals(new Vec2d(pos.x * width, pos.y * height)))) {
 			setPosition(pos.x * width, pos.y *height);
 		}
+	}
+	
+	public BlockProperties getBlockType() {
+		return type;
 	}
 	
 	public void addBlockPos(BlockPos pos) {

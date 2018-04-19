@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 import main.java.javatest.blocks.Block;
+import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
@@ -23,6 +24,7 @@ public class DebugHud extends Canvas {
 	private static String blockPosString = "";
 	private static String mouseString = "";
 	private static int blockCount;
+	private static double gravityY;
 	
 	public static void getInfo() {
 		int tempInt = 0;
@@ -33,6 +35,10 @@ public class DebugHud extends Canvas {
 				pos = new Vec2d(o.getPositionX(), o.getPositionY() + o.height);
 				posString = pos.toStringInt();
 				blockPosString = new Vec2i(MathHelper.floor(o.getPositionX() / Block.SIZE), MathHelper.floor((o.getPositionY() + o.height) / Block.SIZE)).toString();
+				
+				gravityY = MathHelper.roundTo(((Entity) o).getGravityY(), 3);
+				tempInt += 1;
+			} else if (o instanceof Entity) {
 				tempInt += 1;
 			}
 		}
@@ -43,13 +49,16 @@ public class DebugHud extends Canvas {
 		mouseString = vec.toString();
 	}
 	
-	public static void drawText(Graphics g, String string, int x, int y) {
+	public static void drawText(Graphics g, String fps, int x, int y) {
 		g.setColor(Color.GREEN);
 		g.setFont(FONT);
-		g.drawString(string, x, y);
+		g.drawString(fps, x, y);
+		
+		g.drawString("Mouse pos: " + mouseString, x, y += 30);
+		g.drawString("Block count: " + blockCount, x, y += 15);
+		
 		g.drawString("Player pos: " + posString, x, y += 30);
 		g.drawString("Player block pos: " + blockPosString, x, y += 15);
-		g.drawString("Mouse pos: " + mouseString, x, y += 15);
-		g.drawString("Block count: " + blockCount, x, y += 15);
+		g.drawString("Player Gravity: " + gravityY, x, y += 15);
 	}
 }

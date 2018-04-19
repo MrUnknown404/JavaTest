@@ -2,7 +2,7 @@ package main.java.javatest.util;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import main.java.javatest.blocks.Block;
+import main.java.javatest.blocks.BlockStone;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.BlockPos;
@@ -16,7 +16,7 @@ public class CreateTestLevel {
 						if (ThreadLocalRandom.current().nextBoolean()) {
 							if (ThreadLocalRandom.current().nextBoolean()) {
 								if (ThreadLocalRandom.current().nextBoolean()) {
-									ObjectHandler.addObject(new Block(new BlockPos(i, i2)));
+									ObjectHandler.addObject(new BlockStone(new BlockPos(i, i2)));
 								}
 							}
 						}

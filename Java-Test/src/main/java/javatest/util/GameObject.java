@@ -3,6 +3,7 @@ package main.java.javatest.util;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
@@ -102,5 +103,10 @@ public abstract class GameObject {
 	/** Gets the entities right bounds */
 	public Rectangle getBoundsRight() {
 		return new Rectangle(MathHelper.floor(getPositionX() + (width - (width / 4))), MathHelper.floor(getPositionY()), width / 4, height);
+	}
+	
+	/** Kills the object */
+	public void killObject() {
+		ObjectHandler.removeObject(this);
 	}
 }

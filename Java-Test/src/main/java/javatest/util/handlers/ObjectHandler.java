@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import main.java.javatest.entity.EntityLiving;
 import main.java.javatest.util.Console;
-import main.java.javatest.util.EnumWarningType;
 import main.java.javatest.util.GameObject;
 
 public class ObjectHandler {
@@ -52,7 +51,7 @@ public class ObjectHandler {
 		if (object != null) {
 			objects.add(object);
 		} else {
-			System.out.println(Console.info(EnumWarningType.Error) + "entity is null!");
+			System.out.println(Console.info(Console.EnumWarningType.Error) + "entity is null!");
 		}
 	}
 	
@@ -60,7 +59,7 @@ public class ObjectHandler {
 		if (objects.contains(object)) {
 			objects.remove(object);
 		} else {
-			System.out.println(Console.info(EnumWarningType.Error) + "entity is null!");
+			System.out.println(Console.info(Console.EnumWarningType.Error) + "entity is null!");
 		}
 	}
 }

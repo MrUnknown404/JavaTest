@@ -11,4 +11,13 @@ public class MathHelper {
 	public static double clamp(double num, double min, double max) {
 		return num < min ? min : (num > max ? max : num);
 	}
+	
+	/** Returns the number rounded to the specified decimal */
+	public static double roundTo(double number, int decimal) {
+		double tempDecimal = 1;
+		for (int i = 0; i < decimal; i++) {
+			tempDecimal *= 10;
+		}
+		return Math.round(number * tempDecimal) / tempDecimal;
+	}
 }

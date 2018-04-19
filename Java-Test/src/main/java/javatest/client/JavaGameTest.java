@@ -9,7 +9,6 @@ import main.java.javatest.blocks.Block;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.CreateTestLevel;
-import main.java.javatest.util.EnumWarningType;
 import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.Vec2i;
 
@@ -30,12 +29,10 @@ public class JavaGameTest extends Canvas implements Runnable {
 		new Window(WIDTH, HEIGHT, "Java Test!", this);
 		
 		preInit();
-		init();
-		postInit();
 	}
 	
 	private void preInit() {
-		System.out.println(Console.info(EnumWarningType.Info) + "Pre-Initialization started!");
+		System.out.println(Console.info(Console.EnumWarningType.Info) + "Pre-Initialization started!");
 		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
 		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
 		
@@ -44,21 +41,23 @@ public class JavaGameTest extends Canvas implements Runnable {
 		addKeyListener(new KeyInput());
 		addMouseListener(new MouseInput());
 		addMouseMotionListener(new MouseInput());
+		
+		init();
 	}
 	
 	private void init() {
-		System.out.println(Console.info(EnumWarningType.Info) + "Initialization started!");
+		System.out.println(Console.info(Console.EnumWarningType.Info) + "Initialization started!");
 		
+		postInit();
 	}
 	
 	private void postInit() {
-		System.out.println(Console.info(EnumWarningType.Info) + "Post-Initialization started!");
-		
+		System.out.println(Console.info(Console.EnumWarningType.Info) + "Post-Initialization started!");
 	}
 	
 	public synchronized void start() {
 		System.out.println(Console.getTimeExample());
-		System.out.println(Console.info(EnumWarningType.Info) + "Starting!");
+		System.out.println(Console.info(Console.EnumWarningType.Info) + "Starting!");
 		
 		thread = new Thread(this);
 		thread.start();
@@ -75,7 +74,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 	}
 	
 	public void run() {
-		System.out.println(Console.info(EnumWarningType.Info) + "Started Run Loop");
+		System.out.println(Console.info(Console.EnumWarningType.Info) + "Started Run Loop");
 		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -109,7 +108,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 	
 				if (System.currentTimeMillis() - timer > 1000) {
 					timer += 1000;
-					fps = frames; //System.out.println(Console.info() + "FPS: " + frames);
+					fps = frames;
 					frames = 0;
 				}
 			} else {
@@ -130,7 +129,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
-			System.out.println(Console.info(EnumWarningType.Info) + "Started Render Loop");
+			System.out.println(Console.info(Console.EnumWarningType.Info) + "Started Render Loop");
 			return;
 		}
 		
