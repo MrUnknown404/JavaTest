@@ -19,9 +19,9 @@ public abstract class GameObject {
 		this.height = height;
 	}
 	
-	/** Runs 60 time a second */
+	/** Runs 60 times a second */
 	public abstract void tick();
-	/** Runs 20 time a second */
+	/** Runs 20 times a second */
 	public abstract void gameTick();
 	public abstract void render(Graphics g);
 	

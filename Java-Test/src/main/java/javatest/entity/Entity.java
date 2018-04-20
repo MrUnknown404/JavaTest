@@ -52,7 +52,7 @@ public class Entity extends GameObject {
 					}
 				}
 			} else if (obj != this) {
-				if (getBoundsRight().intersects(obj.getBoundsLeft().x, obj.getBoundsLeft().y - GRAVITY - y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
+				if (getBoundsBottom().intersects(obj.getBoundsTop().x, obj.getBoundsTop().y - GRAVITY - y, obj.getBoundsTop().getWidth(), obj.getBoundsTop().getHeight())) {
 					return obj;
 				}
 			}
@@ -72,7 +72,7 @@ public class Entity extends GameObject {
 					}
 				}
 			} else if (obj != this) {
-				if (getBoundsRight().intersects(obj.getBoundsLeft().x, obj.getBoundsLeft().y - GRAVITY - y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
+				if (getBoundsTop().intersects(obj.getBoundsBottom().x, obj.getBoundsBottom().y - GRAVITY - y, obj.getBoundsBottom().getWidth(), obj.getBoundsBottom().getHeight())) {
 					return obj;
 				}
 			}
@@ -92,7 +92,7 @@ public class Entity extends GameObject {
 						}
 					}
 				} else if (obj != this) {
-					if (getBoundsRight().intersects(obj.getBoundsLeft().x + x, obj.getBoundsLeft().y, obj.getBoundsLeft().getWidth(), obj.getBoundsLeft().getHeight())) {
+					if (getBoundsLeft().intersects(obj.getBoundsRight().x + x, obj.getBoundsRight().y, obj.getBoundsRight().getWidth(), obj.getBoundsRight().getHeight())) {
 						return obj;
 					}
 				}
@@ -123,10 +123,9 @@ public class Entity extends GameObject {
 	public void doVelocity() {
 		if (doGravity) {
 			GameObject obj = getBelow(0);
-			
 			if (obj != null && !canJump) {
 				setPositionY(obj.getPositionY() - height);
-				addVelocityY(-getVelocityY()); //fix this
+				setVelocityY(0); //fix this
 				setGravityY(0);
 				canJump = true;
 			} else if (canJump && obj == null) {
@@ -142,7 +141,6 @@ public class Entity extends GameObject {
 		}
 		
 		if (getVelocityX() != 0) {
-			
 			GameObject o = getLeft(-getVelocityX());
 			GameObject o2 = getRight(-getVelocityX());
 			if ((o != null || o2 != null) && doCollision) {
