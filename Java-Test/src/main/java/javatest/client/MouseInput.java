@@ -29,7 +29,8 @@ public class MouseInput extends MouseAdapter {
 			
 			int tempInt = 0;
 			
-			for (GameObject o : ObjectHandler.objects) {
+			for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
+				GameObject o = ObjectHandler.getObjectsActive().get(i);
 				if (o instanceof Block) {
 					Block b = (Block) o;
 					tempInt += 1;
@@ -47,12 +48,13 @@ public class MouseInput extends MouseAdapter {
 			}
 			
 			if (pos != null) {
-				ObjectHandler.addObject(new BlockStone(new BlockPos(this.pos.getX(), this.pos.getY())));
+				ObjectHandler.addObjectAll(new BlockStone(new BlockPos(this.pos.getX(), this.pos.getY())));
 				pos = null;
 			}
 		} else if (e.getButton() == 1) {
 			Vec2i pos = new Vec2i(e.getX() / Block.SIZE, e.getY() / Block.SIZE);
-			for (GameObject o : ObjectHandler.objects) {
+			for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
+				GameObject o = ObjectHandler.getObjectsActive().get(i);
 				if (o instanceof Block) {
 					Block b = (Block) o;
 					
@@ -63,7 +65,7 @@ public class MouseInput extends MouseAdapter {
 			}
 			
 			if (block != null) {
-				ObjectHandler.removeObject(block);
+				ObjectHandler.removeObjectAll(block);
 				block = null;
 			}
 		}

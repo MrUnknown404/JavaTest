@@ -19,20 +19,22 @@ public class DebugHud extends Canvas {
 	private static final long serialVersionUID = -4835862860408839539L;
 	private static final Font FONT = new Font("Font", Font.BOLD, 16);
 	
-	private static Vec2d pos;
 	private static String posString = "";
 	private static String blockPosString = "";
 	private static String mouseString = "";
 	private static int blockCount;
+	private static int blockCountAll;
 	private static double gravityY;
 	
 	public static void getInfo() {
+		//*
 		int tempInt = 0;
-		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
-			GameObject o = ObjectHandler.objects.get(i);
+		
+		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
+			GameObject o = ObjectHandler.getObjectsActive().get(i);
 			
 			if (o instanceof EntityPlayer) {
-				pos = new Vec2d(o.getPositionX(), o.getPositionY() + o.height);
+				Vec2d pos = new Vec2d(o.getPositionX(), o.getPositionY() + o.height);
 				posString = pos.toStringInt();
 				blockPosString = new Vec2i(MathHelper.floor(o.getPositionX() / Block.SIZE), MathHelper.floor((o.getPositionY() + o.height) / Block.SIZE)).toString();
 				
@@ -42,7 +44,9 @@ public class DebugHud extends Canvas {
 				tempInt += 1;
 			}
 		}
-		blockCount = ObjectHandler.objects.size() - tempInt;
+		blockCount = ObjectHandler.getObjectsActive().size() - tempInt;
+		blockCountAll = ObjectHandler.getObjectsAll().size() - tempInt;
+		//*/
 	}
 	
 	public static void setMouseVec(Vec2i vec) {
@@ -55,7 +59,8 @@ public class DebugHud extends Canvas {
 		g.drawString(fps, x, y);
 		
 		g.drawString("Mouse pos: " + mouseString, x, y += 30);
-		g.drawString("Block count: " + blockCount, x, y += 15);
+		g.drawString("Blocks all: " + blockCountAll, x, y += 15);
+		g.drawString("Blocks active: " + blockCount, x, y += 15);
 		
 		g.drawString("Player pos: " + posString, x, y += 30);
 		g.drawString("Player block pos: " + blockPosString, x, y += 15);

@@ -4,7 +4,7 @@ public class Vec2d {
 	
 	public static final Vec2d ZERO = new Vec2d();
 	public double x, y;
-
+	
 	public Vec2d(double x, double y) {
 		if (x == -0.0D) {
 			x = 0.0D;
@@ -32,6 +32,16 @@ public class Vec2d {
 	
 	public Vec2d add(double x, double y) {
 		return new Vec2d(this.x + x, this.y + y);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Vec2d) {
+			if (((Vec2d) obj).x == x && ((Vec2d) obj).y == y) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String toString() {

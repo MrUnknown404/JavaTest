@@ -17,7 +17,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 	private static final long serialVersionUID = -2518563563721413864L;
 	
 	public static final int WIDTH = 854, HEIGHT = 480;
-	public static final int BLOCK_WIDTH = WIDTH / Block.SIZE, BLOCK_HEIGHT = HEIGHT / Block.SIZE;
+	public static final int BLOCK_WIDTH = (WIDTH / Block.SIZE) - 0, BLOCK_HEIGHT = (HEIGHT / Block.SIZE) - 1;
 	
 	private int fps;
 	private boolean running = false;
@@ -27,8 +27,6 @@ public class JavaGameTest extends Canvas implements Runnable {
 	
 	public JavaGameTest() {
 		new Window(WIDTH, HEIGHT, "Java Test!", this);
-		
-		preInit();
 	}
 	
 	private void preInit() {
@@ -36,7 +34,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
 		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
 		
-		CreateTestLevel.createLevel(BLOCK_WIDTH, BLOCK_HEIGHT, WIDTH, HEIGHT);
+		CreateTestLevel.createLevel(BLOCK_WIDTH, BLOCK_HEIGHT);
 		
 		addKeyListener(new KeyInput());
 		addMouseListener(new MouseInput());
@@ -62,6 +60,8 @@ public class JavaGameTest extends Canvas implements Runnable {
 		thread = new Thread(this);
 		thread.start();
 		running = true;
+		
+		preInit();
 	}
 	
 	public synchronized void stop() {

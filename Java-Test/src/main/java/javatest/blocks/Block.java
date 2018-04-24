@@ -2,82 +2,50 @@ package main.java.javatest.blocks;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import main.java.javatest.blocks.util.BlockProperties;
-import main.java.javatest.client.JavaGameTest;
 import main.java.javatest.util.GameObject;
+import main.java.javatest.util.Resource;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.Vec2d;
 
 public class Block extends GameObject {
 	
 	public final static int SIZE = 16;
-	protected boolean isActive = true;
 	protected BlockProperties type;
-	private BlockPos pos;
-	private BufferedImage image;
+	private BlockPos pos = new BlockPos();
+	private final BufferedImage image;
 	
 	public Block(BlockPos pos, BlockProperties type) {
 		super(pos.x, pos.y, SIZE, SIZE);
-		
 		this.pos = pos;
 		this.type = type;
+		width = SIZE;
+		height = SIZE;
 		
-		try {
-			image = ImageIO.read(new File("C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\blocks\\" + type.getBlockType().toString().toLowerCase() + ".png"));//getBlockTexture(type);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		image = Resource.getTexture(Resource.EnumResourceType.blocks, type.getBlockType());
 		
 		updatePosition();
 	}
-
+	
 	@Override
 	public void tick() {
-		activeTick();
+		super.tick();
 	}
-
+	
 	@Override
 	public void gameTick() {
-		activeGameTick();
-		updatePosition();
-		updateActive();
+		
 	}
 	
 	@Override
 	public void render(Graphics g) {
-		if (isActive) {
-			g.drawImage(image, getBlockPosX() * Block.SIZE, getBlockPosY() * Block.SIZE, width, height, null);
-		}
-	}
-	
-	protected void updateActive() {
-		if (isActive && (getBlockPosX() < 0) || (getBlockPosX() > JavaGameTest.BLOCK_WIDTH)) {
-			isActive = false;
-		} else if (!isActive && getBlockPosX() > 0 && getBlockPosX() < JavaGameTest.BLOCK_WIDTH) {
-			isActive = true;
-		}
-	}
-	
-	public void activeTick() {
-		if (!isActive) {
-			return;
-		}
-	}
-	
-	public void activeGameTick() {
-		if (!isActive) {
-			return;
-		}
+		g.drawImage(image, (int) getPositionX(), (int) getPositionY(), SIZE, SIZE, null);
 	}
 	
 	private void updatePosition() {
-		if (!(getPosition().equals(new Vec2d(pos.x * width, pos.y * height)))) {
-			setPosition(pos.x * width, pos.y *height);
+		if (!(getPosition().equals(new Vec2d(pos.x * SIZE, pos.y * SIZE)))) {
+			setPosition(pos.x * SIZE, pos.y * SIZE);
 		}
 	}
 	
@@ -123,9 +91,5 @@ public class Block extends GameObject {
 	
 	public int getBlockPosY() {
 		return pos.y;
-	}
-	
-	public boolean getIsActive() {
-		return isActive;
 	}
 }

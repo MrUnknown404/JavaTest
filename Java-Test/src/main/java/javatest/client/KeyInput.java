@@ -24,7 +24,8 @@ public class KeyInput extends KeyAdapter {
 	}
 	
 	private void findPlayer() {
-		for (GameObject obj : ObjectHandler.objects) {
+		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
+			GameObject obj = ObjectHandler.getObjectsActive().get(i);
 			
 			if (obj instanceof EntityPlayer) {
 				player = (EntityPlayer) obj;
@@ -37,9 +38,9 @@ public class KeyInput extends KeyAdapter {
 		
 		if (player != null) {
 			if (key == KeyEvent.VK_R) {
-				ObjectHandler.clearObjects();
+				ObjectHandler.clearObjectsAll();
 				
-				CreateTestLevel.createLevel(JavaGameTest.BLOCK_WIDTH, JavaGameTest.BLOCK_HEIGHT, JavaGameTest.WIDTH, JavaGameTest.HEIGHT);
+				CreateTestLevel.createLevel(JavaGameTest.BLOCK_WIDTH, JavaGameTest.BLOCK_HEIGHT);
 				findPlayer();
 			}
 			
@@ -62,8 +63,8 @@ public class KeyInput extends KeyAdapter {
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		for (int i = 0; i < ObjectHandler.objects.size(); i++) {
-			GameObject tObj = ObjectHandler.objects.get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
+			GameObject tObj = ObjectHandler.getObjectsActive().get(i);
 			
 			if (tObj instanceof EntityPlayer) {
 				EntityPlayer obj = (EntityPlayer) tObj;

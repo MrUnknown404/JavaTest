@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import main.java.javatest.client.JavaGameTest;
-import main.java.javatest.entity.EntityLiving;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.MathHelper;
 

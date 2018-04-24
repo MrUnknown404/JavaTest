@@ -1,4 +1,6 @@
-package main.java.javatest.entity;
+package main.java.javatest.entity.entityliving;
+
+import main.java.javatest.entity.Entity;
 
 public class EntityLiving extends Entity {
 
