@@ -1,9 +1,11 @@
 package main.java.javatest.blocks;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import main.java.javatest.blocks.util.BlockProperties;
+import main.java.javatest.util.EnumRenderKey;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.Resource;
 import main.java.javatest.util.math.BlockPos;
@@ -17,20 +19,18 @@ public class Block extends GameObject {
 	private final BufferedImage image;
 	
 	public Block(BlockPos pos, BlockProperties type) {
-		super(pos.x, pos.y, SIZE, SIZE);
+		super(pos.x, pos.y, SIZE, SIZE, EnumRenderKey.block);
 		this.pos = pos;
 		this.type = type;
-		width = SIZE;
-		height = SIZE;
 		
-		image = Resource.getTexture(Resource.EnumResourceType.blocks, type.getBlockType());
+		image = Resource.getTexture(Resource.ResourceType.blocks, type.getBlockType());
 		
 		updatePosition();
 	}
 	
 	@Override
 	public void tick() {
-		super.tick();
+		
 	}
 	
 	@Override
@@ -41,6 +41,10 @@ public class Block extends GameObject {
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, (int) getPositionX(), (int) getPositionY(), SIZE, SIZE, null);
+		if (getLightLevel() != 0) {
+			g.setColor(new Color(0, 0, 0, getLightLevel()));
+			g.fillRect((int) getPositionX(), (int) getPositionY(), SIZE, SIZE);
+		}
 	}
 	
 	private void updatePosition() {

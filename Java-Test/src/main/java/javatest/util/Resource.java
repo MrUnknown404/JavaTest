@@ -13,7 +13,7 @@ public class Resource {
 	private static final String baseLocation = "C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\";
 	private static final String fileType = ".png";
 	
-	public static BufferedImage getTexture(EnumResourceType location, BlockProperties.EnumBlockType textureName) {
+	public static BufferedImage getTexture(ResourceType location, BlockProperties.BlockType textureName) {
 		File f = new File(baseLocation + location.toString().toLowerCase() + "\\" + textureName.toString().toLowerCase() + fileType);
 		BufferedImage i = null;
 		try {
@@ -24,17 +24,17 @@ public class Resource {
 		return i;
 	}
 	
-	public enum EnumResourceType {
+	public enum ResourceType {
 		blocks(0);
 		
 		public final int fId;
 		
-		private EnumResourceType(int id) {
+		private ResourceType(int id) {
 			fId = id;
 		}
 
-		public static EnumResourceType getNumber(int id) {
-			for (EnumResourceType type : values()) {
+		public static ResourceType getNumber(int id) {
+			for (ResourceType type : values()) {
 				if (type.fId == id) {
 					return type;
 				}

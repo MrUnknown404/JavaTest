@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Console {
 	
-	public static final EnumWarningType DEFAULT_TYPE = EnumWarningType.Debug;
+	public static final WarningType DEFAULT_TYPE = WarningType.Debug;
 	
 	/** Adds console info Example: <p> [12:34:56:789] [Info] [ExampleClass.exampleMethod] [Hour/Minute/Second/Millisecond] */
 	public static String getTimeExample() {
@@ -15,11 +15,11 @@ public class Console {
 		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
 		String formattedDate = dateFormat.format(date);
 		
-		return "[" + formattedDate + "] [" + EnumWarningType.Info + "] [" + Debug.getCallerName(Console.class.getName()) + "] [Hour/Minute/Second/Millisecond]";
+		return "[" + formattedDate + "] [" + WarningType.Info + "] [" + Debug.getCallerName(Console.class.getName()) + "] [Hour/Minute/Second/Millisecond]";
 	}
 	
 	/** Adds console info Example: <p> [12:34:56:789] [Fatal Error] [ExampleClass.exampleMethod] : Hello! */
-	public static String info(EnumWarningType type) {
+	public static String info(WarningType type) {
 		Date date = new Date();
 		String strDateFormat = "hh:mm:ss:SSS";
 		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
@@ -38,7 +38,7 @@ public class Console {
 		return "[" + formattedDate + "] [" + DEFAULT_TYPE + "] [" + Debug.getCallerName(Console.class.getName()) + "] : ";
 	}
 	
-	public enum EnumWarningType {
+	public enum WarningType {
 		Debug     (0),
 		Info      (1),
 		Warning   (2),
@@ -47,12 +47,12 @@ public class Console {
 		
 		public final int fId;
 		
-		private EnumWarningType(int id) {
+		private WarningType(int id) {
 			fId = id;
 		}
 
-		public static EnumWarningType getNumber(int id) {
-			for (EnumWarningType type : values()) {
+		public static WarningType getNumber(int id) {
+			for (WarningType type : values()) {
 				if (type.fId == id) {
 					return type;
 				}

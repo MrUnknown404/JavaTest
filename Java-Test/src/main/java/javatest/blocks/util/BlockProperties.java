@@ -1,13 +1,13 @@
 package main.java.javatest.blocks.util;
 
 public class BlockProperties {
-	public static final BlockProperties AIR = new BlockProperties(EnumBlockType.AIR);
-	public static final BlockProperties STONE = new BlockProperties(EnumBlockType.STONE);
+	public static final BlockProperties AIR = new BlockProperties(BlockType.AIR);
+	public static final BlockProperties STONE = new BlockProperties(BlockType.STONE);
 	
 	private boolean hasCollision;
-	public EnumBlockType type;
+	public BlockType type;
 	
-	public BlockProperties(EnumBlockType type) {
+	public BlockProperties(BlockType type) {
 		this.type = type;
 		
 		switch (type) {
@@ -32,22 +32,22 @@ public class BlockProperties {
 		return this;
 	}
 	
-	public EnumBlockType getBlockType() {
+	public BlockType getBlockType() {
 		return type;
 	}
 	
-	public enum EnumBlockType {
+	public enum BlockType {
 		AIR  (0),
 		STONE(1);
 		
 		public final int fId;
 		
-		private EnumBlockType(int id) {
+		private BlockType(int id) {
 			fId = id;
 		}
 
-		public static EnumBlockType getNumber(int id) {
-			for (EnumBlockType type : values()) {
+		public static BlockType getNumber(int id) {
+			for (BlockType type : values()) {
 				if (type.fId == id) {
 					return type;
 				}

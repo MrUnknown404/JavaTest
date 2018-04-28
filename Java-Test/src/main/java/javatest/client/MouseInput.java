@@ -29,8 +29,8 @@ public class MouseInput extends MouseAdapter {
 			
 			int tempInt = 0;
 			
-			for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-				GameObject o = ObjectHandler.getObjectsActive().get(i);
+			for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+				GameObject o = ObjectHandler.getObjectsAll().get(i);
 				if (o instanceof Block) {
 					Block b = (Block) o;
 					tempInt += 1;
@@ -53,8 +53,8 @@ public class MouseInput extends MouseAdapter {
 			}
 		} else if (e.getButton() == 1) {
 			Vec2i pos = new Vec2i(e.getX() / Block.SIZE, e.getY() / Block.SIZE);
-			for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-				GameObject o = ObjectHandler.getObjectsActive().get(i);
+			for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+				GameObject o = ObjectHandler.getObjectsAll().get(i);
 				if (o instanceof Block) {
 					Block b = (Block) o;
 					

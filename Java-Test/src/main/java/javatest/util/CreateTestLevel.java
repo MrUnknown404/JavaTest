@@ -10,7 +10,7 @@ public class CreateTestLevel {
 	private static final int tempMulti = 1; //TEMPORARY
 	
 	public static void createLevel(int BLOCK_WIDTH, int BLOCK_HEIGHT) {
-		System.out.println(Console.info(Console.EnumWarningType.Info) + "Creating a level...");
+		System.out.println(Console.info(Console.WarningType.Info) + "Creating a level...");
 		
 		final int HEIGHT = BLOCK_HEIGHT * Block.SIZE;
 		final int WIDTH = BLOCK_WIDTH * Block.SIZE;
@@ -35,6 +35,6 @@ public class CreateTestLevel {
 		}
 		
 		ObjectHandler.addObjectAll(new EntityPlayer((WIDTH / 2) - 20, (HEIGHT / 2) - 256, 24, 44));
-		System.out.println(Console.info(Console.EnumWarningType.Info) + "Finished creating the level!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished creating the level!");
 	}
 }

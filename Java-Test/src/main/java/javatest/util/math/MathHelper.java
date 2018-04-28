@@ -1,5 +1,7 @@
 package main.java.javatest.util.math;
 
+import main.java.javatest.util.Console;
+
 public class MathHelper {
 	/** Returns the greatest integer less than or equal to the double argument */
 	public static int floor(double value) {
@@ -12,6 +14,11 @@ public class MathHelper {
 		return num < min ? min : (num > max ? max : num);
 	}
 	
+	/** Returns the value of the first parameter, clamped to be within the lower and upper limits given by the second and third parameters */
+	public static float clamp(float num, float min, float max) {
+		return num < min ? min : (num > max ? max : num);
+	}
+	
 	/** Returns the number rounded to the specified decimal */
 	public static double roundTo(double number, int decimal) {
 		double tempDecimal = 1;
@@ -19,5 +26,17 @@ public class MathHelper {
 			tempDecimal *= 10;
 		}
 		return Math.round(number * tempDecimal) / tempDecimal;
+	}
+	
+	/** Normalized the given number */
+	public static float normalize(float number, float max) {
+		if (number > max) {
+			System.out.println(Console.info(Console.WarningType.Error) + "the specified number is more then the specified max!");
+			return max;
+		} else if (number < 0) {
+			System.out.println(Console.info(Console.WarningType.Error) + "the specified number cannot be less than zero!");
+			return 0;
+		}
+		return 1 - ((number - 0) / (max - 0));
 	}
 }

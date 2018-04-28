@@ -1,9 +1,11 @@
 package main.java.javatest.entity;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.entityliving.EntityPlayer;
+import main.java.javatest.util.EnumRenderKey;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
@@ -22,12 +24,11 @@ public class Entity extends GameObject {
 	private Vec2d velocity = new Vec2d();
 	
 	public Entity(double x, double y, int width, int height) {
-		super(x, y, width, height);
+		super(x, y, width, height, EnumRenderKey.entity);
 	}
 	
 	@Override
 	public void tick() {
-		super.tick();
 		doVelocity();
 	}
 	
@@ -38,16 +39,19 @@ public class Entity extends GameObject {
 	
 	@Override
 	public void render(Graphics g) {
-		
+		if (getLightLevel() != 0) {
+			g.setColor(new Color(0, 0, 0, getLightLevel()));
+			g.fillRect((int) getPositionX(), (int) getPositionY(), getWidth(), getHeight());
+		}
 	}
 	
 	/** Gets what's below the entity plus the argument */
 	public GameObject getBelow(double y) {
-		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsActive().get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getIsActive() && tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockType().getHasCollision()) {
 					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - GRAVITY + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
 						return tObj;
 					}
@@ -59,11 +63,11 @@ public class Entity extends GameObject {
 
 	/** Gets what's above the entity plus the argument */
 	public GameObject getAbove(double y) {
-		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsActive().get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getIsActive() && tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockType().getHasCollision()) {
 					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - GRAVITY + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
 						return tObj;
 					}
@@ -75,11 +79,11 @@ public class Entity extends GameObject {
 	
 	/** Gets what's left the entity plus the argument */
 	public GameObject getLeft(double x) {
-		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsActive().get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getIsActive() && tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockType().getHasCollision()) {
 					if (getBoundsLeft().intersects(tObj.getBoundsRight().x + x, tObj.getBoundsRight().y, tObj.getBoundsRight().getWidth(), tObj.getBoundsRight().getHeight())) {
 						return tObj;
 					}
@@ -91,11 +95,11 @@ public class Entity extends GameObject {
 	
 	/** Gets what's right the entity plus the argument */
 	public GameObject getRight(double x) {
-		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsActive().get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getIsActive() && tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockType().getHasCollision()) {
 					if (getBoundsRight().intersects(tObj.getBoundsLeft().x + x, tObj.getBoundsLeft().y, tObj.getBoundsLeft().getWidth(), tObj.getBoundsLeft().getHeight())) {
 						return tObj;
 					}
@@ -137,7 +141,7 @@ public class Entity extends GameObject {
 				} else if (o2 != null) {
 					double y = o2.getPositionX() - getPositionX();
 					if (y < getVelocityX()) {
-						addPositionX(o2.getPositionX() - getPositionX() + o2.width);
+						addPositionX(o2.getPositionX() - getPositionX() + o2.getWidth());
 					}
 				}
 			} else {
@@ -163,7 +167,7 @@ public class Entity extends GameObject {
 				} else if (o2 != null) {
 					double y = o2.getPositionY() - getPositionY();
 					if (y < getVelocityY()) {
-						addPositionY(y + o2.height);
+						addPositionY(y + o2.getHeight());
 						setVelocityY(0);
 					}
 				}

@@ -3,7 +3,7 @@ package main.java.javatest.entity.entityliving;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import main.java.javatest.client.JavaGameTest;
+import main.java.javatest.Main;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.MathHelper;
 
@@ -34,7 +34,7 @@ public class EntityPlayer extends EntityLiving {
 						addPositionX(x - width);
 					}
 				} else if (o2 != null) {
-					addPositionX(o2.getPositionX() - getPositionX() + o2.width);
+					addPositionX(o2.getPositionX() - getPositionX() + o2.getWidth());
 				}
 			} else {
 				addPositionX(moveDirX);
@@ -45,7 +45,7 @@ public class EntityPlayer extends EntityLiving {
 	@Override
 	public void gameTickAlive() {
 		super.gameTick();
-		if (getPositionY() > JavaGameTest.HEIGHT * 10) {
+		if (getPositionY() > Main.HEIGHT * 10) {
 			setPositionY(0);
 		}
 	}
@@ -64,5 +64,7 @@ public class EntityPlayer extends EntityLiving {
 	public void render(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width, height);
+		super.render(g);
+		
 	}
 }

@@ -3,48 +3,32 @@ package main.java.javatest.util;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import main.java.javatest.blocks.Block;
-import main.java.javatest.client.JavaGameTest;
 import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
 public abstract class GameObject {
 	
+	private final EnumRenderKey renderKey;
 	private Vec2d pos = new Vec2d();
-	private boolean isActive = false;
-	public int height, width;
+	private float lightLevel;
+	private int blockLightLevel = 16;
+	protected final int height, width;
 	
-	public GameObject(double x, double y, int width, int height) {
+	public GameObject(double x, double y, int width, int height, EnumRenderKey renderKey) {
 		pos = new Vec2d(x, y);
 		this.width = width;
 		this.height = height;
-		ObjectHandler.addObjectActive(this);
-		updateActive();
+		this.renderKey = renderKey;
+		
+		lightLevel = MathHelper.clamp(MathHelper.normalize(blockLightLevel, 16) - 0.1f, 0.0f, 0.9f);
 	}
 	
 	/** Runs 60 times a second */
-	public void tick() {
-		updateActive();
-	}
-	
+	public abstract void tick();
 	/** Runs 20 times a second */
 	public abstract void gameTick();
 	public abstract void render(Graphics g);
-	
-	private void updateActive() {
-		if (!isActive && getBoundsAll().intersects(0, 0, JavaGameTest.BLOCK_WIDTH * Block.SIZE, JavaGameTest.BLOCK_HEIGHT * Block.SIZE)) {
-			isActive = true;
-			if (!(ObjectHandler.getObjectsActive().contains(this))) {
-				ObjectHandler.addObjectActive(this);
-			}
-		} else if (isActive && !getBoundsAll().intersects(0, 0, JavaGameTest.BLOCK_WIDTH * Block.SIZE, JavaGameTest.BLOCK_HEIGHT * Block.SIZE)) {
-			isActive = false;
-			if (ObjectHandler.getObjectsActive().contains(this)) {
-				ObjectHandler.removeObjectActive(this);
-			}
-		}
-	}
 	
 	/** Adds to the objects position */
 	public void addPosition(double x, double y) {
@@ -101,6 +85,16 @@ public abstract class GameObject {
 		return pos.y;
 	}
 	
+	/** Returns the object's width */
+	public int getWidth() {
+		return width;
+	}
+	
+	/** Returns the object's height */
+	public int getHeight() {
+		return height;
+	}
+	
 	/** Gets the entities entire bounds */
 	public Rectangle getBoundsAll() {
 		return new Rectangle(MathHelper.floor(getPositionX()), MathHelper.floor(getPositionY()), width, height);
@@ -126,8 +120,16 @@ public abstract class GameObject {
 		return new Rectangle(MathHelper.floor(getPositionX() + (width - (width / 4))), MathHelper.floor(getPositionY()), width / 4, height);
 	}
 	
-	public boolean getIsActive() {
-		return isActive;
+	public EnumRenderKey getRenderKey() {
+		return renderKey;
+	}
+	
+	public float getBlockLightLevel() {
+		return blockLightLevel;
+	}
+	
+	public float getLightLevel() {
+		return lightLevel;
 	}
 	
 	/** Kills the object */

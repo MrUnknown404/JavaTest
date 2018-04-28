@@ -22,21 +22,19 @@ public class DebugHud extends Canvas {
 	private static String posString = "";
 	private static String blockPosString = "";
 	private static String mouseString = "";
-	private static int blockCount;
 	private static int blockCountAll;
 	private static double gravityY;
 	
 	public static void getInfo() {
-		//*
 		int tempInt = 0;
 		
-		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-			GameObject o = ObjectHandler.getObjectsActive().get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+			GameObject o = ObjectHandler.getObjectsAll().get(i);
 			
 			if (o instanceof EntityPlayer) {
-				Vec2d pos = new Vec2d(o.getPositionX(), o.getPositionY() + o.height);
+				Vec2d pos = new Vec2d(o.getPositionX(), o.getPositionY() + o.getHeight());
 				posString = pos.toStringInt();
-				blockPosString = new Vec2i(MathHelper.floor(o.getPositionX() / Block.SIZE), MathHelper.floor((o.getPositionY() + o.height) / Block.SIZE)).toString();
+				blockPosString = new Vec2i(MathHelper.floor(o.getPositionX() / Block.SIZE), MathHelper.floor((o.getPositionY() + o.getHeight()) / Block.SIZE)).toString();
 				
 				gravityY = MathHelper.roundTo(((Entity) o).getGravityY(), 3);
 				tempInt += 1;
@@ -44,9 +42,7 @@ public class DebugHud extends Canvas {
 				tempInt += 1;
 			}
 		}
-		blockCount = ObjectHandler.getObjectsActive().size() - tempInt;
 		blockCountAll = ObjectHandler.getObjectsAll().size() - tempInt;
-		//*/
 	}
 	
 	public static void setMouseVec(Vec2i vec) {
@@ -60,7 +56,6 @@ public class DebugHud extends Canvas {
 		
 		g.drawString("Mouse pos: " + mouseString, x, y += 30);
 		g.drawString("Blocks all: " + blockCountAll, x, y += 15);
-		g.drawString("Blocks active: " + blockCount, x, y += 15);
 		
 		g.drawString("Player pos: " + posString, x, y += 30);
 		g.drawString("Player block pos: " + blockPosString, x, y += 15);

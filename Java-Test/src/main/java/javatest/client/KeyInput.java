@@ -3,6 +3,7 @@ package main.java.javatest.client;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import main.java.javatest.Main;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.CreateTestLevel;
 import main.java.javatest.util.GameObject;
@@ -24,8 +25,8 @@ public class KeyInput extends KeyAdapter {
 	}
 	
 	private void findPlayer() {
-		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsActive().get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			
 			if (obj instanceof EntityPlayer) {
 				player = (EntityPlayer) obj;
@@ -40,7 +41,7 @@ public class KeyInput extends KeyAdapter {
 			if (key == KeyEvent.VK_R) {
 				ObjectHandler.clearObjectsAll();
 				
-				CreateTestLevel.createLevel(JavaGameTest.BLOCK_WIDTH, JavaGameTest.BLOCK_HEIGHT);
+				CreateTestLevel.createLevel(Main.BLOCK_WIDTH, Main.BLOCK_HEIGHT);
 				findPlayer();
 			}
 			
@@ -63,8 +64,8 @@ public class KeyInput extends KeyAdapter {
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		for (int i = 0; i < ObjectHandler.getObjectsActive().size(); i++) {
-			GameObject tObj = ObjectHandler.getObjectsActive().get(i);
+		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+			GameObject tObj = ObjectHandler.getObjectsAll().get(i);
 			
 			if (tObj instanceof EntityPlayer) {
 				EntityPlayer obj = (EntityPlayer) tObj;

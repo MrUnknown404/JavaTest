@@ -5,11 +5,13 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+import main.java.javatest.Main;
+
 public class Window extends Canvas {
 
 	private static final long serialVersionUID = 8102809856257657166L;
 
-	public Window(int width, int height, String title, JavaGameTest game) {
+	public Window(int width, int height, String title, Main game) {
 		JFrame frame = new JFrame(title);
 		
 		frame.setPreferredSize(new Dimension(width, height));

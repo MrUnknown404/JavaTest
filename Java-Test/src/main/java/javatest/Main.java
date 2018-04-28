@@ -1,4 +1,4 @@
-package main.java.javatest.client;
+package main.java.javatest;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -6,13 +6,16 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
 import main.java.javatest.blocks.Block;
+import main.java.javatest.client.KeyInput;
+import main.java.javatest.client.MouseInput;
+import main.java.javatest.client.Window;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.CreateTestLevel;
 import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.Vec2i;
 
-public class JavaGameTest extends Canvas implements Runnable {
+public class Main extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = -2518563563721413864L;
 	
@@ -25,12 +28,25 @@ public class JavaGameTest extends Canvas implements Runnable {
 	private ObjectHandler objectHandler = new ObjectHandler();
 	
 	
-	public JavaGameTest() {
+	public Main() {
 		new Window(WIDTH, HEIGHT, "Java Test!", this);
 	}
 	
+	public synchronized void start() {
+		System.out.println(Console.getTimeExample());
+		System.out.println(Console.info(Console.WarningType.Info) + "Starting!");
+		
+		thread = new Thread(this);
+		thread.start();
+		running = true;
+		
+		preInit();
+		init();
+		postInit();
+	}
+	
 	private void preInit() {
-		System.out.println(Console.info(Console.EnumWarningType.Info) + "Pre-Initialization started!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Pre-Initialization started...");
 		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
 		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
 		
@@ -39,29 +55,20 @@ public class JavaGameTest extends Canvas implements Runnable {
 		addKeyListener(new KeyInput());
 		addMouseListener(new MouseInput());
 		addMouseMotionListener(new MouseInput());
+		System.out.println(Console.info(Console.WarningType.Info) + "Pre-Initialization Finished!");
 		
-		init();
 	}
 	
 	private void init() {
-		System.out.println(Console.info(Console.EnumWarningType.Info) + "Initialization started!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Initialization started...");
 		
-		postInit();
+		System.out.println(Console.info(Console.WarningType.Info) + "Initialization Finished!");
 	}
 	
 	private void postInit() {
-		System.out.println(Console.info(Console.EnumWarningType.Info) + "Post-Initialization started!");
-	}
-	
-	public synchronized void start() {
-		System.out.println(Console.getTimeExample());
-		System.out.println(Console.info(Console.EnumWarningType.Info) + "Starting!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Post-Initialization started...");
 		
-		thread = new Thread(this);
-		thread.start();
-		running = true;
-		
-		preInit();
+		System.out.println(Console.info(Console.WarningType.Info) + "Post-Initialization Finished!");
 	}
 	
 	public synchronized void stop() {
@@ -74,7 +81,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 	}
 	
 	public void run() {
-		System.out.println(Console.info(Console.EnumWarningType.Info) + "Started Run Loop");
+		System.out.println(Console.info(Console.WarningType.Info) + "Started Run Loop");
 		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -105,7 +112,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 			if (running) {
 				render();
 				frames++;
-	
+				
 				if (System.currentTimeMillis() - timer > 1000) {
 					timer += 1000;
 					fps = frames;
@@ -129,7 +136,7 @@ public class JavaGameTest extends Canvas implements Runnable {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
-			System.out.println(Console.info(Console.EnumWarningType.Info) + "Started Render Loop");
+			System.out.println(Console.info(Console.WarningType.Info) + "Started Render Loop");
 			return;
 		}
 		
@@ -147,6 +154,6 @@ public class JavaGameTest extends Canvas implements Runnable {
 	}
 	
 	public static void main(String args[]) {
-		new JavaGameTest();
+		new Main();
 	}
 }
