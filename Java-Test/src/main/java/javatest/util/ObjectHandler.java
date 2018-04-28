@@ -13,6 +13,10 @@ public class ObjectHandler {
 		for (int i = 0; i < objectsAll.size(); i++) {
 			GameObject obj = objectsAll.get(i);
 			
+			if (obj != null && !obj.getIsActive()) {
+				continue;
+			}
+			
 			obj.tick();
 			if (obj instanceof EntityLiving) {
 				((EntityLiving) obj).tickAlive();
@@ -23,6 +27,10 @@ public class ObjectHandler {
 	public void gameTick() {
 		for (int i = 0; i < objectsAll.size(); i++) {
 			GameObject obj = objectsAll.get(i);
+			
+			if (obj != null && !obj.getIsActive()) {
+				continue;
+			}
 			
 			obj.gameTick();
 			if (obj instanceof EntityLiving) {

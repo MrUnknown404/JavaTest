@@ -1,4 +1,4 @@
-package main.java.javatest.client.render;
+package main.java.javatest.client;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,7 +20,9 @@ import main.java.javatest.util.Resource;
 
 public class Renderer {
 
-	private final Map<String, BufferedImage> hashImages = new HashMap<String, BufferedImage>();
+	private Map<String, BufferedImage> hashImages = new HashMap<String, BufferedImage>();
+	private List<BufferedImage> valueList = new ArrayList<BufferedImage>();
+	private List<String> keyList = new ArrayList<String>();
 	
 	public void findTextures() {
 		System.out.println(Console.info(Console.WarningType.Info) + "-Finding all textures...");
@@ -36,18 +38,20 @@ public class Renderer {
 		}
 		System.out.println(Console.info(Console.WarningType.Info) + "Found all entity textures!");
 		System.out.println(Console.info(Console.WarningType.Info) + "-Found all Textures!");
+	
+		System.out.println(Console.info(Console.WarningType.Info) + "Setting textures for use...");
+		valueList = new ArrayList<BufferedImage>(hashImages.values());
+		keyList = new ArrayList<String>(hashImages.keySet());
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished setting textures!");
 	}
 	
 	public void render(Graphics g) {
 		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
 			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			
-			if (obj == null) {
-				return;
+			if (obj != null && !obj.getIsActive()) {
+				continue;
 			}
-			
-			List<BufferedImage> valueList = new ArrayList<BufferedImage>(hashImages.values());
-			List<String> keyList = new ArrayList<String>(hashImages.keySet());
 			
 			if (obj instanceof Block) {
 				for (int i2 = 0; i2 < valueList.size(); i2++) {

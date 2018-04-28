@@ -2,6 +2,7 @@ package main.java.javatest.util;
 
 import java.awt.Rectangle;
 
+import main.java.javatest.Main;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
@@ -10,7 +11,7 @@ public abstract class GameObject {
 	private Vec2d pos = new Vec2d();
 	private float lightLevel;
 	private int blockLightLevel = 15;
-	private boolean isActive; //do later
+	private boolean isActive = true;
 	protected final int height, width;
 	
 	public GameObject(double x, double y, int width, int height) {
@@ -19,12 +20,25 @@ public abstract class GameObject {
 		this.height = height;
 		
 		lightLevel = MathHelper.clamp(MathHelper.normalize(blockLightLevel, 15) - 0.1f, 0.0f, 0.9f);
+		
+		updateActive();
+		if (!isActive) {
+			System.out.println(isActive);
+		}
 	}
 	
 	/** Runs 60 times a second */
 	public abstract void tick();
 	/** Runs 20 times a second */
 	public abstract void gameTick();
+	
+	public void updateActive() {
+		if (isActive && !getBoundsAll().intersects(0, 0, Main.BLOCK_WIDTH, Main.BLOCK_HEIGHT)) {
+			isActive = false;
+		} else if (!isActive && getBoundsAll().intersects(0, 0, Main.BLOCK_WIDTH, Main.BLOCK_HEIGHT)) {
+			isActive = true;
+		}
+	}
 	
 	/** Adds to the objects position */
 	public void addPosition(double x, double y) {
@@ -122,6 +136,10 @@ public abstract class GameObject {
 	
 	public float getLightLevel() {
 		return lightLevel;
+	}
+	
+	public boolean getIsActive() {
+		return isActive;
 	}
 	
 	/** Kills the object */

@@ -10,7 +10,7 @@ import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.math.BlockPos;
 
 public class CreateTestLevel {
-	private static final int tempMulti = 1; //TEMPORARY
+	private static final int tempMulti = 2; //TEMPORARY
 	
 	/**
 	 * All of this is temporary! it will all be changed!
