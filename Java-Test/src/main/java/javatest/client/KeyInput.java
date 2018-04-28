@@ -7,12 +7,11 @@ import main.java.javatest.Main;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.CreateTestLevel;
 import main.java.javatest.util.GameObject;
-import main.java.javatest.util.handlers.ObjectHandler;
+import main.java.javatest.util.ObjectHandler;
 
 public class KeyInput extends KeyAdapter {
 
 	private static final double MOVE_SPEED = 3;
-	private boolean didPressJump = false;
 	private boolean[] keyDown = new boolean[3];
 	private EntityPlayer player;
 	
@@ -30,6 +29,7 @@ public class KeyInput extends KeyAdapter {
 			
 			if (obj instanceof EntityPlayer) {
 				player = (EntityPlayer) obj;
+				break;
 			}
 		}
 	}
@@ -45,9 +45,8 @@ public class KeyInput extends KeyAdapter {
 				findPlayer();
 			}
 			
-			if (key == KeyEvent.VK_W && player.canJump && !didPressJump) {
-				player.addVelocityY(-MOVE_SPEED * MOVE_SPEED);
-				didPressJump = true;
+			if (key == KeyEvent.VK_W && player.isGrounded() && !keyDown[0]) {
+				player.setJumpY(-MOVE_SPEED * (MOVE_SPEED / 1.25));
 				keyDown[0] = true;
 			}
 			
@@ -71,7 +70,6 @@ public class KeyInput extends KeyAdapter {
 				EntityPlayer obj = (EntityPlayer) tObj;
 				if (key == KeyEvent.VK_W) {
 					keyDown[0] = false;
-					didPressJump = false;
 				}
 				
 				if (key == KeyEvent.VK_A) {

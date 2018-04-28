@@ -1,30 +1,26 @@
 package main.java.javatest.entity;
 
-import java.awt.Color;
-import java.awt.Graphics;
-
 import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.entityliving.EntityPlayer;
-import main.java.javatest.util.EnumRenderKey;
+import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.util.GameObject;
-import main.java.javatest.util.handlers.ObjectHandler;
+import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
 public class Entity extends GameObject {
 	
+	protected static final double FRICTION = 0.2;
 	private static final double GRAVITY = 1.75; //temp
-	private static final double FRICTION = 0.2;
 	private static final double MAX_FALL_SPEED = (GRAVITY * GRAVITY) * ((GRAVITY * GRAVITY) * (GRAVITY * GRAVITY));
 	
-	public boolean canJump = false;
-	protected boolean doCollision = true;
+	protected EntityProperties type;
 	private double gravityY = 0;
-	private boolean doGravity = true;
 	private Vec2d velocity = new Vec2d();
 	
-	public Entity(double x, double y, int width, int height) {
-		super(x, y, width, height, EnumRenderKey.entity);
+	public Entity(double x, double y, int width, int height, EntityProperties type) {
+		super(x, y, width, height);
+		this.type = type;
 	}
 	
 	@Override
@@ -37,21 +33,13 @@ public class Entity extends GameObject {
 		
 	}
 	
-	@Override
-	public void render(Graphics g) {
-		if (getLightLevel() != 0) {
-			g.setColor(new Color(0, 0, 0, getLightLevel()));
-			g.fillRect((int) getPositionX(), (int) getPositionY(), getWidth(), getHeight());
-		}
-	}
-	
 	/** Gets what's below the entity plus the argument */
 	public GameObject getBelow(double y) {
 		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
 			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockProperties().getHasCollision()) {
 					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - GRAVITY + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
 						return tObj;
 					}
@@ -67,7 +55,7 @@ public class Entity extends GameObject {
 			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockProperties().getHasCollision()) {
 					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - GRAVITY + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
 						return tObj;
 					}
@@ -83,7 +71,7 @@ public class Entity extends GameObject {
 			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockProperties().getHasCollision()) {
 					if (getBoundsLeft().intersects(tObj.getBoundsRight().x + x, tObj.getBoundsRight().y, tObj.getBoundsRight().getWidth(), tObj.getBoundsRight().getHeight())) {
 						return tObj;
 					}
@@ -99,7 +87,7 @@ public class Entity extends GameObject {
 			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
-				if (tObj.getBlockType().getHasCollision()) {
+				if (tObj.getBlockProperties().getHasCollision()) {
 					if (getBoundsRight().intersects(tObj.getBoundsLeft().x + x, tObj.getBoundsLeft().y, tObj.getBoundsLeft().getWidth(), tObj.getBoundsLeft().getHeight())) {
 						return tObj;
 					}
@@ -109,30 +97,19 @@ public class Entity extends GameObject {
 		return null;
 	}
 	
-	public void doVelocity() {
-		if (doGravity) {
-			GameObject obj = getBelow(0);
-			if (obj != null && !canJump) {
-				setPositionY(obj.getPositionY() - height);
-				setVelocityY(0); //fix this
-				setGravityY(0);
-				canJump = true;
-			} else if (canJump && obj == null) {
-				canJump = false;
-			}
-			
-			if (!canJump) {
-				addGravityY(GRAVITY / (GRAVITY * 2));
-				if (getGravityY() > MAX_FALL_SPEED) {
-					setGravityY(MAX_FALL_SPEED);
-				}
-			}
+	public boolean isGrounded() {
+		GameObject obj = getBelow(0);
+		if (obj != null && obj instanceof Block) {
+			return true;
 		}
-		
+		return false;
+	}
+	
+	public void doVelocity() {
 		if (getVelocityX() != 0) {
 			GameObject o = getLeft(-getVelocityX());
 			GameObject o2 = getRight(-getVelocityX());
-			if ((o != null || o2 != null) && doCollision) {
+			if ((o != null || o2 != null) && getEntityProperties().getDoCollision()) {
 				if (o != null) {
 					double y = o.getPositionX() - getPositionX();
 					if (y > getVelocityX()) {
@@ -158,7 +135,7 @@ public class Entity extends GameObject {
 		if (getVelocityY() != 0) {
 			GameObject o = getBelow(-getVelocityY());
 			GameObject o2 = getAbove(-getVelocityY());
-			if ((o != null || o2 != null) && doCollision) {
+			if ((o != null || o2 != null) && getEntityProperties().getDoCollision()) {
 				if (o != null) {
 					double y = o.getPositionY() - getPositionY();
 					if (y > getVelocityY()) {
@@ -197,6 +174,25 @@ public class Entity extends GameObject {
 				setGravityY(MathHelper.clamp(getGravityY() - FRICTION, 0, Double.MAX_VALUE));
 			} else if (getGravityY() < 0) {
 				setGravityY(MathHelper.clamp(getGravityY() + FRICTION, -Double.MAX_VALUE, 0));
+			}
+		}
+		
+		if (getEntityProperties().getDoGravity()) {
+			if (getEntityProperties().getDoCollision()) {
+				if (isGrounded() && getGravityY() != 0) {
+					setPositionY(getBelow(0).getPositionY() - height);
+					if (this instanceof EntityPlayer) {
+						((EntityPlayer) this).setJumpY(0);
+					}
+					setGravityY(0);
+				}
+			}
+			
+			if (!isGrounded()) {
+				addGravityY(GRAVITY / (GRAVITY * 2));
+				if (getGravityY() > MAX_FALL_SPEED) {
+					setGravityY(MAX_FALL_SPEED);
+				}
 			}
 		}
 	}
@@ -246,7 +242,7 @@ public class Entity extends GameObject {
 		return velocity;
 	}
 	
-	private void setGravityY(double amount) {
+	protected void setGravityY(double amount) {
 		gravityY = amount;
 	}
 	
@@ -254,7 +250,7 @@ public class Entity extends GameObject {
 		return gravityY;
 	}
 	
-	private void addGravityY(double amount) {
+	protected void addGravityY(double amount) {
 		gravityY += amount;
 	}
 	
@@ -268,13 +264,7 @@ public class Entity extends GameObject {
 		return velocity.y;
 	}
 	
-	/** Disables gravity for this entity */
-	protected void disableGravity() {
-		doGravity = false;
-	}
-	
-	/** Disables collision for this entity */
-	protected void disableCollision() {
-		doCollision = false;
+	public EntityProperties getEntityProperties() {
+		return type;
 	}
 }

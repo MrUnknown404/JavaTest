@@ -1,13 +1,9 @@
 package main.java.javatest.blocks;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.util.concurrent.ThreadLocalRandom;
 
 import main.java.javatest.blocks.util.BlockProperties;
-import main.java.javatest.util.EnumRenderKey;
 import main.java.javatest.util.GameObject;
-import main.java.javatest.util.Resource;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.Vec2d;
 
@@ -16,15 +12,11 @@ public class Block extends GameObject {
 	public final static int SIZE = 16;
 	protected BlockProperties type;
 	private BlockPos pos = new BlockPos();
-	private final BufferedImage image;
 	
 	public Block(BlockPos pos, BlockProperties type) {
-		super(pos.x, pos.y, SIZE, SIZE, EnumRenderKey.block);
+		super(pos.x, pos.y, SIZE, SIZE);
 		this.pos = pos;
 		this.type = type;
-		
-		image = Resource.getTexture(Resource.ResourceType.blocks, type.getBlockType());
-		
 		updatePosition();
 	}
 	
@@ -38,22 +30,13 @@ public class Block extends GameObject {
 		
 	}
 	
-	@Override
-	public void render(Graphics g) {
-		g.drawImage(image, (int) getPositionX(), (int) getPositionY(), SIZE, SIZE, null);
-		if (getLightLevel() != 0) {
-			g.setColor(new Color(0, 0, 0, getLightLevel()));
-			g.fillRect((int) getPositionX(), (int) getPositionY(), SIZE, SIZE);
-		}
-	}
-	
 	private void updatePosition() {
 		if (!(getPosition().equals(new Vec2d(pos.x * SIZE, pos.y * SIZE)))) {
 			setPosition(pos.x * SIZE, pos.y * SIZE);
 		}
 	}
 	
-	public BlockProperties getBlockType() {
+	public BlockProperties getBlockProperties() {
 		return type;
 	}
 	
@@ -95,5 +78,15 @@ public class Block extends GameObject {
 	
 	public int getBlockPosY() {
 		return pos.y;
+	}
+	
+	/** Returns a random block */
+	public static Block getRandomBlock(int x, int y) {
+		return new Block(new BlockPos(x, y), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size())));
+	}
+	
+	/** Returns a random block */
+	public static Block getRandomBlock() {
+		return new Block(new BlockPos(0, 0), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size())));
 	}
 }

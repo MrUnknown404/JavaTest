@@ -10,9 +10,10 @@ import main.java.javatest.client.KeyInput;
 import main.java.javatest.client.MouseInput;
 import main.java.javatest.client.Window;
 import main.java.javatest.client.gui.DebugHud;
+import main.java.javatest.client.render.Renderer;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.CreateTestLevel;
-import main.java.javatest.util.handlers.ObjectHandler;
+import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.Vec2i;
 
 public class Main extends Canvas implements Runnable {
@@ -26,7 +27,8 @@ public class Main extends Canvas implements Runnable {
 	private boolean running = false;
 	private Thread thread;
 	private ObjectHandler objectHandler = new ObjectHandler();
-	
+	private Renderer renderer = new Renderer();
+	private DebugHud debugHud = new DebugHud();
 	
 	public Main() {
 		new Window(WIDTH, HEIGHT, "Java Test!", this);
@@ -34,11 +36,9 @@ public class Main extends Canvas implements Runnable {
 	
 	public synchronized void start() {
 		System.out.println(Console.getTimeExample());
+		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
+		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
 		System.out.println(Console.info(Console.WarningType.Info) + "Starting!");
-		
-		thread = new Thread(this);
-		thread.start();
-		running = true;
 		
 		preInit();
 		init();
@@ -47,8 +47,8 @@ public class Main extends Canvas implements Runnable {
 	
 	private void preInit() {
 		System.out.println(Console.info(Console.WarningType.Info) + "Pre-Initialization started...");
-		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
-		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
+		
+		renderer.findTextures();
 		
 		CreateTestLevel.createLevel(BLOCK_WIDTH, BLOCK_HEIGHT);
 		
@@ -68,6 +68,10 @@ public class Main extends Canvas implements Runnable {
 	private void postInit() {
 		System.out.println(Console.info(Console.WarningType.Info) + "Post-Initialization started...");
 		
+		thread = new Thread(this);
+		thread.start();
+		running = true;
+		
 		System.out.println(Console.info(Console.WarningType.Info) + "Post-Initialization Finished!");
 	}
 	
@@ -81,7 +85,7 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	public void run() {
-		System.out.println(Console.info(Console.WarningType.Info) + "Started Run Loop");
+		System.out.println(Console.info(Console.WarningType.Info) + "Started Run Loop!");
 		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -136,7 +140,7 @@ public class Main extends Canvas implements Runnable {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
-			System.out.println(Console.info(Console.WarningType.Info) + "Started Render Loop");
+			System.out.println(Console.info(Console.WarningType.Info) + "Started Render Loop!");
 			return;
 		}
 		
@@ -145,8 +149,8 @@ public class Main extends Canvas implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		objectHandler.render(g);
-		DebugHud.drawText(g, "FPS: " + fps, 1, 15);
+		renderer.render(g);
+		debugHud.drawText(g, "FPS: " + fps, 1, 15);
 		DebugHud.getInfo();
 		
 		g.dispose();

@@ -1,34 +1,30 @@
 package main.java.javatest.util;
 
-import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import main.java.javatest.util.handlers.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
 public abstract class GameObject {
 	
-	private final EnumRenderKey renderKey;
 	private Vec2d pos = new Vec2d();
 	private float lightLevel;
-	private int blockLightLevel = 16;
+	private int blockLightLevel = 15;
+	private boolean isActive; //do later
 	protected final int height, width;
 	
-	public GameObject(double x, double y, int width, int height, EnumRenderKey renderKey) {
+	public GameObject(double x, double y, int width, int height) {
 		pos = new Vec2d(x, y);
 		this.width = width;
 		this.height = height;
-		this.renderKey = renderKey;
 		
-		lightLevel = MathHelper.clamp(MathHelper.normalize(blockLightLevel, 16) - 0.1f, 0.0f, 0.9f);
+		lightLevel = MathHelper.clamp(MathHelper.normalize(blockLightLevel, 15) - 0.1f, 0.0f, 0.9f);
 	}
 	
 	/** Runs 60 times a second */
 	public abstract void tick();
 	/** Runs 20 times a second */
 	public abstract void gameTick();
-	public abstract void render(Graphics g);
 	
 	/** Adds to the objects position */
 	public void addPosition(double x, double y) {
@@ -118,10 +114,6 @@ public abstract class GameObject {
 	/** Gets the entities right bounds */
 	public Rectangle getBoundsRight() {
 		return new Rectangle(MathHelper.floor(getPositionX() + (width - (width / 4))), MathHelper.floor(getPositionY()), width / 4, height);
-	}
-	
-	public EnumRenderKey getRenderKey() {
-		return renderKey;
 	}
 	
 	public float getBlockLightLevel() {

@@ -45,7 +45,7 @@ public class Console {
 		Error     (3),
 		FatalError(4);
 		
-		public final int fId;
+		private final int fId;
 		
 		private WarningType(int id) {
 			fId = id;

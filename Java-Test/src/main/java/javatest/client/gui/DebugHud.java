@@ -9,7 +9,7 @@ import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.GameObject;
-import main.java.javatest.util.handlers.ObjectHandler;
+import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 import main.java.javatest.util.math.Vec2i;
@@ -17,11 +17,11 @@ import main.java.javatest.util.math.Vec2i;
 public class DebugHud extends Canvas {
 
 	private static final long serialVersionUID = -4835862860408839539L;
-	private static final Font FONT = new Font("Font", Font.BOLD, 16);
+	private final Font FONT = new Font("Font", Font.BOLD, 16);
 	
+	private static String mouseString = "";
 	private static String posString = "";
 	private static String blockPosString = "";
-	private static String mouseString = "";
 	private static int blockCountAll;
 	private static double gravityY;
 	
@@ -49,7 +49,7 @@ public class DebugHud extends Canvas {
 		mouseString = vec.toString();
 	}
 	
-	public static void drawText(Graphics g, String fps, int x, int y) {
+	public void drawText(Graphics g, String fps, int x, int y) {
 		g.setColor(Color.GREEN);
 		g.setFont(FONT);
 		g.drawString(fps, x, y);

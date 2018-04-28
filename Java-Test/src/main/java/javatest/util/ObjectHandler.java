@@ -1,12 +1,9 @@
-package main.java.javatest.util.handlers;
+package main.java.javatest.util;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
 import main.java.javatest.entity.entityliving.EntityLiving;
-import main.java.javatest.util.Console;
-import main.java.javatest.util.GameObject;
 
 public class ObjectHandler {
 
@@ -31,14 +28,6 @@ public class ObjectHandler {
 			if (obj instanceof EntityLiving) {
 				((EntityLiving) obj).gameTickAlive();
 			}
-		}
-	}
-	
-	public void render(Graphics g) {
-		for (int i = 0; i < objectsAll.size(); i++) {
-			GameObject obj = objectsAll.get(i);
-			
-			obj.render(g);
 		}
 	}
 	

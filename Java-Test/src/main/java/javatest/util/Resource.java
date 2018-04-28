@@ -7,14 +7,26 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.java.javatest.blocks.util.BlockProperties;
+import main.java.javatest.entity.util.EntityProperties;
 
 public class Resource {
 
-	private static final String baseLocation = "C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\";
-	private static final String fileType = ".png";
+	private static final String BASE_LOCATION = "C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\";
+	private static final String FILE_TYPE = ".png";
 	
 	public static BufferedImage getTexture(ResourceType location, BlockProperties.BlockType textureName) {
-		File f = new File(baseLocation + location.toString().toLowerCase() + "\\" + textureName.toString().toLowerCase() + fileType);
+		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "\\" + textureName.toString().toLowerCase() + FILE_TYPE);
+		BufferedImage i = null;
+		try {
+			i = ImageIO.read(f);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
+	public static BufferedImage getTexture(ResourceType location, EntityProperties.EntityType textureName) {
+		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "\\" + textureName.toString().toLowerCase() + FILE_TYPE);
 		BufferedImage i = null;
 		try {
 			i = ImageIO.read(f);
@@ -25,9 +37,10 @@ public class Resource {
 	}
 	
 	public enum ResourceType {
-		blocks(0);
+		blocks(0),
+		entity(1);
 		
-		public final int fId;
+		private final int fId;
 		
 		private ResourceType(int id) {
 			fId = id;
