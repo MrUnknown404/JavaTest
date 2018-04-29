@@ -45,18 +45,22 @@ public class Renderer {
 		System.out.println(Console.info(Console.WarningType.Info) + "Finished setting textures!");
 	}
 	
+	static int i;
+	
 	public void render(Graphics g) {
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
+		for (i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
 			GameObject obj = ObjectHandler.getObjectsAll().get(i);
 			
 			if (obj != null && !obj.getIsActive()) {
 				continue;
+			} else if (obj == null) {
+				return;
 			}
 			
 			if (obj instanceof Block) {
 				for (int i2 = 0; i2 < valueList.size(); i2++) {
 					if (keyList.get(i2).toString() == ((Block) obj).getBlockProperties().getBlockType().toString()) {
-						g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), Block.SIZE, Block.SIZE, null);
+						g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
 					}
 				}
 			} else if (obj instanceof EntityPlayer) {
@@ -67,7 +71,7 @@ public class Renderer {
 				}
 			}
 			
-			//temporary light system!
+			//temporary lighting system!
 			if (obj.getLightLevel() != 0) {
 				g.setColor(new Color(0, 0, 0, obj.getLightLevel()));
 				g.fillRect((int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight());

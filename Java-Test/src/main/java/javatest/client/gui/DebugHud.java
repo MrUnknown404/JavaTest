@@ -34,7 +34,7 @@ public class DebugHud extends Canvas {
 			if (o instanceof EntityPlayer) {
 				Vec2d pos = new Vec2d(o.getPositionX(), o.getPositionY() + o.getHeight());
 				posString = pos.toStringInt();
-				blockPosString = new Vec2i(MathHelper.floor(o.getPositionX() / Block.SIZE), MathHelper.floor((o.getPositionY() + o.getHeight()) / Block.SIZE)).toString();
+				blockPosString = new Vec2i(MathHelper.floor(o.getPositionX() / Block.getBlockSize()), MathHelper.floor((o.getPositionY() + o.getHeight()) / Block.getBlockSize())).toString();
 				
 				gravityY = MathHelper.roundTo(((Entity) o).getGravityY(), 3);
 				tempInt += 1;

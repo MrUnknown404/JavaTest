@@ -3,32 +3,39 @@ package main.java.javatest;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
 import main.java.javatest.blocks.Block;
+import main.java.javatest.client.Camera;
 import main.java.javatest.client.KeyInput;
 import main.java.javatest.client.MouseInput;
 import main.java.javatest.client.Renderer;
 import main.java.javatest.client.Window;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.Console;
-import main.java.javatest.util.CreateTestLevel;
 import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.Vec2i;
+import main.java.javatest.world.World;
 
 public class Main extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = -2518563563721413864L;
 	
 	public static final int WIDTH = 854, HEIGHT = 480;
-	public static final int BLOCK_WIDTH = (WIDTH / Block.SIZE) - 0, BLOCK_HEIGHT = (HEIGHT / Block.SIZE) - 1;
+	public static final int BLOCK_WIDTH = (WIDTH / Block.getBlockSize()) - 0, BLOCK_HEIGHT = (HEIGHT / Block.getBlockSize()) - 1;
 	
 	private int fps;
 	private boolean running = false;
 	private Thread thread;
-	private ObjectHandler objectHandler = new ObjectHandler();
+	private static ObjectHandler objectHandler = new ObjectHandler();
+	private static Camera camera = new Camera();
 	private Renderer renderer = new Renderer();
 	private DebugHud debugHud = new DebugHud();
+	
+	public static void main(String args[]) {
+		new Main();
+	}
 	
 	public Main() {
 		new Window(WIDTH, HEIGHT, "Java Test!", this);
@@ -50,11 +57,14 @@ public class Main extends Canvas implements Runnable {
 		
 		renderer.findTextures();
 		
-		CreateTestLevel.createLevel(BLOCK_WIDTH, BLOCK_HEIGHT);
+		World.generateWorld(200, 100);
+		
+		MouseInput mouse = new MouseInput(camera);
 		
 		addKeyListener(new KeyInput());
-		addMouseListener(new MouseInput());
-		addMouseMotionListener(new MouseInput());
+		addMouseListener(mouse);
+		addMouseMotionListener(mouse);
+		
 		System.out.println(Console.info(Console.WarningType.Info) + "Pre-Initialization Finished!");
 		
 	}
@@ -129,6 +139,7 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	private void tick() {
+		camera.tick();
 		objectHandler.tick();
 	}
 	
@@ -145,11 +156,17 @@ public class Main extends Canvas implements Runnable {
 		}
 		
 		Graphics g = bs.getDrawGraphics();
+		Graphics2D g2 = (Graphics2D) g;
 		
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
+		g2.translate(camera.getPositionX(), camera.getPositionY());
+		
 		renderer.render(g);
+		
+		g2.translate(-camera.getPositionX(), -camera.getPositionY());
+		
 		debugHud.drawText(g, "FPS: " + fps, 1, 15);
 		DebugHud.getInfo();
 		
@@ -157,7 +174,7 @@ public class Main extends Canvas implements Runnable {
 		bs.show();
 	}
 	
-	public static void main(String args[]) {
-		new Main();
+	public static Camera getCamera() {
+		return camera;
 	}
 }

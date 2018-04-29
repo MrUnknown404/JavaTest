@@ -1,4 +1,4 @@
-package main.java.javatest.util;
+package main.java.javatest.world;
 
 import java.util.Random;
 
@@ -7,28 +7,26 @@ import main.java.javatest.blocks.BlockDirt;
 import main.java.javatest.blocks.BlockGrass;
 import main.java.javatest.blocks.BlockStone;
 import main.java.javatest.entity.entityliving.EntityPlayer;
+import main.java.javatest.util.Console;
+import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.BlockPos;
 
-public class CreateTestLevel {
-	private static final int tempMulti = 2; //TEMPORARY
+public class World {
+
+	private static final double FRICTION = 0.2;
+	private static final double GRAVITY = 1.75;
+	private static final double MAX_FALL_SPEED = (GRAVITY * GRAVITY) * ((GRAVITY * GRAVITY) * (GRAVITY * GRAVITY));
 	
-	/**
-	 * All of this is temporary! it will all be changed!
-	 * 
-	 * @param BLOCK_WIDTH
-	 * @param BLOCK_HEIGHT
-	 */
-	public static void createLevel(int BLOCK_WIDTH, int BLOCK_HEIGHT) {
-		System.out.println(Console.info(Console.WarningType.Info) + "Creating a level...");
+	private static int worldWidth, worldHeight;
+	
+	public static void generateWorld(int xSize, int ySize) {
+		System.out.println(Console.info(Console.WarningType.Info) + "Creating a new world...");
 		
-		final int HEIGHT = BLOCK_HEIGHT * Block.SIZE;
-		final int WIDTH = BLOCK_WIDTH * Block.SIZE;
+		worldWidth = xSize;
+		worldHeight = ySize;
 		
-		BLOCK_WIDTH *= tempMulti;
-		BLOCK_HEIGHT *= tempMulti;
-		
-		for (int i = 0; i < BLOCK_WIDTH; i++) {
-			for (int i2 = 4; i2 < BLOCK_HEIGHT; i2++) {
+		for (int i = 0; i < worldWidth; i++) {
+			for (int i2 = 4; i2 < worldHeight; i2++) {
 				if (i2 == 4) {
 					ObjectHandler.addObjectAll(new BlockGrass(new BlockPos(i, i2)));
 				} else if (i2 == 5) {
@@ -69,7 +67,29 @@ public class CreateTestLevel {
 			}
 		}
 		
-		ObjectHandler.addObjectAll(new EntityPlayer((WIDTH / 2) - 20, (HEIGHT / 2) - 256));
-		System.out.println(Console.info(Console.WarningType.Info) + "Finished creating the level!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Placing player!");
+		ObjectHandler.addObjectAll(new EntityPlayer(((worldWidth * Block.getBlockSize()) / 2) + 4, -44));
+		
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished creating the world!");
+	}
+	
+	public static double getFriction() {
+		return FRICTION;
+	}
+	
+	public static double getGravity() {
+		return GRAVITY;
+	}
+	
+	public static double getMaxFallSpeed() {
+		return MAX_FALL_SPEED;
+	}
+
+	public static int getWorldWidth() {
+		return worldWidth;
+	}
+
+	public static int getWorldHeight() {
+		return worldHeight;
 	}
 }

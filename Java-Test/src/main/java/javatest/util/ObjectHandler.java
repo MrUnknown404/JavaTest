@@ -1,8 +1,10 @@
 package main.java.javatest.util;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.javatest.Main;
 import main.java.javatest.entity.entityliving.EntityLiving;
 
 public class ObjectHandler {
@@ -15,6 +17,8 @@ public class ObjectHandler {
 			
 			if (obj != null && !obj.getIsActive()) {
 				continue;
+			} else if (obj == null) {
+				return;
 			}
 			
 			obj.tick();
@@ -30,12 +34,46 @@ public class ObjectHandler {
 			
 			if (obj != null && !obj.getIsActive()) {
 				continue;
+			} else if (obj == null) {
+				return;
 			}
 			
 			obj.gameTick();
 			if (obj instanceof EntityLiving) {
 				((EntityLiving) obj).gameTickAlive();
 			}
+		}
+	}
+	
+	public static void redoActives() {
+		for (int i = 0; i < objectsAll.size(); i++) {
+			GameObject obj = objectsAll.get(i);
+			
+			if (obj == null) {
+				continue;
+			}
+			
+			Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH, Main.HEIGHT);
+			
+			if (obj.getBoundsAll().intersects(rect)) {
+				obj.setIsActive(true);
+			} else {
+				obj.setIsActive(false);
+			}
+		}
+	}
+	
+	public static void redoSpecificActive(GameObject obj) {
+		if (obj == null) {
+			return;
+		}
+		
+		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH, Main.HEIGHT);
+		
+		if (obj.getBoundsAll().intersects(rect)) {
+			obj.setIsActive(true);
+		} else {
+			obj.setIsActive(false);
 		}
 	}
 	

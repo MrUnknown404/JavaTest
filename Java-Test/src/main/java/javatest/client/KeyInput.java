@@ -3,9 +3,7 @@ package main.java.javatest.client;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import main.java.javatest.Main;
 import main.java.javatest.entity.entityliving.EntityPlayer;
-import main.java.javatest.util.CreateTestLevel;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.ObjectHandler;
 
@@ -38,13 +36,6 @@ public class KeyInput extends KeyAdapter {
 		int key = e.getKeyCode();
 		
 		if (player != null) {
-			if (key == KeyEvent.VK_R) {
-				ObjectHandler.clearObjectsAll();
-				
-				CreateTestLevel.createLevel(Main.BLOCK_WIDTH, Main.BLOCK_HEIGHT);
-				findPlayer();
-			}
-			
 			if (key == KeyEvent.VK_W && player.isGrounded() && !keyDown[0]) {
 				player.setJumpY(-MOVE_SPEED * (MOVE_SPEED / 1.25));
 				keyDown[0] = true;

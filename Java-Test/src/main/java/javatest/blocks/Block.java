@@ -4,20 +4,21 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.util.GameObject;
+import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.Vec2d;
 
 public class Block extends GameObject {
 	
-	public final static int SIZE = 16;
 	protected BlockProperties type;
 	private BlockPos pos = new BlockPos();
+	private final static int SIZE = 16;
 	
 	public Block(BlockPos pos, BlockProperties type) {
 		super(pos.x, pos.y, SIZE, SIZE);
 		this.pos = pos;
 		this.type = type;
-		updatePosition();
+		blockUpdate();
 	}
 	
 	@Override
@@ -28,6 +29,11 @@ public class Block extends GameObject {
 	@Override
 	public void gameTick() {
 		
+	}
+	
+	public void blockUpdate() {
+		updatePosition();
+		ObjectHandler.redoSpecificActive(this);
 	}
 	
 	private void updatePosition() {
@@ -78,6 +84,10 @@ public class Block extends GameObject {
 	
 	public int getBlockPosY() {
 		return pos.y;
+	}
+	
+	public static int getBlockSize() {
+		return SIZE;
 	}
 	
 	/** Returns a random block */

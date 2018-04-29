@@ -4,6 +4,7 @@ import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.MathHelper;
+import main.java.javatest.world.World;
 
 public class EntityLiving extends Entity {
 
@@ -44,9 +45,9 @@ public class EntityLiving extends Entity {
 			}
 			
 			if (getJumpY() > 0) {
-				setJumpY(MathHelper.clamp(getJumpY() - FRICTION, 0, Double.MAX_VALUE));
+				setJumpY(MathHelper.clamp(getJumpY() - World.getFriction(), 0, Double.MAX_VALUE));
 			} else if (getVelocityY() < 0) {
-				setJumpY(MathHelper.clamp(getJumpY() + FRICTION, -Double.MAX_VALUE, 0));
+				setJumpY(MathHelper.clamp(getJumpY() + World.getFriction(), -Double.MAX_VALUE, 0));
 			}
 		}
 		

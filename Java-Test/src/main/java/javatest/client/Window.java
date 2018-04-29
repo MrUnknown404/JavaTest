@@ -1,15 +1,12 @@
 package main.java.javatest.client;
 
-import java.awt.Canvas;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
 import main.java.javatest.Main;
 
-public class Window extends Canvas {
-
-	private static final long serialVersionUID = 8102809856257657166L;
+public class Window {
 
 	public Window(int width, int height, String title, Main game) {
 		JFrame frame = new JFrame(title);
@@ -19,7 +16,7 @@ public class Window extends Canvas {
 		frame.setMaximumSize(new Dimension(width, height));
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(true);
+		frame.setResizable(false);
 		frame.setFocusable(true);
 		frame.setLocationRelativeTo(null);
 		frame.add(game);

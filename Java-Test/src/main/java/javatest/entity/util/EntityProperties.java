@@ -9,6 +9,7 @@ public class EntityProperties {
 	private boolean hasCollision;
 	private boolean doGravity;
 	private boolean doCollision;
+	private boolean alwaysLoad;
 	private EntityType type;
 	
 	public EntityProperties(EntityType type) {
@@ -16,15 +17,13 @@ public class EntityProperties {
 		
 		switch (type) {
 			case player:
+				setHasCollision(false);
 				setDoGravity(true);
 				setDoCollision(true);
-				setHasCollision(false);
+				setAlwaysLoad(true);
 				break;
 			default:
 				System.out.println(Console.info(Console.WarningType.Error) + "Invalid type");
-				setDoGravity(false);
-				setDoCollision(false);
-				setHasCollision(false);
 				break;
 		}
 	}
@@ -41,6 +40,10 @@ public class EntityProperties {
 		return doCollision;
 	}
 	
+	public boolean getAlwaysLoad() {
+		return alwaysLoad;
+	}
+	
 	public EntityProperties setHasCollision(boolean bool) {
 		hasCollision = bool;
 		return this;
@@ -53,6 +56,11 @@ public class EntityProperties {
 	
 	public EntityProperties setDoCollision(boolean bool) {
 		doCollision = bool;
+		return this;
+	}
+	
+	public EntityProperties setAlwaysLoad(boolean bool) {
+		alwaysLoad = bool;
 		return this;
 	}
 	

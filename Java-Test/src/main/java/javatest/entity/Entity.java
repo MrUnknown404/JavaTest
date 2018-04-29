@@ -7,12 +7,9 @@ import main.java.javatest.util.GameObject;
 import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
+import main.java.javatest.world.World;
 
 public class Entity extends GameObject {
-	
-	protected static final double FRICTION = 0.2;
-	private static final double GRAVITY = 1.75; //temp
-	private static final double MAX_FALL_SPEED = (GRAVITY * GRAVITY) * ((GRAVITY * GRAVITY) * (GRAVITY * GRAVITY));
 	
 	protected EntityProperties type;
 	private double gravityY = 0;
@@ -40,7 +37,7 @@ public class Entity extends GameObject {
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - GRAVITY + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
+					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - World.getGravity() + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
 						return tObj;
 					}
 				}
@@ -56,7 +53,7 @@ public class Entity extends GameObject {
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - GRAVITY + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
+					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - World.getGravity() + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
 						return tObj;
 					}
 				}
@@ -126,9 +123,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (getVelocityX() > 0) {
-				setVelocityX(MathHelper.clamp(getVelocityX() - FRICTION, 0, Double.MAX_VALUE));
+				setVelocityX(MathHelper.clamp(getVelocityX() - World.getFriction(), 0, Double.MAX_VALUE));
 			} else if (getVelocityX() < 0) {
-				setVelocityX(MathHelper.clamp(getVelocityX() + FRICTION, -Double.MAX_VALUE, 0));
+				setVelocityX(MathHelper.clamp(getVelocityX() + World.getFriction(), -Double.MAX_VALUE, 0));
 			}
 		}
 		
@@ -153,9 +150,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (getVelocityY() > 0) {
-				setVelocityY(MathHelper.clamp(getVelocityY() - FRICTION, 0, Double.MAX_VALUE));
+				setVelocityY(MathHelper.clamp(getVelocityY() - World.getFriction(), 0, Double.MAX_VALUE));
 			} else if (getVelocityY() < 0) {
-				setVelocityY(MathHelper.clamp(getVelocityY() + FRICTION, -Double.MAX_VALUE, 0));
+				setVelocityY(MathHelper.clamp(getVelocityY() + World.getFriction(), -Double.MAX_VALUE, 0));
 			}
 		}
 		
@@ -171,9 +168,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (getGravityY() > 0) {
-				setGravityY(MathHelper.clamp(getGravityY() - FRICTION, 0, Double.MAX_VALUE));
+				setGravityY(MathHelper.clamp(getGravityY() - World.getFriction(), 0, Double.MAX_VALUE));
 			} else if (getGravityY() < 0) {
-				setGravityY(MathHelper.clamp(getGravityY() + FRICTION, -Double.MAX_VALUE, 0));
+				setGravityY(MathHelper.clamp(getGravityY() + World.getFriction(), -Double.MAX_VALUE, 0));
 			}
 		}
 		
@@ -189,9 +186,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (!isGrounded()) {
-				addGravityY(GRAVITY / (GRAVITY * 2));
-				if (getGravityY() > MAX_FALL_SPEED) {
-					setGravityY(MAX_FALL_SPEED);
+				addGravityY(World.getGravity() / (World.getGravity() * 2));
+				if (getGravityY() > World.getMaxFallSpeed()) {
+					setGravityY(World.getMaxFallSpeed());
 				}
 			}
 		}
