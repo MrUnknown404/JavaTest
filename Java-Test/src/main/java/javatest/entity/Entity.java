@@ -4,7 +4,6 @@ import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.util.GameObject;
-import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 import main.java.javatest.world.World;
@@ -32,8 +31,8 @@ public class Entity extends GameObject {
 	
 	/** Gets what's below the entity plus the argument */
 	public GameObject getBelow(double y) {
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsAll().get(i);
+		for (int i = 0; i < World.getActiveBlocks().size(); i++) {
+			GameObject obj = World.getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
@@ -48,8 +47,8 @@ public class Entity extends GameObject {
 
 	/** Gets what's above the entity plus the argument */
 	public GameObject getAbove(double y) {
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsAll().get(i);
+		for (int i = 0; i < World.getActiveBlocks().size(); i++) {
+			GameObject obj = World.getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
@@ -64,8 +63,8 @@ public class Entity extends GameObject {
 	
 	/** Gets what's left the entity plus the argument */
 	public GameObject getLeft(double x) {
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsAll().get(i);
+		for (int i = 0; i < World.getActiveBlocks().size(); i++) {
+			GameObject obj = World.getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
@@ -80,8 +79,8 @@ public class Entity extends GameObject {
 	
 	/** Gets what's right the entity plus the argument */
 	public GameObject getRight(double x) {
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsAll().get(i);
+		for (int i = 0; i < World.getActiveBlocks().size(); i++) {
+			GameObject obj = World.getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {

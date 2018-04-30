@@ -3,23 +3,19 @@ package main.java.javatest.client;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import main.java.javatest.Main;
 import main.java.javatest.blocks.Block;
 import main.java.javatest.client.gui.DebugHud;
-import main.java.javatest.util.GameObject;
-import main.java.javatest.util.ObjectHandler;
+import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2i;
+import main.java.javatest.world.World;
 
 public class MouseInput extends MouseAdapter {
 
 	private Vec2i pos = new Vec2i();
 	private Block block;
-	private Camera camera;
-	
-	public MouseInput(Camera camera) {
-		DebugHud.setMouseVec(new Vec2i(MathHelper.floor(pos.getX() / Block.getBlockSize()), MathHelper.floor(pos.getY() / Block.getBlockSize())));
-		this.camera = camera;
-	}
+	private Camera camera = Main.getCamera();
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
@@ -31,47 +27,36 @@ public class MouseInput extends MouseAdapter {
 		if (e.getButton() == 3) {
 			Vec2i vec = new Vec2i((e.getX() - camera.getPositionX()) / Block.getBlockSize(), (e.getY() - camera.getPositionY()) / Block.getBlockSize());
 			
-			int tempInt = 0;
-			
-			for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-				GameObject o = ObjectHandler.getObjectsAll().get(i);
-				if (o instanceof Block) {
-					Block b = (Block) o;
-					tempInt += 1;
-					
-					if (b.getBlockPosX() != vec.getX() && b.getBlockPosY() != vec.getY()) {
-						pos = vec;
-					} else if (b.getBlockPosX() == vec.getX() && b.getBlockPosY() == vec.getY()) {
-						pos = null;
-						break;
-					}
-				}
-				if (tempInt == 0) {
+			for (int i = 0; i < World.getActiveBlocks().size(); i++) {
+				Block b = World.getActiveBlocks().get(i);
+				
+				if (!b.getBlockPos().equals(new BlockPos(vec))) {
 					pos = vec;
+				} else if (b.getBlockPosX() == vec.getX() && b.getBlockPosY() == vec.getY()) {
+					pos = null;
+					break;
 				}
 			}
 			
 			if (pos != null) {
 				Renderer.i--;
-				ObjectHandler.addObjectAll(Block.getRandomBlock(this.pos.getX(), this.pos.getY()));
+				World.addBlockAll(Block.getRandomBlock(this.pos.getX(), this.pos.getY()));
 				pos = null;
 			}
 		} else if (e.getButton() == 1) {
 			Vec2i pos = new Vec2i((e.getX() - camera.getPositionX()) / Block.getBlockSize(), (e.getY() - camera.getPositionY()) / Block.getBlockSize());
-			for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-				GameObject o = ObjectHandler.getObjectsAll().get(i);
-				if (o instanceof Block) {
-					Block b = (Block) o;
+			
+			for (int i = 0; i < World.getActiveBlocks().size(); i++) {
+				Block b = World.getActiveBlocks().get(i);
 					
-					if (b.getBlockPosX() == pos.getX() && b.getBlockPosY() == pos.getY()) {
-						block = b;
-					}
+				if (b.getBlockPos().equals(new BlockPos(pos))) {
+					block = b;
 				}
 			}
 			
 			if (block != null) {
 				Renderer.i--;
-				ObjectHandler.removeObjectAll(block);
+				World.removeBlockAll(block);
 				block = null;
 			}
 		}

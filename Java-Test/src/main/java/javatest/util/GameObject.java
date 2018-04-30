@@ -2,12 +2,10 @@ package main.java.javatest.util;
 
 import java.awt.Rectangle;
 
-import main.java.javatest.blocks.Block;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
-public abstract class GameObject {
-	
+public class GameObject {
 	private Vec2d pos = new Vec2d();
 	private float lightLevel;
 	private int blockLightLevel = 15;
@@ -20,15 +18,12 @@ public abstract class GameObject {
 		this.height = height;
 		
 		lightLevel = MathHelper.clamp(MathHelper.normalize(blockLightLevel, 15) - 0.1f, 0.0f, 0.9f);
-		if (!(this instanceof Block)) {
-			ObjectHandler.redoSpecificActive(this);
-		}
 	}
 	
 	/** Runs 60 times a second */
-	public abstract void tick();
+	public void tick() {}
 	/** Runs 20 times a second */
-	public abstract void gameTick();
+	public void gameTick() {}
 	
 	/** Adds to the objects position */
 	public void addPosition(double x, double y) {
@@ -134,10 +129,5 @@ public abstract class GameObject {
 	
 	public boolean getIsActive() {
 		return isActive;
-	}
-	
-	/** Kills the object */
-	public void killObject() {
-		ObjectHandler.removeObjectAll(this);
 	}
 }

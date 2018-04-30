@@ -14,9 +14,8 @@ import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.util.Console;
-import main.java.javatest.util.GameObject;
-import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.Resource;
+import main.java.javatest.world.World;
 
 public class Renderer {
 
@@ -48,26 +47,16 @@ public class Renderer {
 	static int i;
 	
 	public void render(Graphics g) {
-		for (i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsAll().get(i);
+		for (i = 0; i < World.getActiveBlocks().size(); i++) {
+			Block obj = World.getActiveBlocks().get(i);
 			
-			if (obj != null && !obj.getIsActive()) {
-				continue;
-			} else if (obj == null) {
+			if (obj == null) {
 				return;
 			}
 			
-			if (obj instanceof Block) {
-				for (int i2 = 0; i2 < valueList.size(); i2++) {
-					if (keyList.get(i2).toString() == ((Block) obj).getBlockProperties().getBlockType().toString()) {
-						g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
-					}
-				}
-			} else if (obj instanceof EntityPlayer) {
-				for (int i2 = 0; i2 < valueList.size(); i2++) {
-					if (keyList.get(i2).toString() == ((Entity) obj).getEntityProperties().getEntityType().toString()) {
-						g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight(), null);
-					}
+			for (int i2 = 0; i2 < valueList.size(); i2++) {
+				if (keyList.get(i2).toString() == ((Block) obj).getBlockProperties().getBlockType().toString()) {
+					g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
 				}
 			}
 			
@@ -75,6 +64,22 @@ public class Renderer {
 			if (obj.getLightLevel() != 0) {
 				g.setColor(new Color(0, 0, 0, obj.getLightLevel()));
 				g.fillRect((int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight());
+			}
+		}
+		
+		for (i = 0; i < World.getActiveEntities().size(); i++) {
+			Entity obj = World.getActiveEntities().get(i);
+			
+			if (obj == null) {
+				return;
+			}
+			
+			if (obj instanceof EntityPlayer) {
+				for (int i2 = 0; i2 < valueList.size(); i2++) {
+					if (keyList.get(i2).toString() == ((Entity) obj).getEntityProperties().getEntityType().toString()) {
+						g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight(), null);
+					}
+				}
 			}
 		}
 	}

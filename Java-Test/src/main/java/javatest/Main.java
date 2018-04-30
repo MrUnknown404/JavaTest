@@ -14,7 +14,6 @@ import main.java.javatest.client.Renderer;
 import main.java.javatest.client.Window;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.Console;
-import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.Vec2i;
 import main.java.javatest.world.World;
 
@@ -28,10 +27,10 @@ public class Main extends Canvas implements Runnable {
 	private int fps;
 	private boolean running = false;
 	private Thread thread;
-	private static ObjectHandler objectHandler = new ObjectHandler();
-	private static Camera camera = new Camera();
-	private Renderer renderer = new Renderer();
-	private DebugHud debugHud = new DebugHud();
+	private static final World world = new World();
+	private static final Camera camera = new Camera();
+	private final Renderer renderer = new Renderer();
+	private final DebugHud debugHud = new DebugHud();
 	
 	public static void main(String args[]) {
 		new Main();
@@ -57,9 +56,9 @@ public class Main extends Canvas implements Runnable {
 		
 		renderer.findTextures();
 		
-		World.generateWorld(200, 100);
+		World.generateWorld(400, 200);
 		
-		MouseInput mouse = new MouseInput(camera);
+		MouseInput mouse = new MouseInput();
 		
 		addKeyListener(new KeyInput());
 		addMouseListener(mouse);
@@ -140,11 +139,11 @@ public class Main extends Canvas implements Runnable {
 	
 	private void tick() {
 		camera.tick();
-		objectHandler.tick();
+		world.tick();
 	}
 	
 	private void gameTick() {
-		objectHandler.gameTick();
+		world.gameTick();
 	}
 	
 	private void render() {

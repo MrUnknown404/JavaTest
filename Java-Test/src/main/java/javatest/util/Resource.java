@@ -11,11 +11,11 @@ import main.java.javatest.entity.util.EntityProperties;
 
 public class Resource {
 
-	private static final String BASE_LOCATION = "C:\\Github\\JavaTest\\Java-Test\\src\\main\\resources\\javatest\\assets\\textures\\";
+	private static final String BASE_LOCATION = System.getProperty("user.dir") + "\\src\\main\\resources\\javatest\\assets\\textures\\";
 	private static final String FILE_TYPE = ".png";
 	
 	public static BufferedImage getTexture(ResourceType location, BlockProperties.BlockType textureName) {
-		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "\\" + textureName.toString().toLowerCase() + FILE_TYPE);
+		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName.toString().toLowerCase() + FILE_TYPE);
 		BufferedImage i = null;
 		try {
 			i = ImageIO.read(f);
@@ -26,7 +26,7 @@ public class Resource {
 	}
 	
 	public static BufferedImage getTexture(ResourceType location, EntityProperties.EntityType textureName) {
-		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "\\" + textureName.toString().toLowerCase() + FILE_TYPE);
+		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName.toString().toLowerCase() + FILE_TYPE);
 		BufferedImage i = null;
 		try {
 			i = ImageIO.read(f);

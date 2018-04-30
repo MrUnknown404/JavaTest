@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.GameObject;
-import main.java.javatest.util.ObjectHandler;
+import main.java.javatest.world.World;
 
 public class KeyInput extends KeyAdapter {
 
@@ -22,8 +22,8 @@ public class KeyInput extends KeyAdapter {
 	}
 	
 	private void findPlayer() {
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			GameObject obj = ObjectHandler.getObjectsAll().get(i);
+		for (int i = 0; i < World.getActiveEntities().size(); i++) {
+			GameObject obj = World.getActiveEntities().get(i);
 			
 			if (obj instanceof EntityPlayer) {
 				player = (EntityPlayer) obj;
@@ -53,26 +53,18 @@ public class KeyInput extends KeyAdapter {
 	
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
+		if (key == KeyEvent.VK_W) {
+			keyDown[0] = false;
+		}
 		
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			GameObject tObj = ObjectHandler.getObjectsAll().get(i);
-			
-			if (tObj instanceof EntityPlayer) {
-				EntityPlayer obj = (EntityPlayer) tObj;
-				if (key == KeyEvent.VK_W) {
-					keyDown[0] = false;
-				}
-				
-				if (key == KeyEvent.VK_A) {
-					keyDown[1] = false;
-				} else if (key == KeyEvent.VK_D) {
-					keyDown[2] = false;
-				}
-				
-				if (!keyDown[1] && !keyDown[2]) {
-					obj.setMoveDirX(0);
-				}
-			}
+		if (key == KeyEvent.VK_A) {
+			keyDown[1] = false;
+		} else if (key == KeyEvent.VK_D) {
+			keyDown[2] = false;
+		}
+		
+		if (!keyDown[1] && !keyDown[2]) {
+			player.setMoveDirX(0);
 		}
 	}
 }

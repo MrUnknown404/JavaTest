@@ -3,8 +3,8 @@ package main.java.javatest.client;
 import main.java.javatest.Main;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.Console;
-import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.Vec2d;
+import main.java.javatest.world.World;
 
 public class Camera {
 
@@ -13,9 +13,9 @@ public class Camera {
 	private boolean[] bool = new boolean[2];
 	
 	public static void getPlayer() {
-		for (int i = 0; i < ObjectHandler.getObjectsAll().size(); i++) {
-			if (ObjectHandler.getObjectsAll().get(i) instanceof EntityPlayer) {
-				player = (EntityPlayer) ObjectHandler.getObjectsAll().get(i);
+		for (int i = 0; i < World.getActiveEntities().size(); i++) {
+			if (World.getActiveEntities().get(i) instanceof EntityPlayer) {
+				player = (EntityPlayer) World.getActiveEntities().get(i);
 				return;
 			}
 		}
@@ -38,7 +38,7 @@ public class Camera {
 		}
 		
 		if (bool[0] || bool[1]) {
-			ObjectHandler.redoActives();
+			World.redoActives();
 		}
 		bool[0] = false;
 		bool[1] = false;

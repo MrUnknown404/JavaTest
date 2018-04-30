@@ -5,6 +5,11 @@ public class BlockPos {
 	public static final BlockPos ZERO = new BlockPos();
 	public int x, y;
 	
+	public BlockPos(Vec2i vec) {
+		this.x = vec.x;
+		this.y = vec.y;
+	}
+	
 	public BlockPos(int x, int y) {
 		this.x = x;
 		this.y = y;

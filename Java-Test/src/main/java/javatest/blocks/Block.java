@@ -4,19 +4,18 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.util.GameObject;
-import main.java.javatest.util.ObjectHandler;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.Vec2d;
+import main.java.javatest.world.World;
 
 public class Block extends GameObject {
-	
 	protected BlockProperties type;
-	private BlockPos pos = new BlockPos();
+	private BlockPos bPos = new BlockPos();
 	private final static int SIZE = 16;
 	
-	public Block(BlockPos pos, BlockProperties type) {
-		super(pos.x, pos.y, SIZE, SIZE);
-		this.pos = pos;
+	public Block(BlockPos bPos, BlockProperties type) {
+		super(bPos.x, bPos.y, SIZE, SIZE);
+		this.bPos = bPos;
 		this.type = type;
 		blockUpdate();
 	}
@@ -33,12 +32,12 @@ public class Block extends GameObject {
 	
 	public void blockUpdate() {
 		updatePosition();
-		ObjectHandler.redoSpecificActive(this);
+		World.redoSpecificActiveBlock(this);
 	}
 	
 	private void updatePosition() {
-		if (!(getPosition().equals(new Vec2d(pos.x * SIZE, pos.y * SIZE)))) {
-			setPosition(pos.x * SIZE, pos.y * SIZE);
+		if (!(getPosition().equals(new Vec2d(bPos.x * SIZE, bPos.y * SIZE)))) {
+			setPosition(bPos.x * SIZE, bPos.y * SIZE);
 		}
 	}
 	
@@ -46,48 +45,52 @@ public class Block extends GameObject {
 		return type;
 	}
 	
-	public void addBlockPos(BlockPos pos) {
-		this.pos = pos.add(pos);
+	public void addBlockPos(BlockPos bPos) {
+		this.bPos = bPos.add(bPos);
 	}
 	
 	public void addBlockPos(int x, int y) {
-		this.pos = pos.add(x, y);
+		this.bPos = bPos.add(x, y);
 	}
 	
 	public void addBlockPosX(int x) {
-		pos.x += x;
+		bPos.x += x;
 	}
 	
 	public void addBlockPosY(int y) {
-		pos.y += y;
+		bPos.y += y;
 	}
 	
-	public void setBlockPos(BlockPos pos) {
-		this.pos = pos;
+	public void setBlockPos(BlockPos bPos) {
+		this.bPos = bPos;
 	}
 	
 	public void setBlockPosX(int x) {
-		pos.x = x;
+		bPos.x = x;
 	}
 	
 	public void setBlockPosY(int y) {
-		pos.y = y;
+		bPos.y = y;
 	}
 	
 	public BlockPos getBlockPos() {
-		return pos;
+		return bPos;
 	}
 	
 	public int getBlockPosX() {
-		return pos.x;
+		return bPos.x;
 	}
 	
 	public int getBlockPosY() {
-		return pos.y;
+		return bPos.y;
 	}
 	
 	public static int getBlockSize() {
 		return SIZE;
+	}
+	
+	public String getBlockName() {
+		return "Block" + getBlockProperties().getBlockType().toString().replace(getBlockProperties().getBlockType().toString().substring(0, 1), getBlockProperties().getBlockType().toString().substring(0, 1).toUpperCase());
 	}
 	
 	/** Returns a random block */
