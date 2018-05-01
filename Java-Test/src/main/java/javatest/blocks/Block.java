@@ -95,7 +95,7 @@ public class Block extends GameObject {
 	
 	/** Returns a random block */
 	public static Block getRandomBlock(int x, int y) {
-		return new Block(new BlockPos(x, y), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size())));
+		return new Block(new BlockPos(x, y), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size() - 1)));
 	}
 	
 	/** Returns a random block */

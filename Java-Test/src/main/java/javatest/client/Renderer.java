@@ -11,7 +11,6 @@ import java.util.Map;
 import main.java.javatest.blocks.Block;
 import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.entity.Entity;
-import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.Resource;
@@ -74,7 +73,7 @@ public class Renderer {
 				return;
 			}
 			
-			if (obj instanceof EntityPlayer) {
+			if (obj instanceof Entity) {
 				for (int i2 = 0; i2 < valueList.size(); i2++) {
 					if (keyList.get(i2).toString() == ((Entity) obj).getEntityProperties().getEntityType().toString()) {
 						g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight(), null);

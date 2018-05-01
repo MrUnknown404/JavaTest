@@ -39,14 +39,13 @@ public class MouseInput extends MouseAdapter {
 				
 				if (!b.getBlockPos().equals(new BlockPos(vec))) {
 					pos = vec;
-				} else if (b.getBlockPosX() == vec.getX() && b.getBlockPosY() == vec.getY()) {
+				} else if (b.getBlockPos().equals(new BlockPos(vec))) {
 					pos = null;
 					break;
 				}
 			}
 			
 			if (pos != null) {
-				Renderer.i--;
 				World.addBlockAll(Block.getRandomBlock(this.pos.getX(), this.pos.getY()));
 				pos = null;
 			}
@@ -58,6 +57,7 @@ public class MouseInput extends MouseAdapter {
 					
 				if (b.getBlockPos().equals(new BlockPos(pos))) {
 					block = b;
+					break;
 				}
 			}
 			

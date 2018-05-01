@@ -48,6 +48,10 @@ public class World {
 		int tempInt = 0;
 		int tempHeight = 0;
 		
+		System.out.println(Console.info(Console.WarningType.Info) + "Moving Camera!");
+		Main.getCamera().setPosition(((worldLength / 2) * Block.getBlockSize()) - 12, -44 - (-15 * -Block.getBlockSize()));
+		
+		System.out.println(Console.info(Console.WarningType.Info) + "Placing blocks...");
 		for (int width = 0; width < worldLength; width++) {
 			for (int height = 0; height < worldHeight + 15; height++) {
 				if (height == 0) {
@@ -118,6 +122,20 @@ public class World {
 		isGeneratingWorld = false;
 		doesWorldExist = true;
 		System.out.println(Console.info(Console.WarningType.Info) + "-Finished creating the world!");
+	}
+	
+	public static void clearWorld() {
+		System.out.println(Console.info(Console.WarningType.Info) + "-Reseting the world...");
+		System.out.println(Console.info(Console.WarningType.Info) + "Reseting blocks...");
+		allBlocks.clear();
+		activeBlocks.clear();
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished reseting blocks!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Reseting entities...");
+		allEntities.clear();
+		activeEntities.clear();
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished reseting entities!");
+		doesWorldExist = false;
+		System.out.println(Console.info(Console.WarningType.Info) + "-Finished reseting the world!");
 	}
 	
 	//private static final String LOC = System.getProperty("user.dir") + "\\run\\worlds\\";

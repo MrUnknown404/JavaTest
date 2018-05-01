@@ -39,8 +39,10 @@ public class KeyInput extends KeyAdapter {
 			}
 		}
 		
-		if (key == KeyEvent.VK_1) {
+		if (key == KeyEvent.VK_1 && !World.doesWorldExist) {
 			World.generateWorld(200, 100, new Random().nextInt());
+		} else if (key == KeyEvent.VK_3 && World.doesWorldExist) {
+			World.clearWorld();
 		}
 	}
 	

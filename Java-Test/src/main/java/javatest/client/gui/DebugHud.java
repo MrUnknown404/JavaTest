@@ -20,13 +20,15 @@ public class DebugHud extends Canvas {
 	
 	private static String mouseString = "(0, 0)";
 	private static String mouseWorldString = "(0, 0)";
+	private static String mouseWorldBlockString = "(0, 0)";
 	private static String posString = "";
 	private static String blockPosString = "";
 	private static int blockCountAll;
 	private static int blockCountActive;
 	private static double gravityY;
-	private static final String PRESS1 = "Press 1 to generate world!";
-	private static final String PRESS2 = "Press 2 to load world! (not implemented yet)";
+	private static final String PRESS1 = "Press 1 to generate a new world!";
+	private static final String PRESS2 = "Press 2 to load a world! (not implemented yet)";
+	private static final String PRESS3 = "Press 3 to reset the world";
 	private static final String GENERATING = "Generating World...";
 	
 	public void getInfo() {
@@ -44,7 +46,8 @@ public class DebugHud extends Canvas {
 	public static void setMouseVec(Vec2i vec) {
 		mouseString = vec.toString();
 		if (World.getPlayer() != null) {
-			mouseWorldString = new Vec2d(-MouseInput.vec.x - World.getPlayer().getPositionX() - World.getPlayer().getWidth() + Main.WIDTH, -MouseInput.vec.y - World.getPlayer().getPositionY() - World.getPlayer().getHeight() + Main.HEIGHT).toStringInt();
+			mouseWorldString = new Vec2d(-MouseInput.vec.x - Main.getCamera().getPositionX() + Main.WIDTH, -MouseInput.vec.y - Main.getCamera().getPositionY() + Main.HEIGHT).toStringInt();
+			mouseWorldBlockString = new Vec2d((-MouseInput.vec.x - Main.getCamera().getPositionX() + Main.WIDTH) / Block.getBlockSize(), (-MouseInput.vec.y - Main.getCamera().getPositionY() + Main.HEIGHT) / Block.getBlockSize()).toStringInt();
 		}
 	}
 	
@@ -53,15 +56,6 @@ public class DebugHud extends Canvas {
 		g.setColor(Color.GREEN);
 		g.setFont(FONT);
 		g.drawString(fps, x, y);
-		
-		g.drawString("Mouse pos: " + mouseString, x, y += 32);
-		g.drawString("Mouse World pos: " + mouseWorldString, x, y += 16);
-		g.drawString("Blocks active: " + blockCountActive, x, y += 16);
-		g.drawString("Blocks all: " + blockCountAll, x, y += 16);
-		
-		g.drawString("Player pos: " + posString, x, y += 32);
-		g.drawString("Player block pos: " + blockPosString, x, y += 16);
-		g.drawString("Player Gravity: " + gravityY, x, y += 16);
 		
 		if (!World.doesWorldExist && !World.isGeneratingWorld) {
 			final int w1 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS1, g).getWidth() / 2;
@@ -76,6 +70,20 @@ public class DebugHud extends Canvas {
 			final int h = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(GENERATING, g).getHeight() / 2;
 			
 			g.drawString(GENERATING, w, h);
+		} else if (World.doesWorldExist && !World.isGeneratingWorld) {
+			final int w = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS3, g).getWidth() / 2;
+			
+			g.drawString(PRESS3, w, 16);
+			
+			g.drawString("Mouse pos: " + mouseString, x, y += 32);
+			g.drawString("Mouse world pos: " + mouseWorldString, x, y += 16);
+			g.drawString("Mouse world block pos: " + mouseWorldBlockString, x, y += 16);
+			g.drawString("Blocks active: " + blockCountActive, x, y += 16);
+			g.drawString("Blocks all: " + blockCountAll, x, y += 16);
+			
+			g.drawString("Player pos: " + posString, x, y += 32);
+			g.drawString("Player block pos: " + blockPosString, x, y += 16);
+			g.drawString("Player Gravity: " + gravityY, x, y += 16);
 		}
 	}
 }

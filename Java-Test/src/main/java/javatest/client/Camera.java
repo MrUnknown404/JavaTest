@@ -37,7 +37,6 @@ public class Camera {
 			}
 		}
 		
-		
 		if (bool) {
 			World.redoActives();
 		}
