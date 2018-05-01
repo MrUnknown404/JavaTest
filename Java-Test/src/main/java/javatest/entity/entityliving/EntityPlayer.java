@@ -1,6 +1,7 @@
 package main.java.javatest.entity.entityliving;
 
 import main.java.javatest.Main;
+import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.util.EntityProperties;
 
 public class EntityPlayer extends EntityLiving {
@@ -13,7 +14,7 @@ public class EntityPlayer extends EntityLiving {
 	public void gameTickAlive() {
 		super.gameTick();
 		if (getPositionY() > Main.HEIGHT * 10) {
-			setPositionY(0);
+			setPositionY(-44 - (-15 * -Block.getBlockSize()));
 		}
 	}
 }

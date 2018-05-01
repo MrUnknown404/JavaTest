@@ -16,74 +16,108 @@ import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.BlockPos;
+import main.java.javatest.util.math.MathHelper;
 
 public class World {
 
+	public static boolean isGeneratingWorld;
+	public static boolean doesWorldExist;
+	
 	private static final double FRICTION = 0.2;
 	private static final double GRAVITY = 1.75;
 	private static final double MAX_FALL_SPEED = (GRAVITY * GRAVITY) * ((GRAVITY * GRAVITY) * (GRAVITY * GRAVITY));
 	
-	private static int worldWidth, worldHeight;
+	private static int worldLength, worldHeight, worldSeed;
+	private static Random random;
 	
 	private static List<Block> allBlocks = new ArrayList<Block>();
 	private static List<Entity> allEntities = new ArrayList<Entity>();
 	private static List<Block> activeBlocks = new ArrayList<Block>();
 	private static List<Entity> activeEntities = new ArrayList<Entity>();
+	private static EntityPlayer player;
 	
-	public static void generateWorld(int xSize, int ySize) {
-		System.out.println(Console.info(Console.WarningType.Info) + "Creating a new world...");
+	public static void generateWorld(int xSize, int ySize, int seed) {
+		System.out.println(Console.info(Console.WarningType.Info) + "-Creating a new world...");
+		isGeneratingWorld = true;
 		
-		worldWidth = xSize;
+		worldLength = xSize;
 		worldHeight = ySize;
+		worldSeed = seed;
+		random = new Random(seed);
 		
-		for (int i = 0; i < worldWidth; i++) {
-			for (int i2 = 4; i2 < worldHeight; i2++) {
-				if (i2 == 4) {
-					allBlocks.add(new BlockGrass(new BlockPos(i, i2)));
-				} else if (i2 == 5) {
-					if (new Random().nextBoolean() && new Random().nextBoolean()) {
-						allBlocks.add(new BlockGrass(new BlockPos(i, i2)));
+		int tempInt = 0;
+		int tempHeight = 0;
+		
+		for (int width = 0; width < worldLength; width++) {
+			for (int height = 0; height < worldHeight + 15; height++) {
+				if (height == 0) {
+					if (tempInt != 0) {
+						tempInt--;
+						addBlockAll(new BlockGrass(new BlockPos(width, height - tempHeight)));
+					} else if (tempHeight == 15) {
+						tempHeight--;
+						tempInt += 3;
+						addBlockAll(new BlockGrass(new BlockPos(width, height - tempHeight)));
+					} else if (tempHeight == -15) {
+						tempHeight++;
+						tempInt += 3;
+						addBlockAll(new BlockGrass(new BlockPos(width, height - tempHeight)));
+					} else if (random.nextInt(4) == 0) {
+						if (random.nextBoolean()) {
+							tempHeight++;
+							tempHeight = MathHelper.clamp(tempHeight, -15, 15);
+							tempInt += 2;
+						} else {
+							tempHeight--;
+							tempHeight = MathHelper.clamp(tempHeight, -15, 15);
+							tempInt += 2;
+						}
+						addBlockAll(new BlockGrass(new BlockPos(width, height - tempHeight)));
 					} else {
-						allBlocks.add(new BlockDirt(new BlockPos(i, i2)));
+						addBlockAll(new BlockGrass(new BlockPos(width, height - tempHeight)));
 					}
-				} else if (i2 == 6 || i2 == 7) {
-					allBlocks.add(new BlockDirt(new BlockPos(i, i2)));
-				} else if (i2 == 8) {
-					if (new Random().nextBoolean() && new Random().nextBoolean()) {
-						allBlocks.add(new BlockStone(new BlockPos(i, i2)));
+				} else if (height > 0 && height < 4) {
+					if (random.nextInt(height * 2) == 0) {
+						addBlockAll(new BlockGrass(new BlockPos(width, height - tempHeight)));
 					} else {
-						allBlocks.add(new BlockDirt(new BlockPos(i, i2)));
+						addBlockAll(new BlockDirt(new BlockPos(width, height - tempHeight)));
 					}
-				} else if (i2 == 9) {
-					if (new Random().nextBoolean()) {
-						allBlocks.add(new BlockDirt(new BlockPos(i, i2)));
+				} else if (height > 3 && height < 9) {
+					addBlockAll(new BlockDirt(new BlockPos(width, height - tempHeight)));
+				} else if (height > 8 && height < 12) {
+					if (random.nextInt(height / 3) == 0) {
+						addBlockAll(new BlockStone(new BlockPos(width, height - tempHeight)));
 					} else {
-						allBlocks.add(new BlockStone(new BlockPos(i, i2)));
-					}
-				} else if (i2 == 10) {
-					if (new Random().nextBoolean() && new Random().nextBoolean()) {
-						allBlocks.add(new BlockDirt(new BlockPos(i, i2)));
-					} else {
-						allBlocks.add(new BlockStone(new BlockPos(i, i2)));
-					}
-				} else if (i2 == 11) {
-					if (new Random().nextBoolean() && new Random().nextBoolean() && new Random().nextBoolean()) {
-						allBlocks.add(new BlockDirt(new BlockPos(i, i2)));
-					} else {
-						allBlocks.add(new BlockStone(new BlockPos(i, i2)));
+						addBlockAll(new BlockDirt(new BlockPos(width, height - tempHeight)));
 					}
 				} else {
-					allBlocks.add(new BlockStone(new BlockPos(i, i2)));
+					addBlockAll(new BlockStone(new BlockPos(width, height - tempHeight)));
 				}
 			}
 		}
 		
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished placing blocks!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Removing blocks...");
+		for (int i = 0; i < allBlocks.size(); i++) {
+			Block b = allBlocks.get(i);
+			if (b.getBlockPosY() > getWorldHeight()) {
+				i--;
+				removeBlockAll(b);
+			}
+		}
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished removing blocks!");
+		
 		System.out.println(Console.info(Console.WarningType.Info) + "Placing player!");
-		allEntities.add(new EntityPlayer(((worldWidth/ 2) * Block.getBlockSize()) - 12, -44));
+		player = new EntityPlayer(((worldLength / 2) * Block.getBlockSize()) - 12, -44 - (-15 * -Block.getBlockSize()));
+		allEntities.add(player);
 		
+		System.out.println(Console.info(Console.WarningType.Info) + "Checking what block need to be active...");
 		redoActives();
+		System.out.println(Console.info(Console.WarningType.Info) + "Finished checking what block need to be active!");
 		
-		System.out.println(Console.info(Console.WarningType.Info) + "Finished creating the world!");
+		isGeneratingWorld = false;
+		doesWorldExist = true;
+		System.out.println(Console.info(Console.WarningType.Info) + "-Finished creating the world!");
 	}
 	
 	//private static final String LOC = System.getProperty("user.dir") + "\\run\\worlds\\";
@@ -306,11 +340,19 @@ public class World {
 		return MAX_FALL_SPEED;
 	}
 
-	public static int getWorldWidth() {
-		return worldWidth;
+	public static int getWorldLength() {
+		return worldLength;
 	}
 
 	public static int getWorldHeight() {
 		return worldHeight;
+	}
+	
+	public static int getWorldSeed() {
+		return worldSeed;
+	}
+	
+	public static EntityPlayer getPlayer() {
+		return player;
 	}
 }

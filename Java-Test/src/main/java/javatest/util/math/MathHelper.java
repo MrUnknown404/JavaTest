@@ -19,6 +19,11 @@ public class MathHelper {
 		return num < min ? min : (num > max ? max : num);
 	}
 	
+	/** Returns the value of the first parameter, clamped to be within the lower and upper limits given by the second and third parameters */
+	public static int clamp(int num, int min, int max) {
+		return num < min ? min : (num > max ? max : num);
+	}
+	
 	/** Returns the number rounded to the specified decimal */
 	public static double roundTo(double number, int decimal) {
 		double tempDecimal = 1;

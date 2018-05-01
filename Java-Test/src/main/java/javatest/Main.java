@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
-import main.java.javatest.blocks.Block;
+import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.client.Camera;
 import main.java.javatest.client.KeyInput;
 import main.java.javatest.client.MouseInput;
@@ -22,7 +22,6 @@ public class Main extends Canvas implements Runnable {
 	private static final long serialVersionUID = -2518563563721413864L;
 	
 	public static final int WIDTH = 854, HEIGHT = 480;
-	public static final int BLOCK_WIDTH = (WIDTH / Block.getBlockSize()) - 0, BLOCK_HEIGHT = (HEIGHT / Block.getBlockSize()) - 1;
 	
 	private int fps;
 	private boolean running = false;
@@ -43,7 +42,6 @@ public class Main extends Canvas implements Runnable {
 	public synchronized void start() {
 		System.out.println(Console.getTimeExample());
 		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
-		System.out.println(Console.info() + "Block map size: " + new Vec2i(BLOCK_WIDTH, BLOCK_HEIGHT).toString());
 		System.out.println(Console.info(Console.WarningType.Info) + "Starting!");
 		
 		preInit();
@@ -52,11 +50,10 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	private void preInit() {
-		System.out.println(Console.info(Console.WarningType.Info) + "Pre-Initialization started...");
+		System.out.println(Console.info(Console.WarningType.Info) + "-Pre-Initialization started...");
 		
 		renderer.findTextures();
-		
-		World.generateWorld(400, 200);
+		new BlockProperties(BlockProperties.BlockType.air);
 		
 		MouseInput mouse = new MouseInput();
 		
@@ -64,24 +61,24 @@ public class Main extends Canvas implements Runnable {
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
 		
-		System.out.println(Console.info(Console.WarningType.Info) + "Pre-Initialization Finished!");
-		
+		System.out.println(Console.info(Console.WarningType.Info) + "-Pre-Initialization Finished!");
 	}
 	
 	private void init() {
-		System.out.println(Console.info(Console.WarningType.Info) + "Initialization started...");
+		System.out.println(Console.info(Console.WarningType.Info) + "-Initialization started...");
 		
-		System.out.println(Console.info(Console.WarningType.Info) + "Initialization Finished!");
+		System.out.println(Console.info(Console.WarningType.Info) + "-Initialization Finished!");
 	}
 	
 	private void postInit() {
-		System.out.println(Console.info(Console.WarningType.Info) + "Post-Initialization started...");
+		System.out.println(Console.info(Console.WarningType.Info) + "-Post-Initialization started...");
+		
+		System.out.println(Console.info(Console.WarningType.Info) + "-Post-Initialization Finished!");
 		
 		thread = new Thread(this);
 		thread.start();
 		running = true;
-		
-		System.out.println(Console.info(Console.WarningType.Info) + "Post-Initialization Finished!");
+		System.out.println(Console.info(Console.WarningType.Info) + "Started thread!");
 	}
 	
 	public synchronized void stop() {
@@ -161,13 +158,11 @@ public class Main extends Canvas implements Runnable {
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		g2.translate(camera.getPositionX(), camera.getPositionY());
-		
 		renderer.render(g);
-		
 		g2.translate(-camera.getPositionX(), -camera.getPositionY());
 		
-		debugHud.drawText(g, "FPS: " + fps, 1, 15);
-		DebugHud.getInfo();
+		debugHud.getInfo();
+		debugHud.drawText(g, "FPS: " + fps);
 		
 		g.dispose();
 		bs.show();

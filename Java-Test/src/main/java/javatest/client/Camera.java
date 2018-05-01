@@ -1,47 +1,47 @@
 package main.java.javatest.client;
 
 import main.java.javatest.Main;
-import main.java.javatest.entity.entityliving.EntityPlayer;
-import main.java.javatest.util.Console;
 import main.java.javatest.util.math.Vec2d;
 import main.java.javatest.world.World;
 
 public class Camera {
 
 	private Vec2d pos = new Vec2d();
-	private static EntityPlayer player;
-	private boolean[] bool = new boolean[2];
-	
-	public static void getPlayer() {
-		for (int i = 0; i < World.getActiveEntities().size(); i++) {
-			if (World.getActiveEntities().get(i) instanceof EntityPlayer) {
-				player = (EntityPlayer) World.getActiveEntities().get(i);
-				return;
-			}
-		}
-		System.err.println(Console.info(Console.WarningType.FatalError) + "Player not found!");
-	}
+	private boolean bool;
 	
 	public void tick() {
-		if (player == null) {
-			getPlayer();
+		if (World.getPlayer() == null) {
+			if (!World.doesWorldExist) {
+				return;
+			}
 			return;
 		}
 		
-		if (pos.x != (-player.getPositionX() - (player.getWidth() / 2)) + Main.WIDTH / 2) {
-			pos.x = (-player.getPositionX() - (player.getWidth() / 2)) + Main.WIDTH / 2;
-			bool[0] = true;
-		}
-		if (pos.y != (-player.getPositionY() - player.getHeight()) + Main.HEIGHT / 2) {
-			pos.y = (-player.getPositionY() - player.getHeight()) + Main.HEIGHT / 2;
-			bool[1] = true;
+		if (!KeyInput.keyDown[3]) {
+			if (pos.x != (-World.getPlayer().getPositionX() - (World.getPlayer().getWidth() / 2)) + Main.WIDTH / 2) {
+				pos.x = (-World.getPlayer().getPositionX() - (World.getPlayer().getWidth() / 2)) + Main.WIDTH / 2;
+				bool = true;
+			}
+			if (pos.y != (-World.getPlayer().getPositionY() - World.getPlayer().getHeight()) + Main.HEIGHT / 2) {
+				pos.y = (-World.getPlayer().getPositionY() - World.getPlayer().getHeight()) + Main.HEIGHT / 2;
+				bool = true;
+			}
+		} else {
+			if (pos.x != -MouseInput.vec.x - World.getPlayer().getPositionX() - World.getPlayer().getWidth() + Main.WIDTH) {
+				pos.x = -MouseInput.vec.x - World.getPlayer().getPositionX() - World.getPlayer().getWidth() + Main.WIDTH;
+				bool = true;
+			}
+			if (pos.y != -MouseInput.vec.y - World.getPlayer().getPositionY() - World.getPlayer().getHeight() + Main.HEIGHT) {
+				pos.y = -MouseInput.vec.y - World.getPlayer().getPositionY() - World.getPlayer().getHeight() + Main.HEIGHT;
+				bool = true;
+			}
 		}
 		
-		if (bool[0] || bool[1]) {
+		
+		if (bool) {
 			World.redoActives();
 		}
-		bool[0] = false;
-		bool[1] = false;
+		bool = false;
 	}
 	
 	/** Adds to the camera's position */

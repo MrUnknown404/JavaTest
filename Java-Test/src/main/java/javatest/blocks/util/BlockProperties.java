@@ -46,7 +46,7 @@ public class BlockProperties {
 			blocks.add(this);
 			if (blocks.size() == BlockType.values().length) { //all this is debug
 				int ti = 1;
-				System.out.print(Console.info() + "Block Properties : ");
+				System.out.print(Console.info() + "Block properties : ");
 				for (BlockProperties b : blocks) {
 					if (blocks.size() == ti) {
 						System.out.print(b.type.toString().toUpperCase() + "!");

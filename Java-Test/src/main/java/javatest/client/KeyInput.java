@@ -2,52 +2,45 @@ package main.java.javatest.client;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Random;
 
-import main.java.javatest.entity.entityliving.EntityPlayer;
-import main.java.javatest.util.GameObject;
 import main.java.javatest.world.World;
 
 public class KeyInput extends KeyAdapter {
 
 	private static final double MOVE_SPEED = 3;
-	private boolean[] keyDown = new boolean[3];
-	private EntityPlayer player;
+	public static boolean[] keyDown = new boolean[4];
 	
 	public KeyInput() {
-		findPlayer();
-		
 		for (int i = 0; i < keyDown.length; i++) {
 			keyDown[i] = false;
-		}
-	}
-	
-	private void findPlayer() {
-		for (int i = 0; i < World.getActiveEntities().size(); i++) {
-			GameObject obj = World.getActiveEntities().get(i);
-			
-			if (obj instanceof EntityPlayer) {
-				player = (EntityPlayer) obj;
-				break;
-			}
 		}
 	}
 	
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		if (player != null) {
-			if (key == KeyEvent.VK_W && player.isGrounded() && !keyDown[0]) {
-				player.setJumpY(-MOVE_SPEED * (MOVE_SPEED / 1.25));
+		if (World.getPlayer() != null) {
+			if (key == KeyEvent.VK_W && World.getPlayer().isGrounded() && !keyDown[0]) {
+				World.getPlayer().setJumpY(-MOVE_SPEED * (MOVE_SPEED / 1.25));
 				keyDown[0] = true;
 			}
 			
 			if (key == KeyEvent.VK_A) {
-				player.setMoveDirX(-MOVE_SPEED);
+				World.getPlayer().setMoveDirX(-MOVE_SPEED);
 				keyDown[1] = true;
 			} else if (key == KeyEvent.VK_D) {
-				player.setMoveDirX(MOVE_SPEED);
+				World.getPlayer().setMoveDirX(MOVE_SPEED);
 				keyDown[2] = true;
 			}
+			
+			if (key == KeyEvent.VK_CONTROL) {
+				keyDown[3] = true;
+			}
+		}
+		
+		if (key == KeyEvent.VK_1) {
+			World.generateWorld(200, 100, new Random().nextInt());
 		}
 	}
 	
@@ -63,8 +56,14 @@ public class KeyInput extends KeyAdapter {
 			keyDown[2] = false;
 		}
 		
-		if (!keyDown[1] && !keyDown[2]) {
-			player.setMoveDirX(0);
+		if (World.getPlayer() != null) {
+			if (!keyDown[1] && !keyDown[2]) {
+				World.getPlayer().setMoveDirX(0);
+			}
+			
+			if (key == KeyEvent.VK_CONTROL) {
+				keyDown[3] = false;
+			}
 		}
 	}
 }

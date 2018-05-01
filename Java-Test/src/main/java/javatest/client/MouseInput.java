@@ -8,6 +8,7 @@ import main.java.javatest.blocks.Block;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.MathHelper;
+import main.java.javatest.util.math.Vec2d;
 import main.java.javatest.util.math.Vec2i;
 import main.java.javatest.world.World;
 
@@ -17,13 +18,19 @@ public class MouseInput extends MouseAdapter {
 	private Block block;
 	private Camera camera = Main.getCamera();
 	
+	public static Vec2d vec = new Vec2d();
+	
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		DebugHud.setMouseVec(new Vec2i(MathHelper.floor((e.getX() - camera.getPositionX()) / Block.getBlockSize()), MathHelper.floor((e.getY() - camera.getPositionY()) / Block.getBlockSize())));
+		vec = new Vec2d(e.getX(), e.getY());
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if (!World.doesWorldExist) {
+			return;
+		}
 		if (e.getButton() == 3) {
 			Vec2i vec = new Vec2i((e.getX() - camera.getPositionX()) / Block.getBlockSize(), (e.getY() - camera.getPositionY()) / Block.getBlockSize());
 			
