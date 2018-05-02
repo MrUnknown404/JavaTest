@@ -135,12 +135,16 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	private void tick() {
-		camera.tick();
-		world.tick();
+		if (!World.isSaving && !World.isLoading) {
+			camera.tick();
+			world.tick();
+		}
 	}
 	
 	private void gameTick() {
-		world.gameTick();
+		if (!World.isSaving && !World.isLoading) {
+			world.gameTick();
+		}
 	}
 	
 	private void render() {

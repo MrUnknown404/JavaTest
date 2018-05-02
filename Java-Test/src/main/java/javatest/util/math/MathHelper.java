@@ -33,7 +33,7 @@ public class MathHelper {
 		return Math.round(number * tempDecimal) / tempDecimal;
 	}
 	
-	/** Normalized the given number */
+	/** Returns a normalized version of the given number */
 	public static float normalize(float number, float max) {
 		if (number > max) {
 			System.out.println(Console.info(Console.WarningType.Error) + "the specified number is more then the specified max!");
@@ -43,5 +43,9 @@ public class MathHelper {
 			return 0;
 		}
 		return 1 - ((number - 0) / (max - 0));
+	}
+	
+	public static float percentage(float number, float max) {
+		return (number / max) * 100f;
 	}
 }

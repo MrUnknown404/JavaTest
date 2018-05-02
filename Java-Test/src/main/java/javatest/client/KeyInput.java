@@ -40,8 +40,12 @@ public class KeyInput extends KeyAdapter {
 		}
 		
 		if (key == KeyEvent.VK_1 && !World.doesWorldExist) {
-			World.generateWorld(200, 100, new Random().nextInt());
-		} else if (key == KeyEvent.VK_3 && World.doesWorldExist) {
+			World.generateWorld(400, 200, new Random().nextInt());
+		} else if (key == KeyEvent.VK_2 && World.doesWorldExist) {
+			World.saveWorld("world1");
+		} else if (key == KeyEvent.VK_3 && !World.doesWorldExist) {
+			World.loadWorld("world1");
+		} else if (key == KeyEvent.VK_4 && World.doesWorldExist) {
 			World.clearWorld();
 		}
 	}

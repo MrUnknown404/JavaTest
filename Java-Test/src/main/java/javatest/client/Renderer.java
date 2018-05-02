@@ -24,23 +24,23 @@ public class Renderer {
 	
 	public void findTextures() {
 		System.out.println(Console.info(Console.WarningType.Info) + "-Finding all textures...");
-		System.out.println(Console.info(Console.WarningType.Info) + "Finding all block textures...");
+		System.out.println(Console.info() + "Finding all block textures...");
 		for (int i = 1; i < BlockProperties.BlockType.values().length; i++) {
 			hashImages.put(BlockProperties.BlockType.getNumber(i).toString(), Resource.getTexture(Resource.ResourceType.blocks, BlockProperties.BlockType.getNumber(i)));
 		}
-		System.out.println(Console.info(Console.WarningType.Info) + "Found all block textures!");
+		System.out.println(Console.info() + "Found all block textures!");
 		
-		System.out.println(Console.info(Console.WarningType.Info) + "Finding all entity textures...");
+		System.out.println(Console.info() + "Finding all entity textures...");
 		for (int i = 0; i < EntityProperties.EntityType.values().length; i++) {
 			hashImages.put(EntityProperties.EntityType.getNumber(i).toString(), Resource.getTexture(Resource.ResourceType.entity, EntityProperties.EntityType.getNumber(i)));
 		}
-		System.out.println(Console.info(Console.WarningType.Info) + "Found all entity textures!");
+		System.out.println(Console.info() + "Found all entity textures!");
 		System.out.println(Console.info(Console.WarningType.Info) + "-Found all Textures!");
 	
-		System.out.println(Console.info(Console.WarningType.Info) + "Setting textures for use...");
+		System.out.println(Console.info() + "Setting textures for use...");
 		valueList = new ArrayList<BufferedImage>(hashImages.values());
 		keyList = new ArrayList<String>(hashImages.keySet());
-		System.out.println(Console.info(Console.WarningType.Info) + "Finished setting textures!");
+		System.out.println(Console.info() + "Finished setting textures!");
 	}
 	
 	static int i;
