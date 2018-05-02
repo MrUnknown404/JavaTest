@@ -51,8 +51,8 @@ public class DebugHud extends Canvas {
 	public static void setMouseVec(Vec2i vec) {
 		mouseString = vec.toString();
 		if (World.getPlayer() != null) {
-			mouseWorldString = new Vec2d(-MouseInput.vec.x - Main.getCamera().getPositionX() + Main.WIDTH, -MouseInput.vec.y - Main.getCamera().getPositionY() + Main.HEIGHT).toStringInt();
-			mouseWorldBlockString = new Vec2d((-MouseInput.vec.x - Main.getCamera().getPositionX() + Main.WIDTH) / Block.getBlockSize(), (-MouseInput.vec.y - Main.getCamera().getPositionY() + Main.HEIGHT) / Block.getBlockSize()).toStringInt();
+			mouseWorldString = new Vec2i(MouseInput.vec.x - Main.getCamera().getPositionX(), MouseInput.vec.y - Main.getCamera().getPositionY()).toString();
+			mouseWorldBlockString = new Vec2i((MouseInput.vec.x - Main.getCamera().getPositionX()) / Block.getBlockSize(), (MouseInput.vec.y - Main.getCamera().getPositionY()) / Block.getBlockSize()).toString();
 		}
 	}
 	

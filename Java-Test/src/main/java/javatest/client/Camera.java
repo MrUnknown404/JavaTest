@@ -1,6 +1,8 @@
 package main.java.javatest.client;
 
 import main.java.javatest.Main;
+import main.java.javatest.blocks.Block;
+import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 import main.java.javatest.world.World;
 
@@ -36,6 +38,9 @@ public class Camera {
 				bool = true;
 			}
 		}
+		
+		pos.x = MathHelper.clamp(pos.x, -(World.getWorldLength() * Block.getBlockSize()) + Main.WIDTH - 6, 0);
+		pos.y = MathHelper.clamp(pos.y, -((World.getWorldHeight() * Block.getBlockSize()) * 2) + Main.HEIGHT - 45, 0);
 		
 		if (bool) {
 			World.redoActives();

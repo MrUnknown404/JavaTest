@@ -46,7 +46,18 @@ public class MouseInput extends MouseAdapter {
 			}
 			
 			if (pos != null) {
-				World.addBlockAll(Block.getRandomBlock(this.pos.getX(), this.pos.getY()));
+				Block b = Block.getRandomBlock(this.pos.getX(), this.pos.getY());
+				
+				if (b.getBlockPosX() < 0 || b.getBlockPosX() + 1 > World.getWorldLength()) {
+					World.redoSpecificActiveBlock(b);
+					pos = null;
+					return;
+				} else if (b.getBlockPosY() < 0 || b.getBlockPosY() > World.getWorldHeight() * 2) {
+					World.redoSpecificActiveBlock(b);
+					pos = null;
+					return;
+				}
+				World.addBlockAll(b);
 				pos = null;
 			}
 		} else if (e.getButton() == 1) {
@@ -54,7 +65,7 @@ public class MouseInput extends MouseAdapter {
 			
 			for (int i = 0; i < World.getActiveBlocks().size(); i++) {
 				Block b = World.getActiveBlocks().get(i);
-					
+				
 				if (b.getBlockPos().equals(new BlockPos(pos))) {
 					block = b;
 					break;
