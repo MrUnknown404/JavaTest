@@ -89,8 +89,8 @@ public class DebugHud extends Canvas {
 			final int w1 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS4, g).getWidth() / 2;
 			final int w2 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS2, g).getWidth() / 2;
 			
-			g.drawString(PRESS4, w1, Main.HEIGHT - 32);
-			g.drawString(PRESS2, w2, Main.HEIGHT - 48);
+			g.drawString(PRESS4, w1, Main.HEIGHT - 42);
+			g.drawString(PRESS2, w2, Main.HEIGHT - 58);
 			
 			g.drawString("Mouse pos: " + mouseString, 1, y += 32);
 			g.drawString("Mouse world pos: " + mouseWorldString, 1, y += 16);

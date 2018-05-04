@@ -22,7 +22,7 @@ public class PlayerInventory extends Inventory {
 		}
 		
 		if (items.size() > slots) {
-			Console.print("ERR");
+			Console.print(Console.WarningType.FatalError + "Inventory is bigger then the maximum size!");
 		}
 	}
 	

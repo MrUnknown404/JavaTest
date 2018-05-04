@@ -5,7 +5,7 @@ import java.util.List;
 
 import main.java.javatest.items.ItemStack;
 
-public class Inventory {
+public abstract class Inventory {
 	
 	protected List<ItemStack> items;
 	protected int slotsX, slotsY;

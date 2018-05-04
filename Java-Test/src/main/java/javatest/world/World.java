@@ -29,7 +29,7 @@ import main.java.javatest.world.util.WorldInfo;
 public class World {
 
 	public static boolean isGeneratingWorld, doesWorldExist, isSaving, isLoading;
-	private static final String LOC = System.getProperty("user.dir") + "\\run\\worlds\\";
+	private static final String LOC = "C:/Users/" + System.getProperty("user.name") + "/Documents/My Games/JavaTest/worlds/";
 	private static final String TYPE = ".sav", TYPE2 = ".properties";//, TYPE3 = ".config";
 	
 	private static float amountGenerated, amountLoaded, amountSaved;
@@ -154,6 +154,7 @@ public class World {
 		Gson g = new Gson().newBuilder().setPrettyPrinting().create();
 		FileWriter fileBlock = null, fileEntity = null, filePlayer = null, fileWorld = null;
 		Entity[] es = new Entity[allEntities.size() - 1];
+		Block[] bs = new Block[allBlocks.size()];
 		
 		if (!new File(LOC + name).exists()) {
 			new File(LOC + name).mkdirs();
@@ -161,10 +162,10 @@ public class World {
 		
 		try {
 			Console.print("Writing files...");
-			fileBlock = new FileWriter(new File(LOC + name + "\\blocks" + TYPE));
-			fileEntity = new FileWriter(new File(LOC + name + "\\entities" + TYPE));
-			filePlayer = new FileWriter(new File(LOC + name + "\\player" + TYPE));
-			fileWorld = new FileWriter(new File(LOC + name + "\\world" + TYPE2));
+			fileBlock = new FileWriter(new File(LOC + name + "/blocks" + TYPE));
+			fileEntity = new FileWriter(new File(LOC + name + "/entities" + TYPE));
+			filePlayer = new FileWriter(new File(LOC + name + "/player" + TYPE));
+			fileWorld = new FileWriter(new File(LOC + name + "/world" + TYPE2));
 			
 			if (allEntities.size() - 1 != 0) {
 				for (int i = 0; i < allEntities.size(); i++) {
@@ -175,13 +176,12 @@ public class World {
 				}
 			}
 			
-			Block[] b = new Block[allBlocks.size()];
 			for (int i = 0; i < allBlocks.size(); i++) {
 				amountSaved = MathHelper.percentage(i, allBlocks.size());
-				b[i] = allBlocks.get(i);
+				bs[i] = allBlocks.get(i);
 			}
 			
-			g.toJson(b, fileBlock);
+			g.toJson(bs, fileBlock);
 			g.toJson(es, fileEntity);
 			g.toJson(player, filePlayer);
 			g.toJson(worldInfo, fileWorld);
@@ -212,30 +212,30 @@ public class World {
 			Console.print(Console.WarningType.Error, "Cannot find world at : " + LOC +  name + "!");
 			isLoading = false;
 			return;
-		} else if (!(new File(LOC + name + "\\blocks" + TYPE).exists())) {
-			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\blocks" + TYPE + "!");
+		} else if (!(new File(LOC + name + "/blocks" + TYPE).exists())) {
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "/blocks" + TYPE + "!");
 			isLoading = false;
 			return;
-		} else if (!(new File(LOC + name + "\\entities" + TYPE).exists())) {
-			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\entities" + TYPE + "!");
+		} else if (!(new File(LOC + name + "/entities" + TYPE).exists())) {
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "/entities" + TYPE + "!");
 			isLoading = false;
 			return;
-		} else if (!(new File(LOC + name + "\\player" + TYPE).exists())) {
-			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\player" + TYPE + "!");
+		} else if (!(new File(LOC + name + "/player" + TYPE).exists())) {
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "/player" + TYPE + "!");
 			isLoading = false;
 			return;
-		} else if (!(new File(LOC + name + "\\world" + TYPE2).exists())) {
-			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\world" + TYPE2 + "!");
+		} else if (!(new File(LOC + name + "/world" + TYPE2).exists())) {
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "/world" + TYPE2 + "!");
 			isLoading = false;
 			return;
 		}
 		
 		try {
 			Console.print("Reading files...");
-			fileBlock = new FileReader(new File(LOC + name + "\\blocks" + TYPE));
-			fileEntity = new FileReader(new File(LOC + name + "\\entities" + TYPE));
-			filePlayer = new FileReader(new File(LOC + name + "\\player" + TYPE));
-			fileWorld = new FileReader(new File(LOC + name + "\\world" + TYPE2));
+			fileBlock = new FileReader(new File(LOC + name + "/blocks" + TYPE));
+			fileEntity = new FileReader(new File(LOC + name + "/entities" + TYPE));
+			filePlayer = new FileReader(new File(LOC + name + "/player" + TYPE));
+			fileWorld = new FileReader(new File(LOC + name + "/world" + TYPE2));
 			
 			Block[] bs = g.fromJson(g.newJsonReader(fileBlock), Block[].class);
 			Entity[] es = g.fromJson(g.newJsonReader(fileEntity), Entity[].class);
