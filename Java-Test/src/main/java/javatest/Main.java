@@ -6,13 +6,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
-import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.client.Camera;
 import main.java.javatest.client.KeyInput;
 import main.java.javatest.client.MouseInput;
 import main.java.javatest.client.Renderer;
 import main.java.javatest.client.Window;
 import main.java.javatest.client.gui.DebugHud;
+import main.java.javatest.client.gui.InventoryHud;
+import main.java.javatest.init.EnumBlocks;
+import main.java.javatest.init.EnumItems;
+import main.java.javatest.items.Item;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.math.Vec2i;
 import main.java.javatest.world.World;
@@ -30,6 +33,7 @@ public class Main extends Canvas implements Runnable {
 	private static final Camera camera = new Camera();
 	private final Renderer renderer = new Renderer();
 	private final DebugHud debugHud = new DebugHud();
+	private InventoryHud invHud = new InventoryHud();
 	
 	public static void main(String args[]) {
 		new Main();
@@ -40,9 +44,9 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	public synchronized void start() {
-		System.out.println(Console.getTimeExample());
-		System.out.println(Console.info() + "Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
-		System.out.println(Console.info(Console.WarningType.Info) + "Starting!");
+		Console.getTimeExample();
+		Console.print("Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
+		Console.print(Console.WarningType.Info, "Starting!");
 		
 		preInit();
 		init();
@@ -50,35 +54,43 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	private void preInit() {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Pre-Initialization started...");
-		
+		Console.print(Console.WarningType.Info, "-Pre-Initialization started...");
 		renderer.findTextures();
-		new BlockProperties(BlockProperties.BlockType.air);
+		
+		for (int i = 0; i < EnumBlocks.values().length; i++) {
+			new Item(EnumBlocks.getNumber(i).toString()).addThis();
+		}
+		for (int i = 0; i < EnumItems.values().length; i++) {
+			new Item(EnumItems.getNumber(i).toString()).addThis();;
+		}
+		
+		invHud.updateTextures();
 		
 		MouseInput mouse = new MouseInput();
 		
 		addKeyListener(new KeyInput());
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
+		addMouseWheelListener(mouse);
 		
-		System.out.println(Console.info(Console.WarningType.Info) + "-Pre-Initialization Finished!");
+		Console.print(Console.WarningType.Info, "-Pre-Initialization Finished!");
 	}
 	
 	private void init() {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Initialization started...");
+		Console.print(Console.WarningType.Info, "-Initialization started...");
 		
-		System.out.println(Console.info(Console.WarningType.Info) + "-Initialization Finished!");
+		Console.print(Console.WarningType.Info, "-Initialization Finished!");
 	}
 	
 	private void postInit() {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Post-Initialization started...");
+		Console.print(Console.WarningType.Info, "-Post-Initialization started...");
 		
-		System.out.println(Console.info(Console.WarningType.Info) + "-Post-Initialization Finished!");
+		Console.print(Console.WarningType.Info, "-Post-Initialization Finished!");
 		
 		thread = new Thread(this);
 		thread.start();
 		running = true;
-		System.out.println(Console.info(Console.WarningType.Info) + "Started thread!");
+		Console.print(Console.WarningType.Info, "Started thread!");
 	}
 	
 	public synchronized void stop() {
@@ -91,7 +103,7 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	public void run() {
-		System.out.println(Console.info(Console.WarningType.Info) + "Started Run Loop!");
+		Console.print(Console.WarningType.Info, "Started Run Loop!");
 		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
@@ -151,7 +163,7 @@ public class Main extends Canvas implements Runnable {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
-			System.out.println(Console.info(Console.WarningType.Info) + "Started Render Loop!");
+			Console.print(Console.WarningType.Info, "Started Render Loop!");
 			return;
 		}
 		
@@ -165,6 +177,7 @@ public class Main extends Canvas implements Runnable {
 		renderer.render(g);
 		g2.translate(-camera.getPositionX(), -camera.getPositionY());
 		
+		invHud.draw(g);
 		debugHud.getInfo();
 		debugHud.drawText(g, "FPS: " + fps);
 		

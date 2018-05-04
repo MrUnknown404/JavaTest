@@ -21,7 +21,7 @@ public class EntityProperties {
 				setAlwaysLoad(true);
 				break;
 			default:
-				System.out.println(Console.info(Console.WarningType.Error) + "Invalid type");
+				Console.print(Console.WarningType.Error, "Invalid type");
 				break;
 		}
 	}

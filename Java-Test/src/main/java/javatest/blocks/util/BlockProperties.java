@@ -3,61 +3,43 @@ package main.java.javatest.blocks.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.javatest.util.Console;
+import main.java.javatest.init.EnumBlocks;
 
 public class BlockProperties {
 	private static List<BlockProperties> blocks = new ArrayList<BlockProperties>();
 	
-	public static final BlockProperties AIR = new BlockProperties(BlockType.air);
-	public static final BlockProperties STONE = new BlockProperties(BlockType.stone);
-	public static final BlockProperties DIRT = new BlockProperties(BlockType.dirt);
-	public static final BlockProperties GRASS = new BlockProperties(BlockType.grass);
+	public static final BlockProperties AIR = new BlockProperties(EnumBlocks.air);
+	public static final BlockProperties STONE = new BlockProperties(EnumBlocks.stone);
+	public static final BlockProperties DIRT = new BlockProperties(EnumBlocks.dirt);
+	public static final BlockProperties GRASS = new BlockProperties(EnumBlocks.grass);
 	
 	private boolean hasCollision;
-	private BlockType type;
+	private EnumBlocks type;
 	
-	public BlockProperties(BlockType type) {
+	public BlockProperties(EnumBlocks type) {
 		this.type = type;
 		
-		addProperties();
+		if (!blocks.contains(this) && type != EnumBlocks.air) {
+			blocks.add(this);
+		}
 		
 		switch (type) {
 			case air:
 				setHasCollision(false);
 				break;
-			case stone:
-				setHasCollision(true);
-				break;
-			case grass:
-				setHasCollision(true);
-				break;
-			case dirt:
-				setHasCollision(true);
-				break;
 			default:
-				System.out.println(Console.info(Console.WarningType.Error) + "Invalid type");
-				setHasCollision(false);
+				setHasCollision(true);
 				break;
 		}
 	}
 	
-	private void addProperties() {
-		if (!blocks.contains(this)) {
-			blocks.add(this);
-			if (blocks.size() == BlockType.values().length) { //all this is debug
-				int ti = 1;
-				System.out.print(Console.info() + "Block properties : ");
-				for (BlockProperties b : blocks) {
-					if (blocks.size() == ti) {
-						System.out.print(b.type.toString().toUpperCase() + "!");
-					} else {
-						System.out.print(b.type.toString().toUpperCase() + ", ");
-					}
-					ti++;
-				}
-				System.out.println();
+	public static BlockProperties findBlockPropertyWithName(String name) {
+		for (int i = 0; i < blocks.size(); i++) {
+			if (blocks.get(i).getBlockType().toString().equals(name)) {
+				return blocks.get(i);
 			}
 		}
+		return null;
 	}
 	
 	public boolean getHasCollision() {
@@ -73,29 +55,7 @@ public class BlockProperties {
 		return blocks;
 	}
 	
-	public BlockType getBlockType() {
+	public EnumBlocks getBlockType() {
 		return type;
-	}
-	
-	public enum BlockType {
-		air  (0),
-		stone(1),
-		dirt (2),
-		grass(3);
-		
-		private final int fId;
-		
-		private BlockType(int id) {
-			fId = id;
-		}
-
-		public static BlockType getNumber(int id) {
-			for (BlockType type : values()) {
-				if (type.fId == id) {
-					return type;
-				}
-			}
-			throw new IllegalArgumentException("Invalid Type id: " + id);
-		}
 	}
 }

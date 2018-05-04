@@ -17,6 +17,7 @@ public class Block extends GameObject {
 		super(bPos.x, bPos.y, SIZE, SIZE);
 		this.bPos = bPos;
 		this.type = type;
+		
 		blockUpdate();
 	}
 	
@@ -100,6 +101,6 @@ public class Block extends GameObject {
 	
 	/** Returns a random block */
 	public static Block getRandomBlock() {
-		return new Block(new BlockPos(0, 0), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size())));
+		return new Block(new BlockPos(0, 0), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size() - 1)));
 	}
 }

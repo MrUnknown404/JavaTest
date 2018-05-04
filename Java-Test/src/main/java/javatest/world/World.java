@@ -24,20 +24,17 @@ import main.java.javatest.util.Console;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.MathHelper;
+import main.java.javatest.world.util.WorldInfo;
 
 public class World {
 
 	public static boolean isGeneratingWorld, doesWorldExist, isSaving, isLoading;
 	private static final String LOC = System.getProperty("user.dir") + "\\run\\worlds\\";
-	private static final String TYPE = ".sav", TYPE2 = ".properties";
+	private static final String TYPE = ".sav", TYPE2 = ".properties";//, TYPE3 = ".config";
 	
-	private static final double FRICTION = 0.2;
-	private static final double GRAVITY = 1.75;
-	private static final double MAX_FALL_SPEED = (GRAVITY * GRAVITY) * ((GRAVITY * GRAVITY) * (GRAVITY * GRAVITY));
-	
-	private static float amountGenerated;
-	private static int worldLength, worldHeight, worldSeed;
+	private static float amountGenerated, amountLoaded, amountSaved;
 	private static Random random;
+	private static WorldInfo worldInfo = new WorldInfo();
 	
 	private static List<Block> allBlocks = new ArrayList<Block>();
 	private static List<Entity> allEntities = new ArrayList<Entity>();
@@ -46,35 +43,33 @@ public class World {
 	private static EntityPlayer player;
 	
 	public static void generateWorld(int xSize, int ySize, int seed) {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Creating a new world...");
+		Console.print(Console.WarningType.Info, "-Creating a new world...");
 		isGeneratingWorld = true;
 		
-		worldLength = xSize;
-		worldHeight = ySize;
-		worldSeed = seed;
+		worldInfo.worldLength = xSize;
+		worldInfo.worldHeight = ySize;
+		worldInfo.worldSeed = seed;
+		
 		random = new Random(seed);
 		
 		int tempInt = 0;
 		int tempHeight = 0;
 		
-		System.out.println(Console.info() + "Moving Camera!");
-		Main.getCamera().setPosition(((worldLength / 2) * Block.getBlockSize()), -15 * -Block.getBlockSize());
+		Console.print("Moving Camera!");
+		Main.getCamera().setPosition(((worldInfo.worldLength / 2) * Block.getBlockSize()), -15 * -Block.getBlockSize());
 		
-		System.out.println(Console.info() + "Placing blocks...");
-		for (int width = 0; width < worldLength; width++) {
-			for (int height = 0; height < worldHeight + 15; height++) {
+		Console.print("Placing blocks...");
+		for (int width = 0; width < worldInfo.worldLength; width++) {
+			for (int height = 0; height < worldInfo.worldHeight + 15; height++) {
 				if (height == 0) {
 					if (tempInt != 0) {
 						tempInt--;
-						addBlockAll(new BlockGrass(new BlockPos(width, worldHeight + height - tempHeight)));
 					} else if (tempHeight == 15) {
 						tempHeight--;
 						tempInt += 3;
-						addBlockAll(new BlockGrass(new BlockPos(width, worldHeight + height - tempHeight)));
 					} else if (tempHeight == -15) {
 						tempHeight++;
 						tempInt += 3;
-						addBlockAll(new BlockGrass(new BlockPos(width, worldHeight + height - tempHeight)));
 					} else if (random.nextInt(4) == 0) {
 						if (random.nextBoolean()) {
 							tempHeight++;
@@ -85,38 +80,36 @@ public class World {
 							tempHeight = MathHelper.clamp(tempHeight, -15, 15);
 							tempInt += 2;
 						}
-						addBlockAll(new BlockGrass(new BlockPos(width, worldHeight + height - tempHeight)));
-					} else {
-						addBlockAll(new BlockGrass(new BlockPos(width, worldHeight + height - tempHeight)));
 					}
+					addBlockAll(new BlockGrass(new BlockPos(width, worldInfo.worldHeight + height - tempHeight)));
 				} else if (height > 0 && height < 4) {
 					if (random.nextInt(height * 2) == 0) {
-						addBlockAll(new BlockGrass(new BlockPos(width, worldHeight + height - tempHeight)));
+						addBlockAll(new BlockGrass(new BlockPos(width, worldInfo.worldHeight + height - tempHeight)));
 					} else {
-						addBlockAll(new BlockDirt(new BlockPos(width, worldHeight + height - tempHeight)));
+						addBlockAll(new BlockDirt(new BlockPos(width, worldInfo.worldHeight + height - tempHeight)));
 					}
 				} else if (height > 3 && height < 9) {
-					addBlockAll(new BlockDirt(new BlockPos(width, worldHeight + height - tempHeight)));
+					addBlockAll(new BlockDirt(new BlockPos(width, worldInfo.worldHeight + height - tempHeight)));
 				} else if (height > 8 && height < 12) {
 					if (random.nextInt(height / 3) == 0) {
-						addBlockAll(new BlockStone(new BlockPos(width, worldHeight + height - tempHeight)));
+						addBlockAll(new BlockStone(new BlockPos(width, worldInfo.worldHeight + height - tempHeight)));
 					} else {
-						addBlockAll(new BlockDirt(new BlockPos(width, worldHeight + height - tempHeight)));
+						addBlockAll(new BlockDirt(new BlockPos(width, worldInfo.worldHeight + height - tempHeight)));
 					}
 				} else {
-					addBlockAll(new BlockStone(new BlockPos(width, worldHeight + height - tempHeight)));
+					addBlockAll(new BlockStone(new BlockPos(width, worldInfo.worldHeight + height - tempHeight)));
 				}
 			}
 			
-			amountGenerated = MathHelper.percentage(width, worldLength);
+			amountGenerated = MathHelper.percentage(width, worldInfo.worldLength);
 		}
 		
-		System.out.println(Console.info() + "Finished placing blocks!");
-		System.out.println(Console.info() + "Removing blocks...");
+		Console.print("Finished placing blocks!");
+		Console.print("Removing blocks...");
 		int ti = 0;
 		for (int i = 0; i < allBlocks.size(); i++) {
 			Block b = allBlocks.get(i);
-			if (b.getBlockPosY() > getWorldHeight() * 2) {
+			if (b.getBlockPosY() > worldInfo.worldHeight * 2) {
 				i--;
 				removeBlockAll(b);
 			} else {
@@ -125,87 +118,89 @@ public class World {
 			
 			amountGenerated = MathHelper.percentage(ti, allBlocks.size());
 		}
-		System.out.println(Console.info() + "Finished removing blocks!");
+		Console.print("Finished removing blocks!");
 		
-		System.out.println(Console.info() + "Placing player!");
-		player = new EntityPlayer(((worldLength  / 2) * Block.getBlockSize()) - 12, + -44 - ((-15 + worldHeight) * -Block.getBlockSize()));
+		Console.print("Placing player!");
+		player = new EntityPlayer(((worldInfo.worldLength  / 2) * Block.getBlockSize()) - 12, + -44 - ((-15 + worldInfo.worldHeight) * -Block.getBlockSize()));
 		allEntities.add(player);
 		
-		System.out.println(Console.info() + "Checking what block need to be active...");
+		Console.print("Checking what block need to be active...");
 		redoActives();
-		System.out.println(Console.info() + "Finished checking what block need to be active!");
+		Console.print("Finished checking what block need to be active!");
 		
 		isGeneratingWorld = false;
 		doesWorldExist = true;
-		System.out.println(Console.info(Console.WarningType.Info) + "-Finished creating the world!");
+		Console.print(Console.WarningType.Info, "-Finished creating the world!");
 	}
 	
 	public static void clearWorld() {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Reseting the world...");
-		System.out.println(Console.info() + "Reseting blocks...");
+		Console.print(Console.WarningType.Info, "-Reseting the world...");
+		Console.print("Reseting blocks...");
 		allBlocks.clear();
 		activeBlocks.clear();
-		System.out.println(Console.info() + "Finished reseting blocks!");
-		System.out.println(Console.info() + "Reseting entities...");
+		Console.print("Finished reseting blocks!");
+		Console.print("Reseting entities...");
 		allEntities.clear();
 		activeEntities.clear();
 		player = null;
-		System.out.println(Console.info() + "Finished reseting entities!");
+		Console.print("Finished reseting entities!");
 		doesWorldExist = false;
-		System.out.println(Console.info(Console.WarningType.Info) + "-Finished reseting the world!");
+		Console.print(Console.WarningType.Info, "-Finished reseting the world!");
 	}
 	
 	public static void saveWorld(String name) {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Saving the world...");
+		Console.print(Console.WarningType.Info, "-Saving the world...");
 		isSaving = true;
-		Gson g = new Gson().newBuilder().create();
+		Gson g = new Gson().newBuilder().setPrettyPrinting().create();
 		FileWriter fileBlock = null, fileEntity = null, filePlayer = null, fileWorld = null;
 		Entity[] es = new Entity[allEntities.size() - 1];
-		int[] values = new int[3];
 		
 		if (!new File(LOC + name).exists()) {
 			new File(LOC + name).mkdirs();
 		}
 		
 		try {
-			System.out.println(Console.info() + "Writing files...");
+			Console.print("Writing files...");
 			fileBlock = new FileWriter(new File(LOC + name + "\\blocks" + TYPE));
 			fileEntity = new FileWriter(new File(LOC + name + "\\entities" + TYPE));
 			filePlayer = new FileWriter(new File(LOC + name + "\\player" + TYPE));
 			fileWorld = new FileWriter(new File(LOC + name + "\\world" + TYPE2));
 			
-			values[0] = worldLength;
-			values[1] = worldHeight;
-			values[2] = worldSeed;
-			
 			if (allEntities.size() - 1 != 0) {
 				for (int i = 0; i < allEntities.size(); i++) {
 					if (!(es[i] instanceof EntityPlayer)) {
+						amountSaved = MathHelper.percentage(i, allEntities.size());
 						es[i] = allEntities.get(i);
 					}
 				}
 			}
 			
-			g.toJson(allBlocks, fileBlock);
+			Block[] b = new Block[allBlocks.size()];
+			for (int i = 0; i < allBlocks.size(); i++) {
+				amountSaved = MathHelper.percentage(i, allBlocks.size());
+				b[i] = allBlocks.get(i);
+			}
+			
+			g.toJson(b, fileBlock);
 			g.toJson(es, fileEntity);
 			g.toJson(player, filePlayer);
-			g.toJson(values ,fileWorld);
+			g.toJson(worldInfo, fileWorld);
 			
 			fileBlock.flush();
 			fileEntity.flush();
 			filePlayer.flush();
 			fileWorld.flush();
-			System.out.println(Console.info() + "Finished writing files!");
+			Console.print("Finished writing files!");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		isSaving = false;
-		System.out.println(Console.info() + "-Finished saving the world!");
+		Console.print("-Finished saving the world!");
 	}
 	
 	public static void loadWorld(String name) {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Loading the world...");
+		Console.print(Console.WarningType.Info, "-Loading the world...");
 		isLoading = true;
 		FileReader fileBlock = null, fileEntity = null, filePlayer = null, fileWorld = null;
 		Gson g = new Gson();
@@ -214,29 +209,29 @@ public class World {
 			if (!new File(LOC).exists()) {
 				new File(LOC).mkdirs();
 			}
-			System.err.println(Console.info(Console.WarningType.Error) + "Cannot find world at : " + LOC +  name + "!");
+			Console.print(Console.WarningType.Error, "Cannot find world at : " + LOC +  name + "!");
 			isLoading = false;
 			return;
 		} else if (!(new File(LOC + name + "\\blocks" + TYPE).exists())) {
-			System.err.println(Console.info(Console.WarningType.Error) + "Cannot find : " + LOC + name + "\\blocks" + TYPE + "!");
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\blocks" + TYPE + "!");
 			isLoading = false;
 			return;
 		} else if (!(new File(LOC + name + "\\entities" + TYPE).exists())) {
-			System.err.println(Console.info(Console.WarningType.Error) + "Cannot find : " + LOC + name + "\\entities" + TYPE + "!");
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\entities" + TYPE + "!");
 			isLoading = false;
 			return;
 		} else if (!(new File(LOC + name + "\\player" + TYPE).exists())) {
-			System.err.println(Console.info(Console.WarningType.Error) + "Cannot find : " + LOC + name + "\\player" + TYPE + "!");
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\player" + TYPE + "!");
 			isLoading = false;
 			return;
 		} else if (!(new File(LOC + name + "\\world" + TYPE2).exists())) {
-			System.err.println(Console.info(Console.WarningType.Error) + "Cannot find : " + LOC + name + "\\world" + TYPE2 + "!");
+			Console.print(Console.WarningType.Error, "Cannot find : " + LOC + name + "\\world" + TYPE2 + "!");
 			isLoading = false;
 			return;
 		}
 		
 		try {
-			System.out.println(Console.info() + "Reading files...");
+			Console.print("Reading files...");
 			fileBlock = new FileReader(new File(LOC + name + "\\blocks" + TYPE));
 			fileEntity = new FileReader(new File(LOC + name + "\\entities" + TYPE));
 			filePlayer = new FileReader(new File(LOC + name + "\\player" + TYPE));
@@ -244,40 +239,38 @@ public class World {
 			
 			Block[] bs = g.fromJson(g.newJsonReader(fileBlock), Block[].class);
 			Entity[] es = g.fromJson(g.newJsonReader(fileEntity), Entity[].class);
-			int[] values = g.fromJson(g.newJsonReader(fileWorld), int[].class);
-			System.out.println(Console.info() + "Finished Reading files!");
+			WorldInfo wi = g.fromJson(g.newJsonReader(fileWorld), WorldInfo.class);
+			Console.print("Finished Reading files!");
 			
-			System.out.println(Console.info() + "Setting settings...");
-			worldLength = values[0];
-			worldHeight = values[1];
-			worldSeed = values[2];
-			System.out.println(Console.info() + "Finished setting settings!");
-			System.out.println(Console.info() + "Creating Blocks...");
+			Console.print("Creating Blocks...");
 			for (int i = 0; i < bs.length; i++) {
+				amountLoaded = MathHelper.percentage(i, bs.length);
 				addBlockAll(bs[i]);
 			}
-			System.out.println(Console.info() + "Finished creating blocks!");
-			System.out.println(Console.info() + "Creating entities...");
+			Console.print("Finished creating blocks!");
+			Console.print("Creating entities...");
 			for (int i = 0; i < es.length; i++) {
+				amountLoaded = MathHelper.percentage(i, es.length);
 				addEntityAll(es[i]);
-				if (es[i] instanceof EntityPlayer) {
-					System.err.println("player found");
-					
-				}
 			}
+			Console.print("Creating player...");
 			player = g.fromJson(g.newJsonReader(filePlayer), EntityPlayer.class);
 			addEntityAll(player);
-			Main.getCamera().setPosition(((worldLength / 2) * Block.getBlockSize()) - 12, -44 - (-15 * -Block.getBlockSize()));
-			System.out.println(Console.info() + "Finished creating entites!");
-			
+			Main.getCamera().setPosition(((worldInfo.worldLength / 2) * Block.getBlockSize()) - 12, -44 - (-15 * -Block.getBlockSize()));
+			Console.print("Finished creating player!");
 			redoActives();
+			Console.print("Finished creating entites!");
+			
+			Console.print("Setting settings...");
+			worldInfo = wi;
+			Console.print("Finished setting settings!");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
 		isLoading = false;
 		doesWorldExist = true;
-		System.out.println(Console.info(Console.WarningType.Info) + "-Finished loading the world!");
+		Console.print(Console.WarningType.Info, "-Finished loading the world!");
 	}
 	
 	public void tick() {
@@ -410,7 +403,7 @@ public class World {
 		if (object != null && !allBlocks.contains(object)) {
 			allBlocks.add(object);
 		} else {
-			System.out.println(Console.info(Console.WarningType.Error) + "object is null or Object already exists!");
+			Console.print(Console.WarningType.Error, "object is null or Object already exists!");
 		}
 	}
 	
@@ -418,7 +411,7 @@ public class World {
 		if (object != null && !allEntities.contains(object)) {
 			allEntities.add(object);
 		} else {
-			System.out.println(Console.info(Console.WarningType.Error) + "object is null or Object already exists!");
+			Console.print(Console.WarningType.Error, "object is null or Object already exists!");
 		}
 	}
 	
@@ -427,7 +420,7 @@ public class World {
 			allBlocks.remove(object);
 			redoSpecificActiveBlock(object);
 		} else {
-			System.out.println(Console.info(Console.WarningType.Error) + "object is null!");
+			Console.print(Console.WarningType.Error, "object is null!");
 		}
 	}
 	
@@ -436,7 +429,7 @@ public class World {
 			allEntities.remove(object);
 			redoSpecificActiveEntity(object);
 		} else {
-			System.out.println(Console.info(Console.WarningType.Error) + "object is null!");
+			Console.print(Console.WarningType.Error, "object is null!");
 		}
 	}
 	
@@ -453,7 +446,7 @@ public class World {
 				return i;
 			}
 		}
-		System.out.println(Console.info(Console.WarningType.Error) + "Cannot find object : " + obj.toString());
+		Console.print(Console.WarningType.Error, "Cannot find object : " + obj.toString());
 		return 0;
 	}
 	
@@ -473,32 +466,20 @@ public class World {
 		return activeEntities;
 	}
 	
-	public static double getFriction() {
-		return FRICTION;
-	}
-	
-	public static double getGravity() {
-		return GRAVITY;
-	}
-	
-	public static double getMaxFallSpeed() {
-		return MAX_FALL_SPEED;
-	}
-
-	public static int getWorldLength() {
-		return worldLength;
-	}
-
-	public static int getWorldHeight() {
-		return worldHeight;
-	}
-	
-	public static int getWorldSeed() {
-		return worldSeed;
+	public static WorldInfo getWorldInfo() {
+		return worldInfo;
 	}
 	
 	public static float getAmountGenerated() {
 		return amountGenerated;
+	}
+	
+	public static float getAmountLoaded() {
+		return amountLoaded;
+	}
+	
+	public static float getAmountSaved() {
+		return amountSaved;
 	}
 	
 	public static EntityPlayer getPlayer() {

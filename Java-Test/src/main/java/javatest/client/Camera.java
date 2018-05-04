@@ -39,8 +39,8 @@ public class Camera {
 			}
 		}
 		
-		pos.x = MathHelper.clamp(pos.x, -(World.getWorldLength() * Block.getBlockSize()) + Main.WIDTH - 6, 0);
-		pos.y = MathHelper.clamp(pos.y, -((World.getWorldHeight() * Block.getBlockSize()) * 2) + Main.HEIGHT - 45, 0);
+		pos.x = MathHelper.clamp(pos.x, -(World.getWorldInfo().worldLength * Block.getBlockSize()) + Main.WIDTH - 6, 0);
+		pos.y = MathHelper.clamp(pos.y, -((World.getWorldInfo().worldHeight * Block.getBlockSize()) * 2) + Main.HEIGHT - 45, 0);
 		
 		if (bool) {
 			World.redoActives();

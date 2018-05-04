@@ -1,41 +1,27 @@
 package main.java.javatest.util;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Console {
 	
-	public static final WarningType DEFAULT_TYPE = WarningType.Debug;
-	
-	/** Adds console info Example: <p> [12:34:56:789] [Info] [ExampleClass.exampleMethod] [Hour/Minute/Second/Millisecond] */
-	public static String getTimeExample() {
-		Date date = new Date();
-		String strDateFormat = "hh:mm:ss:SSS";
-		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
-		String formattedDate = dateFormat.format(date);
-		
-		return "[" + formattedDate + "] [" + WarningType.Info + "] [" + Debug.getCallerName(Console.class.getName()) + "] [Hour/Minute/Second/Millisecond]";
+	/** Prints date info to the console Example: <p> [12:34:56:789] [Info] [ExampleClass.exampleMethod.69] [Hour/Minute/Second/Millisecond] */
+	public static void getTimeExample() {
+		System.out.println( "[" + new SimpleDateFormat("hh:mm:ss:SSS").format(new Date()) + "] [" + WarningType.Info + "] [" + Debug.getCallerName(Console.class.getName()) + "] [Hour/Minute/Second/Millisecond]");
 	}
 	
-	/** Adds console info Example: <p> [12:34:56:789] [Fatal Error] [ExampleClass.exampleMethod] : Hello! */
-	public static String info(WarningType type) {
-		Date date = new Date();
-		String strDateFormat = "hh:mm:ss:SSS";
-		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
-		String formattedDate = dateFormat.format(date);
-		
-		return "[" + formattedDate + "] [" + type.toString() +  "] [" + Debug.getCallerName(Console.class.getName()) + "] : ";
+	/** Prints date info plus the given string to the console Example: <p> [12:34:56:789] [Debug] [ExampleClass.exampleMethod.69] : Hello! */
+	public static void print(WarningType type, String string) {
+		if (type == WarningType.Error || type == WarningType.FatalError) {
+			System.err.println("[" + new SimpleDateFormat("hh:mm:ss:SSS").format(new Date()) + "] [" + type.toString() +  "] [" + Debug.getCallerName(Console.class.getName()) + "] : " + string);
+			return;
+		}
+		System.out.println("[" + new SimpleDateFormat("hh:mm:ss:SSS").format(new Date()) + "] [" + type.toString() +  "] [" + Debug.getCallerName(Console.class.getName()) + "] : " + string);
 	}
 	
-	/** Adds console info Example: <p> [12:34:56:789] [Debug] [ExampleClass.exampleMethod] : Hello! */
-	public static String info() {
-		Date date = new Date();
-		String strDateFormat = "hh:mm:ss:SSS";
-		DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
-		String formattedDate = dateFormat.format(date);
-		
-		return "[" + formattedDate + "] [" + DEFAULT_TYPE + "] [" + Debug.getCallerName(Console.class.getName()) + "] : ";
+	/** Prints date info plus the given string to the console Example: <p> [12:34:56:789] [Debug] [ExampleClass.exampleMethod.69] : Hello! */
+	public static void print(String string) {
+		System.out.println("[" + new SimpleDateFormat("hh:mm:ss:SSS").format(new Date()) + "] [" + WarningType.Debug +  "] [" + Debug.getCallerName(Console.class.getName()) + "] : " + string);
 	}
 	
 	public enum WarningType {

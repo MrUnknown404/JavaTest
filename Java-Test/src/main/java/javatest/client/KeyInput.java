@@ -37,15 +37,59 @@ public class KeyInput extends KeyAdapter {
 			if (key == KeyEvent.VK_CONTROL) {
 				keyDown[3] = true;
 			}
+			
+			if (key == KeyEvent.VK_E) {
+				if (World.getPlayer().getInventory().getIsInventoryOpen()) {
+					World.getPlayer().getInventory().setIsInventoryOpen(false) ;
+				} else if (!World.getPlayer().getInventory().getIsInventoryOpen()) {
+					World.getPlayer().getInventory().setIsInventoryOpen(true) ;
+				}
+			}
+			
+			if (key == KeyEvent.VK_0) {
+				World.getPlayer().getInventory().setSelectedSlot(9);
+			} else if (key == KeyEvent.VK_1) {
+				World.getPlayer().getInventory().setSelectedSlot(0);
+			} else if (key == KeyEvent.VK_2) {
+				World.getPlayer().getInventory().setSelectedSlot(1);
+			} else if (key == KeyEvent.VK_3) {
+				World.getPlayer().getInventory().setSelectedSlot(2);
+			} else if (key == KeyEvent.VK_4) {
+				World.getPlayer().getInventory().setSelectedSlot(3);
+			} else if (key == KeyEvent.VK_5) {
+				World.getPlayer().getInventory().setSelectedSlot(4);
+			} else if (key == KeyEvent.VK_6) {
+				World.getPlayer().getInventory().setSelectedSlot(5);
+			} else if (key == KeyEvent.VK_7) {
+				World.getPlayer().getInventory().setSelectedSlot(6);
+			} else if (key == KeyEvent.VK_8) {
+				World.getPlayer().getInventory().setSelectedSlot(7);
+			} else if (key == KeyEvent.VK_9) {
+				World.getPlayer().getInventory().setSelectedSlot(8);
+			}
+			
+			if (key == KeyEvent.VK_EQUALS) {
+				if (World.getPlayer().getInventory().getSelectedSlot() != World.getPlayer().getInventory().getSlotsX() - 1) {
+					World.getPlayer().getInventory().setSelectedSlot(World.getPlayer().getInventory().getSelectedSlot() + 1);
+				} else {
+					World.getPlayer().getInventory().setSelectedSlot(0);
+				}
+			} else if (key == KeyEvent.VK_MINUS) {
+				if (World.getPlayer().getInventory().getSelectedSlot() != 0) {
+					World.getPlayer().getInventory().setSelectedSlot(World.getPlayer().getInventory().getSelectedSlot() - 1);
+				} else {
+					World.getPlayer().getInventory().setSelectedSlot(9);
+				}
+			}
 		}
 		
-		if (key == KeyEvent.VK_1 && !World.doesWorldExist) {
-			World.generateWorld(400, 200, new Random().nextInt());
-		} else if (key == KeyEvent.VK_2 && World.doesWorldExist) {
+		if (key == KeyEvent.VK_F1 && !World.doesWorldExist) {
+			World.generateWorld(200, 100, new Random().nextInt());
+		} else if (key == KeyEvent.VK_F2 && World.doesWorldExist) {
 			World.saveWorld("world1");
-		} else if (key == KeyEvent.VK_3 && !World.doesWorldExist) {
+		} else if (key == KeyEvent.VK_F3 && !World.doesWorldExist) {
 			World.loadWorld("world1");
-		} else if (key == KeyEvent.VK_4 && World.doesWorldExist) {
+		} else if (key == KeyEvent.VK_F4 && World.doesWorldExist) {
 			World.clearWorld();
 		}
 	}

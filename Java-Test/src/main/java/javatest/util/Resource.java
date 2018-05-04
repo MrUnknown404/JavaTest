@@ -6,15 +6,15 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.entity.util.EntityProperties;
+import main.java.javatest.init.EnumBlocks;
 
 public class Resource {
 
 	private static final String BASE_LOCATION = System.getProperty("user.dir") + "\\src\\main\\resources\\javatest\\assets\\textures\\";
 	private static final String FILE_TYPE = ".png";
 	
-	public static BufferedImage getTexture(ResourceType location, BlockProperties.BlockType textureName) {
+	public static BufferedImage getTexture(ResourceType location, EnumBlocks textureName) {
 		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName.toString().toLowerCase() + FILE_TYPE);
 		BufferedImage i = null;
 		try {
@@ -36,9 +36,22 @@ public class Resource {
 		return i;
 	}
 	
+	public static BufferedImage getTexture(ResourceType location, String textureName) {
+		File f = new File(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName + FILE_TYPE);
+		BufferedImage i = null;
+		try {
+			i = ImageIO.read(f);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
 	public enum ResourceType {
 		blocks(0),
-		entity(1);
+		entity(1),
+		items (2),
+		gui   (3);
 		
 		private final int fId;
 		

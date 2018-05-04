@@ -36,7 +36,7 @@ public class Entity extends GameObject {
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - World.getGravity() + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
+					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - World.getWorldInfo().gravity + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
 						return tObj;
 					}
 				}
@@ -52,7 +52,7 @@ public class Entity extends GameObject {
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - World.getGravity() + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
+					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - World.getWorldInfo().gravity + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
 						return tObj;
 					}
 				}
@@ -122,9 +122,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (getVelocityX() > 0) {
-				setVelocityX(MathHelper.clamp(getVelocityX() - World.getFriction(), 0, Double.MAX_VALUE));
+				setVelocityX(MathHelper.clamp(getVelocityX() - World.getWorldInfo().friction, 0, Double.MAX_VALUE));
 			} else if (getVelocityX() < 0) {
-				setVelocityX(MathHelper.clamp(getVelocityX() + World.getFriction(), -Double.MAX_VALUE, 0));
+				setVelocityX(MathHelper.clamp(getVelocityX() + World.getWorldInfo().friction, -Double.MAX_VALUE, 0));
 			}
 		}
 		
@@ -149,9 +149,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (getVelocityY() > 0) {
-				setVelocityY(MathHelper.clamp(getVelocityY() - World.getFriction(), 0, Double.MAX_VALUE));
+				setVelocityY(MathHelper.clamp(getVelocityY() - World.getWorldInfo().friction, 0, Double.MAX_VALUE));
 			} else if (getVelocityY() < 0) {
-				setVelocityY(MathHelper.clamp(getVelocityY() + World.getFriction(), -Double.MAX_VALUE, 0));
+				setVelocityY(MathHelper.clamp(getVelocityY() + World.getWorldInfo().friction, -Double.MAX_VALUE, 0));
 			}
 		}
 		
@@ -167,9 +167,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (getGravityY() > 0) {
-				setGravityY(MathHelper.clamp(getGravityY() - World.getFriction(), 0, Double.MAX_VALUE));
+				setGravityY(MathHelper.clamp(getGravityY() - World.getWorldInfo().friction, 0, Double.MAX_VALUE));
 			} else if (getGravityY() < 0) {
-				setGravityY(MathHelper.clamp(getGravityY() + World.getFriction(), -Double.MAX_VALUE, 0));
+				setGravityY(MathHelper.clamp(getGravityY() + World.getWorldInfo().friction, -Double.MAX_VALUE, 0));
 			}
 		}
 		
@@ -185,9 +185,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (!isGrounded()) {
-				addGravityY(World.getGravity() / (World.getGravity() * 2));
-				if (getGravityY() > World.getMaxFallSpeed()) {
-					setGravityY(World.getMaxFallSpeed());
+				addGravityY(World.getWorldInfo().gravity / (World.getWorldInfo().gravity * 2));
+				if (getGravityY() > World.getWorldInfo().maxFallSpeed) {
+					setGravityY(World.getWorldInfo().maxFallSpeed);
 				}
 			}
 		}

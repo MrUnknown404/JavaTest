@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.javatest.blocks.Block;
-import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.util.EntityProperties;
+import main.java.javatest.init.EnumBlocks;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.Resource;
 import main.java.javatest.world.World;
@@ -23,30 +23,28 @@ public class Renderer {
 	private List<String> keyList = new ArrayList<String>();
 	
 	public void findTextures() {
-		System.out.println(Console.info(Console.WarningType.Info) + "-Finding all textures...");
-		System.out.println(Console.info() + "Finding all block textures...");
-		for (int i = 1; i < BlockProperties.BlockType.values().length; i++) {
-			hashImages.put(BlockProperties.BlockType.getNumber(i).toString(), Resource.getTexture(Resource.ResourceType.blocks, BlockProperties.BlockType.getNumber(i)));
+		Console.print(Console.WarningType.Info, "-Finding all textures...");
+		Console.print("Finding all block textures...");
+		for (int i = 1; i < EnumBlocks.values().length; i++) {
+			hashImages.put(EnumBlocks.getNumber(i).toString(), Resource.getTexture(Resource.ResourceType.blocks, EnumBlocks.getNumber(i)));
 		}
-		System.out.println(Console.info() + "Found all block textures!");
+		Console.print("Found all block textures!");
 		
-		System.out.println(Console.info() + "Finding all entity textures...");
+		Console.print("Finding all entity textures...");
 		for (int i = 0; i < EntityProperties.EntityType.values().length; i++) {
 			hashImages.put(EntityProperties.EntityType.getNumber(i).toString(), Resource.getTexture(Resource.ResourceType.entity, EntityProperties.EntityType.getNumber(i)));
 		}
-		System.out.println(Console.info() + "Found all entity textures!");
-		System.out.println(Console.info(Console.WarningType.Info) + "-Found all Textures!");
+		Console.print("Found all entity textures!");
+		Console.print(Console.WarningType.Info, "-Found all Textures!");
 	
-		System.out.println(Console.info() + "Setting textures for use...");
+		Console.print("Setting textures for use...");
 		valueList = new ArrayList<BufferedImage>(hashImages.values());
 		keyList = new ArrayList<String>(hashImages.keySet());
-		System.out.println(Console.info() + "Finished setting textures!");
+		Console.print("Finished setting textures!");
 	}
 	
-	static int i;
-	
 	public void render(Graphics g) {
-		for (i = 0; i < World.getActiveBlocks().size(); i++) {
+		for (int i = 0; i < World.getActiveBlocks().size(); i++) {
 			Block obj = World.getActiveBlocks().get(i);
 			
 			if (obj == null) {
@@ -66,7 +64,7 @@ public class Renderer {
 			}
 		}
 		
-		for (i = 0; i < World.getActiveEntities().size(); i++) {
+		for (int i = 0; i < World.getActiveEntities().size(); i++) {
 			Entity obj = World.getActiveEntities().get(i);
 			
 			if (obj == null) {
