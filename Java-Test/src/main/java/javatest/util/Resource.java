@@ -7,14 +7,14 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 import main.java.javatest.entity.util.EntityProperties;
-import main.java.javatest.init.EnumBlocks;
+import main.java.javatest.init.Blocks;
 
 public class Resource {
 
 	private static final String BASE_LOCATION = "/main/resources/javatest/assets/textures/";
 	private static final String FILE_TYPE = ".png";
 	
-	public static BufferedImage getTexture(ResourceType location, EnumBlocks textureName) {
+	public static BufferedImage getTexture(ResourceType location, Blocks.EnumBlocks textureName) {
 		InputStream f = Resource.class.getResourceAsStream(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName.toString().toLowerCase() + FILE_TYPE);
 		BufferedImage i = null;
 		try {

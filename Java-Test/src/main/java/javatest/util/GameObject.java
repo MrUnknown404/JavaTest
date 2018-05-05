@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
-public class GameObject {
+public  class GameObject {
 	private Vec2d pos = new Vec2d();
 	private float lightLevel;
 	private int blockLightLevel = 15;

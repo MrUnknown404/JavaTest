@@ -4,7 +4,6 @@ import main.java.javatest.Main;
 import main.java.javatest.blocks.Block;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
-import main.java.javatest.world.World;
 
 public class Camera {
 
@@ -12,38 +11,38 @@ public class Camera {
 	private boolean bool;
 	
 	public void tick() {
-		if (World.getPlayer() == null) {
-			if (!World.doesWorldExist) {
+		if (Main.getWorldHandler().getWorld().getPlayer() == null) {
+			if (!Main.getWorldHandler().doesWorldExist) {
 				return;
 			}
 			return;
 		}
 		
 		if (!KeyInput.keyDown[3]) {
-			if (pos.x != (-World.getPlayer().getPositionX() - (World.getPlayer().getWidth() / 2)) + Main.WIDTH / 2) {
-				pos.x = (-World.getPlayer().getPositionX() - (World.getPlayer().getWidth() / 2)) + Main.WIDTH / 2;
+			if (pos.x != (-Main.getWorldHandler().getWorld().getPlayer().getPositionX() - (Main.getWorldHandler().getWorld().getPlayer().getWidth() / 2)) + Main.WIDTH / 2) {
+				pos.x = (-Main.getWorldHandler().getWorld().getPlayer().getPositionX() - (Main.getWorldHandler().getWorld().getPlayer().getWidth() / 2)) + Main.WIDTH / 2;
 				bool = true;
 			}
-			if (pos.y != (-World.getPlayer().getPositionY() - World.getPlayer().getHeight()) + Main.HEIGHT / 2) {
-				pos.y = (-World.getPlayer().getPositionY() - World.getPlayer().getHeight()) + Main.HEIGHT / 2;
+			if (pos.y != (-Main.getWorldHandler().getWorld().getPlayer().getPositionY() - Main.getWorldHandler().getWorld().getPlayer().getHeight()) + Main.HEIGHT / 2) {
+				pos.y = (-Main.getWorldHandler().getWorld().getPlayer().getPositionY() - Main.getWorldHandler().getWorld().getPlayer().getHeight()) + Main.HEIGHT / 2;
 				bool = true;
 			}
 		} else {
-			if (pos.x != -MouseInput.vec.x - World.getPlayer().getPositionX() - World.getPlayer().getWidth() + Main.WIDTH) {
-				pos.x = -MouseInput.vec.x - World.getPlayer().getPositionX() - World.getPlayer().getWidth() + Main.WIDTH;
+			if (pos.x != -MouseInput.vec.x - Main.getWorldHandler().getWorld().getPlayer().getPositionX() - Main.getWorldHandler().getWorld().getPlayer().getWidth() + Main.WIDTH) {
+				pos.x = -MouseInput.vec.x - Main.getWorldHandler().getWorld().getPlayer().getPositionX() - Main.getWorldHandler().getWorld().getPlayer().getWidth() + Main.WIDTH;
 				bool = true;
 			}
-			if (pos.y != -MouseInput.vec.y - World.getPlayer().getPositionY() - World.getPlayer().getHeight() + Main.HEIGHT) {
-				pos.y = -MouseInput.vec.y - World.getPlayer().getPositionY() - World.getPlayer().getHeight() + Main.HEIGHT;
+			if (pos.y != -MouseInput.vec.y - Main.getWorldHandler().getWorld().getPlayer().getPositionY() - Main.getWorldHandler().getWorld().getPlayer().getHeight() + Main.HEIGHT) {
+				pos.y = -MouseInput.vec.y - Main.getWorldHandler().getWorld().getPlayer().getPositionY() - Main.getWorldHandler().getWorld().getPlayer().getHeight() + Main.HEIGHT;
 				bool = true;
 			}
 		}
 		
-		pos.x = MathHelper.clamp(pos.x, -(World.getWorldInfo().worldLength * Block.getBlockSize()) + Main.WIDTH - 6, 0);
-		pos.y = MathHelper.clamp(pos.y, -((World.getWorldInfo().worldHeight * Block.getBlockSize()) * 2) + Main.HEIGHT - 45, 0);
+		pos.x = MathHelper.clamp(pos.x, -(Main.getWorldHandler().getWorld().getWorldInfo().worldLength * Block.getBlockSize()) + Main.WIDTH - 6, 0);
+		pos.y = MathHelper.clamp(pos.y, -((Main.getWorldHandler().getWorld().getWorldInfo().worldHeight * Block.getBlockSize()) * 2) + Main.HEIGHT - 45, 0);
 		
 		if (bool) {
-			World.redoActives();
+			Main.getWorldHandler().getWorld().redoActives();
 		}
 		bool = false;
 	}

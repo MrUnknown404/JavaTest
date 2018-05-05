@@ -5,6 +5,7 @@ import main.java.javatest.util.Console;
 public class EntityProperties {
 
 	public static final EntityProperties PLAYER = new EntityProperties(EntityType.player);
+	public static final EntityProperties ITEM = new EntityProperties(EntityType.item);
 	
 	private boolean doGravity;
 	private boolean doCollision;
@@ -19,6 +20,11 @@ public class EntityProperties {
 				setDoGravity(true);
 				setDoCollision(true);
 				setAlwaysLoad(true);
+				break;
+			case item:
+				setDoGravity(true);
+				setDoCollision(true);
+				setAlwaysLoad(false);
 				break;
 			default:
 				Console.print(Console.WarningType.Error, "Invalid type");
@@ -58,14 +64,15 @@ public class EntityProperties {
 	}
 	
 	public enum EntityType {
-		player(0);
+		player(0),
+		item  (1);
 		
 		private final int fId;
 		
 		private EntityType(int id) {
 			fId = id;
 		}
-
+		
 		public static EntityType getNumber(int id) {
 			for (EntityType type : values()) {
 				if (type.fId == id) {

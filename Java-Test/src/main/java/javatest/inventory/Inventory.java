@@ -37,4 +37,18 @@ public abstract class Inventory {
 	public int getSlotsY() {
 		return slotsY;
 	}
+	
+	public boolean isFull() {
+		List<ItemStack> its = new ArrayList<ItemStack>(slots);
+		for (int i = 0; i < items.size(); i++) {
+			if (!items.get(i).equals(ItemStack.EMPTY)) {
+				its.add(items.get(i));
+			}
+		}
+		
+		if (its.size() == slots) {
+			return true;
+		}
+		return false;
+	}
 }

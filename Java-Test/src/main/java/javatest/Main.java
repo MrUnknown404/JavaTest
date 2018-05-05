@@ -13,12 +13,12 @@ import main.java.javatest.client.Renderer;
 import main.java.javatest.client.Window;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.client.gui.InventoryHud;
-import main.java.javatest.init.EnumBlocks;
-import main.java.javatest.init.EnumItems;
+import main.java.javatest.init.Blocks;
+import main.java.javatest.init.Items;
 import main.java.javatest.items.Item;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.math.Vec2i;
-import main.java.javatest.world.World;
+import main.java.javatest.world.WorldHandler;
 
 public class Main extends Canvas implements Runnable {
 
@@ -29,11 +29,17 @@ public class Main extends Canvas implements Runnable {
 	private int fps;
 	private boolean running = false;
 	private Thread thread;
-	private static final World world = new World();
-	private static final Camera camera = new Camera();
+	
+	private static final Camera CAMERA = new Camera();
 	private final Renderer renderer = new Renderer();
 	private final DebugHud debugHud = new DebugHud();
-	private InventoryHud invHud = new InventoryHud();
+	private final InventoryHud invHud = new InventoryHud();
+	
+	private static final WorldHandler WORLD_HANDLER = new WorldHandler();
+	
+	public static WorldHandler getWorldHandler() {
+		return WORLD_HANDLER;
+	}
 	
 	public static void main(String args[]) {
 		new Main();
@@ -57,11 +63,12 @@ public class Main extends Canvas implements Runnable {
 		Console.print(Console.WarningType.Info, "-Pre-Initialization started...");
 		renderer.findTextures();
 		
-		for (int i = 0; i < EnumBlocks.values().length; i++) {
-			new Item(EnumBlocks.getNumber(i).toString()).addThis();
+		for (int i = 0; i < Blocks.EnumBlocks.values().length; i++) {
+			new Item(Blocks.EnumBlocks.getNumber(i).toString()).addThis();
 		}
-		for (int i = 0; i < EnumItems.values().length; i++) {
-			new Item(EnumItems.getNumber(i).toString()).addThis();;
+		
+		for (int i = 0; i < Items.EnumItems.values().length; i++) {
+			new Item(Items.EnumItems.getNumber(i).toString()).addThis();
 		}
 		
 		invHud.updateTextures();
@@ -147,15 +154,15 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	private void tick() {
-		if (!World.isSaving && !World.isLoading) {
-			camera.tick();
-			world.tick();
+		if (!getWorldHandler().isSaving && !WORLD_HANDLER.isLoading) {
+			CAMERA.tick();
+			WORLD_HANDLER.tick();
 		}
 	}
 	
 	private void gameTick() {
-		if (!World.isSaving && !World.isLoading) {
-			world.gameTick();
+		if (!WORLD_HANDLER.isSaving && !WORLD_HANDLER.isLoading) {
+			WORLD_HANDLER.gameTick();
 		}
 	}
 	
@@ -173,9 +180,9 @@ public class Main extends Canvas implements Runnable {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		g2.translate(camera.getPositionX(), camera.getPositionY());
+		g2.translate(CAMERA.getPositionX(), CAMERA.getPositionY());
 		renderer.render(g);
-		g2.translate(-camera.getPositionX(), -camera.getPositionY());
+		g2.translate(-CAMERA.getPositionX(), -CAMERA.getPositionY());
 		
 		invHud.draw(g);
 		debugHud.getInfo();
@@ -186,6 +193,6 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	public static Camera getCamera() {
-		return camera;
+		return CAMERA;
 	}
 }

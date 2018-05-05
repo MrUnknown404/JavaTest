@@ -1,7 +1,7 @@
 package main.java.javatest.items;
 
+import main.java.javatest.Main;
 import main.java.javatest.util.math.MathHelper;
-import main.java.javatest.world.World;
 
 public class ItemStack {
 	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty"));
@@ -18,7 +18,7 @@ public class ItemStack {
 	public void decreaseCount() {
 		count--;
 		if (count == 0) {
-			World.getPlayer().getInventory().getItems().set(World.getPlayer().getInventory().findItemInt(this), ItemStack.EMPTY);
+			Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(Main.getWorldHandler().getWorld().getPlayer().getInventory().findItemInt(this), ItemStack.EMPTY);
 		}
 	}
 	
@@ -45,5 +45,20 @@ public class ItemStack {
 	
 	public void setItem(Item item) {
 		this.item = item;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ItemStack) {
+			if (((ItemStack) obj).getCount() == getCount() && ((ItemStack) obj).getItem().equals(getItem())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + getItem().getName() + ", " + count + ")";
 	}
 }

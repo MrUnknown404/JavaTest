@@ -11,7 +11,6 @@ import main.java.javatest.client.MouseInput;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 import main.java.javatest.util.math.Vec2i;
-import main.java.javatest.world.World;
 
 public class DebugHud extends Canvas {
 
@@ -25,6 +24,10 @@ public class DebugHud extends Canvas {
 	private static String blockPosString = "";
 	private static String blockCountAll;
 	private static String blockCountActive;
+	private static String entityCountAll;
+	private static String entityCountActive;
+	private static String entityItemCountAll;
+	private static String entityItemCountActive;
 	private static String gravityY;
 	private static String generating = "";
 	private static String loading = "";
@@ -36,23 +39,27 @@ public class DebugHud extends Canvas {
 	private static final String PRESS4 = "Press F4 to reset the world!";
 	
 	public void getInfo() {
-		if (World.getPlayer() != null) {
-			Vec2d pos = new Vec2d(World.getPlayer().getPositionX(), World.getPlayer().getPositionY() + World.getPlayer().getHeight());
+		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
+			Vec2d pos = new Vec2d(Main.getWorldHandler().getWorld().getPlayer().getPositionX(), Main.getWorldHandler().getWorld().getPlayer().getPositionY() + Main.getWorldHandler().getWorld().getPlayer().getHeight());
 			posString = pos.toStringInt();
-			blockPosString = new Vec2i(MathHelper.floor(World.getPlayer().getPositionX() / Block.getBlockSize()), MathHelper.floor((World.getPlayer().getPositionY() + World.getPlayer().getHeight()) / Block.getBlockSize())).toString();
+			blockPosString = new Vec2i(MathHelper.floor(Main.getWorldHandler().getWorld().getPlayer().getPositionX() / Block.getBlockSize()), MathHelper.floor((Main.getWorldHandler().getWorld().getPlayer().getPositionY() + Main.getWorldHandler().getWorld().getPlayer().getHeight()) / Block.getBlockSize())).toString();
 			
-			gravityY = String.valueOf(MathHelper.roundTo((World.getPlayer()).getGravityY(), 3));
+			gravityY = String.valueOf(MathHelper.roundTo((Main.getWorldHandler().getWorld().getPlayer()).getGravityY(), 3));
 		}
-		generating = "Generating a new world... " + MathHelper.roundTo(World.getAmountGenerated(), 1) + "%";
-		loading = "Loading the world... " + MathHelper.roundTo(World.getAmountLoaded(), 1) + "%";
-		saving = "Saving the world... " + MathHelper.roundTo(World.getAmountSaved(), 1) + "%";
-		blockCountAll = String.valueOf(World.getAllBlocks().size());
-		blockCountActive = String.valueOf(World.getActiveBlocks().size());
+		generating = "Generating a new world... " + MathHelper.roundTo(Main.getWorldHandler().getAmountGenerated(), 1) + "%";
+		loading = "Loading the world... " + MathHelper.roundTo(Main.getWorldHandler().getAmountLoaded(), 1) + "%";
+		saving = "Saving the world... " + MathHelper.roundTo(Main.getWorldHandler().getAmountSaved(), 1) + "%";
+		blockCountAll = String.valueOf(Main.getWorldHandler().getWorld().getAllBlocks().size());
+		blockCountActive = String.valueOf(Main.getWorldHandler().getWorld().getActiveBlocks().size());
+		entityCountAll = String.valueOf(Main.getWorldHandler().getWorld().getAllEntities().size());
+		entityCountActive = String.valueOf(Main.getWorldHandler().getWorld().getActiveEntities().size());
+		entityItemCountAll = String.valueOf(Main.getWorldHandler().getWorld().getAllItemEntities().size());
+		entityItemCountActive = String.valueOf(Main.getWorldHandler().getWorld().getActiveItemEntities().size());
 	}
 	
 	public static void setMouseVec(Vec2i vec) {
 		mouseString = vec.toString();
-		if (World.getPlayer() != null) {
+		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
 			mouseWorldString = new Vec2i(MouseInput.vec.x - Main.getCamera().getPositionX(), MouseInput.vec.y - Main.getCamera().getPositionY()).toString();
 			mouseWorldBlockString = new Vec2i((MouseInput.vec.x - Main.getCamera().getPositionX()) / Block.getBlockSize(), (MouseInput.vec.y - Main.getCamera().getPositionY()) / Block.getBlockSize()).toString();
 		}
@@ -62,8 +69,8 @@ public class DebugHud extends Canvas {
 		int y = 15;
 		g.setColor(Color.GREEN);
 		g.setFont(FONT);
-		if (World.getPlayer() != null) {
-			if (World.getPlayer().getInventory().getIsInventoryOpen()) {
+		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
+			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
 				g.drawString(fps, 1, y += 134);
 			} else {
 				g.drawString(fps, 1, y += 46);
@@ -72,7 +79,7 @@ public class DebugHud extends Canvas {
 			g.drawString(fps, 1, y);
 		}
 		
-		if (!World.doesWorldExist && !World.isGeneratingWorld && !World.isSaving && !World.isLoading) {
+		if (!Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld && !Main.getWorldHandler().isSaving && !Main.getWorldHandler().isLoading) {
 			final int w1 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS1, g).getWidth() / 2;
 			final int h1 = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(PRESS1, g).getHeight() / 2;
 			final int w2 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS3, g).getWidth() / 2;
@@ -80,12 +87,12 @@ public class DebugHud extends Canvas {
 			
 			g.drawString(PRESS1, w1, h1);
 			g.drawString(PRESS3, w2, h2 + 16);
-		} else if (World.isGeneratingWorld && !World.isSaving && !World.isLoading) {
+		} else if (Main.getWorldHandler().isGeneratingWorld && !Main.getWorldHandler().isSaving && !Main.getWorldHandler().isLoading) {
 			final int w = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(generating, g).getWidth() / 2;
 			final int h = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(generating, g).getHeight() / 2;
 			
 			g.drawString(generating, w, h);
-		} else if (World.doesWorldExist && !World.isGeneratingWorld && !World.isSaving && !World.isLoading) {
+		} else if (Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld && !Main.getWorldHandler().isSaving && !Main.getWorldHandler().isLoading) {
 			final int w1 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS4, g).getWidth() / 2;
 			final int w2 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS2, g).getWidth() / 2;
 			
@@ -97,16 +104,20 @@ public class DebugHud extends Canvas {
 			g.drawString("Mouse world block pos: " + mouseWorldBlockString, 1, y += 16);
 			g.drawString("Blocks active: " + blockCountActive, 1, y += 16);
 			g.drawString("Blocks all: " + blockCountAll, 1, y += 16);
+			g.drawString("Entities active: " + entityCountActive, 1, y += 16);
+			g.drawString("Entities all: " + entityCountAll, 1, y += 16);
+			g.drawString("Item Entities active: " + entityItemCountActive, 1, y += 16);
+			g.drawString("Item Entities all: " + entityItemCountAll, 1, y += 16);
 			
 			g.drawString("Player pos: " + posString, 1, y += 32);
 			g.drawString("Player block pos: " + blockPosString, 1, y += 16);
 			g.drawString("Player Gravity: " + gravityY, 1, y += 16);
-		} else if (!World.isLoading && World.isSaving && World.doesWorldExist && !World.isGeneratingWorld) {
+		} else if (!Main.getWorldHandler().isLoading && Main.getWorldHandler().isSaving && Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld) {
 			final int w = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(saving, g).getWidth() / 2;
 			final int h = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(saving, g).getHeight() / 2;
 			
 			g.drawString(saving, w, h);
-		} else if (!World.isSaving && World.isLoading && !World.doesWorldExist && !World.isGeneratingWorld) {
+		} else if (!Main.getWorldHandler().isSaving && Main.getWorldHandler().isLoading && !Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld) {
 			final int w = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(loading, g).getWidth() / 2;
 			final int h = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(loading, g).getHeight() / 2;
 			

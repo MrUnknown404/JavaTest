@@ -2,11 +2,11 @@ package main.java.javatest.blocks;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import main.java.javatest.Main;
 import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.Vec2d;
-import main.java.javatest.world.World;
 
 public class Block extends GameObject {
 	protected BlockProperties type;
@@ -33,7 +33,7 @@ public class Block extends GameObject {
 	
 	public void blockUpdate() {
 		updatePosition();
-		World.redoSpecificActiveBlock(this);
+		Main.getWorldHandler().getWorld().redoSpecificActiveObject(this);
 	}
 	
 	private void updatePosition() {

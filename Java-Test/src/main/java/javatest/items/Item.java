@@ -1,6 +1,6 @@
 package main.java.javatest.items;
 
-import main.java.javatest.init.EnumItems;
+import main.java.javatest.init.Items;
 
 public class Item {
 	private String name;
@@ -11,8 +11,8 @@ public class Item {
 	}
 	
 	public void addThis() {
-		EnumItems.items.add(this);
-		id = EnumItems.findItemInt(this);
+		Items.items.add(this);
+		id = Items.findItemInt(this);
 	}
 	
 	public String getName() {
@@ -21,5 +21,20 @@ public class Item {
 	
 	public int getId() {
 		return id;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Item) {
+			if (((Item) obj).name.equals(name) && ((Item) obj).id == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + name + ")";
 	}
 }

@@ -4,7 +4,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
-import main.java.javatest.world.World;
+import main.java.javatest.Main;
+import main.java.javatest.entity.EntityItem;
+import main.java.javatest.items.ItemStack;
 
 public class KeyInput extends KeyAdapter {
 
@@ -20,17 +22,17 @@ public class KeyInput extends KeyAdapter {
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		
-		if (World.getPlayer() != null) {
-			if (key == KeyEvent.VK_W && World.getPlayer().isGrounded() && !keyDown[0]) {
-				World.getPlayer().setJumpY(-MOVE_SPEED * (MOVE_SPEED / 1.25));
+		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
+			if (key == KeyEvent.VK_W && Main.getWorldHandler().getWorld().getPlayer().isGrounded() && !keyDown[0]) {
+				Main.getWorldHandler().getWorld().getPlayer().setJumpY(-MOVE_SPEED * (MOVE_SPEED / 1.25));
 				keyDown[0] = true;
 			}
 			
 			if (key == KeyEvent.VK_A) {
-				World.getPlayer().setMoveDirX(-MOVE_SPEED);
+				Main.getWorldHandler().getWorld().getPlayer().setMoveDirX(-MOVE_SPEED);
 				keyDown[1] = true;
 			} else if (key == KeyEvent.VK_D) {
-				World.getPlayer().setMoveDirX(MOVE_SPEED);
+				Main.getWorldHandler().getWorld().getPlayer().setMoveDirX(MOVE_SPEED);
 				keyDown[2] = true;
 			}
 			
@@ -39,58 +41,74 @@ public class KeyInput extends KeyAdapter {
 			}
 			
 			if (key == KeyEvent.VK_E) {
-				if (World.getPlayer().getInventory().getIsInventoryOpen()) {
-					World.getPlayer().getInventory().setIsInventoryOpen(false) ;
-				} else if (!World.getPlayer().getInventory().getIsInventoryOpen()) {
-					World.getPlayer().getInventory().setIsInventoryOpen(true) ;
+				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().setIsInventoryOpen(false) ;
+				} else if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().setIsInventoryOpen(true) ;
 				}
+			}
+			
+			if (key == KeyEvent.VK_Q) {
+				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).equals(ItemStack.EMPTY)) {
+					return;
+				}
+				EntityItem item = null;
+				if (MouseInput.vec.x > Main.WIDTH / 2) {
+					item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() + Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), new ItemStack(1 , Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem()));
+					item.addVelocityX(5);
+				} else {
+					item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() - 12, Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), new ItemStack(1 , Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem()));
+					item.addVelocityX(-5);
+				}
+				Main.getWorldHandler().getWorld().addObjectAll(item);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).decreaseCount();
 			}
 			
 			if (key == KeyEvent.VK_0) {
-				World.getPlayer().getInventory().setSelectedSlot(9);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(9);
 			} else if (key == KeyEvent.VK_1) {
-				World.getPlayer().getInventory().setSelectedSlot(0);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(0);
 			} else if (key == KeyEvent.VK_2) {
-				World.getPlayer().getInventory().setSelectedSlot(1);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(1);
 			} else if (key == KeyEvent.VK_3) {
-				World.getPlayer().getInventory().setSelectedSlot(2);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(2);
 			} else if (key == KeyEvent.VK_4) {
-				World.getPlayer().getInventory().setSelectedSlot(3);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(3);
 			} else if (key == KeyEvent.VK_5) {
-				World.getPlayer().getInventory().setSelectedSlot(4);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(4);
 			} else if (key == KeyEvent.VK_6) {
-				World.getPlayer().getInventory().setSelectedSlot(5);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(5);
 			} else if (key == KeyEvent.VK_7) {
-				World.getPlayer().getInventory().setSelectedSlot(6);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(6);
 			} else if (key == KeyEvent.VK_8) {
-				World.getPlayer().getInventory().setSelectedSlot(7);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(7);
 			} else if (key == KeyEvent.VK_9) {
-				World.getPlayer().getInventory().setSelectedSlot(8);
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(8);
 			}
 			
 			if (key == KeyEvent.VK_EQUALS) {
-				if (World.getPlayer().getInventory().getSelectedSlot() != World.getPlayer().getInventory().getSlotsX() - 1) {
-					World.getPlayer().getInventory().setSelectedSlot(World.getPlayer().getInventory().getSelectedSlot() + 1);
+				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() != Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsX() - 1) {
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() + 1);
 				} else {
-					World.getPlayer().getInventory().setSelectedSlot(0);
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(0);
 				}
 			} else if (key == KeyEvent.VK_MINUS) {
-				if (World.getPlayer().getInventory().getSelectedSlot() != 0) {
-					World.getPlayer().getInventory().setSelectedSlot(World.getPlayer().getInventory().getSelectedSlot() - 1);
+				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() != 0) {
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() - 1);
 				} else {
-					World.getPlayer().getInventory().setSelectedSlot(9);
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(9);
 				}
 			}
 		}
 		
-		if (key == KeyEvent.VK_F1 && !World.doesWorldExist) {
-			World.generateWorld(200, 100, new Random().nextInt());
-		} else if (key == KeyEvent.VK_F2 && World.doesWorldExist) {
-			World.saveWorld("world1");
-		} else if (key == KeyEvent.VK_F3 && !World.doesWorldExist) {
-			World.loadWorld("world1");
-		} else if (key == KeyEvent.VK_F4 && World.doesWorldExist) {
-			World.clearWorld();
+		if (key == KeyEvent.VK_F1 && !Main.getWorldHandler().doesWorldExist) {
+			Main.getWorldHandler().generateWorld(200, 100, new Random().nextInt());
+		} else if (key == KeyEvent.VK_F2 && Main.getWorldHandler().doesWorldExist) {
+			Main.getWorldHandler().saveWorld("world1");
+		} else if (key == KeyEvent.VK_F3 && !Main.getWorldHandler().doesWorldExist) {
+			Main.getWorldHandler().loadWorld("world1");
+		} else if (key == KeyEvent.VK_F4 && Main.getWorldHandler().doesWorldExist) {
+			Main.getWorldHandler().clearWorld();
 		}
 	}
 	
@@ -106,9 +124,9 @@ public class KeyInput extends KeyAdapter {
 			keyDown[2] = false;
 		}
 		
-		if (World.getPlayer() != null) {
+		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
 			if (!keyDown[1] && !keyDown[2]) {
-				World.getPlayer().setMoveDirX(0);
+				Main.getWorldHandler().getWorld().getPlayer().setMoveDirX(0);
 			}
 			
 			if (key == KeyEvent.VK_CONTROL) {

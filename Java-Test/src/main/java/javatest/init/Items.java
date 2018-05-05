@@ -6,25 +6,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import main.java.javatest.items.Item;
 
-public enum EnumItems {
-	stick(0);
-	
+public class Items {
 	public static List<Item> items = new ArrayList<Item>();
 	
-	private final int fId;
-	
-	private EnumItems(int id) {
-		fId = id;
-	}
-
-	public static EnumItems getNumber(int id) {
-		for (EnumItems type : values()) {
-			if (type.fId == id) {
-				return type;
-			}
-		}
-		throw new IllegalArgumentException("Invalid Type id: " + id);
-	}
+	public static final Item STICK = new Item(EnumItems.stick.toString());
 	
 	public static Item findItem(String name) {
 		if (name.equals("") || name == null) {
@@ -49,5 +34,24 @@ public enum EnumItems {
 	
 	public static Item getRandomItem() {
 		return items.get(ThreadLocalRandom.current().nextInt(1, items.size()));
+	}
+	
+	public enum EnumItems {
+		stick(0);
+		
+		private final int fId;
+		
+		private EnumItems(int id) {
+			fId = id;
+		}
+	
+		public static EnumItems getNumber(int id) {
+			for (EnumItems type : values()) {
+				if (type.fId == id) {
+					return type;
+				}
+			}
+			throw new IllegalArgumentException("Invalid Type id: " + id);
+		}
 	}
 }

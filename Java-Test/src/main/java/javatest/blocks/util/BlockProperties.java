@@ -1,26 +1,23 @@
 package main.java.javatest.blocks.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import main.java.javatest.init.EnumBlocks;
+import main.java.javatest.init.Blocks;
 
 public class BlockProperties {
-	private static List<BlockProperties> blocks = new ArrayList<BlockProperties>();
-	
-	public static final BlockProperties AIR = new BlockProperties(EnumBlocks.air);
-	public static final BlockProperties STONE = new BlockProperties(EnumBlocks.stone);
-	public static final BlockProperties DIRT = new BlockProperties(EnumBlocks.dirt);
-	public static final BlockProperties GRASS = new BlockProperties(EnumBlocks.grass);
+	public static final BlockProperties AIR = new BlockProperties(Blocks.EnumBlocks.air);
+	public static final BlockProperties STONE = new BlockProperties(Blocks.EnumBlocks.stone);
+	public static final BlockProperties DIRT = new BlockProperties(Blocks.EnumBlocks.dirt);
+	public static final BlockProperties GRASS = new BlockProperties(Blocks.EnumBlocks.grass);
 	
 	private boolean hasCollision;
-	private EnumBlocks type;
+	private Blocks.EnumBlocks type;
 	
-	public BlockProperties(EnumBlocks type) {
+	public BlockProperties(Blocks.EnumBlocks type) {
 		this.type = type;
 		
-		if (!blocks.contains(this) && type != EnumBlocks.air) {
-			blocks.add(this);
+		if (!Blocks.blocks.contains(this) && type != Blocks.EnumBlocks.air) {
+			Blocks.blocks.add(this);
 		}
 		
 		switch (type) {
@@ -34,9 +31,9 @@ public class BlockProperties {
 	}
 	
 	public static BlockProperties findBlockPropertyWithName(String name) {
-		for (int i = 0; i < blocks.size(); i++) {
-			if (blocks.get(i).getBlockType().toString().equals(name)) {
-				return blocks.get(i);
+		for (int i = 0; i < Blocks.blocks.size(); i++) {
+			if (Blocks.blocks.get(i).getBlockType().toString().equals(name)) {
+				return Blocks.blocks.get(i);
 			}
 		}
 		return null;
@@ -52,10 +49,10 @@ public class BlockProperties {
 	}
 	
 	public static List<BlockProperties> getBlocks() {
-		return blocks;
+		return Blocks.blocks;
 	}
 	
-	public EnumBlocks getBlockType() {
+	public Blocks.EnumBlocks getBlockType() {
 		return type;
 	}
 }
