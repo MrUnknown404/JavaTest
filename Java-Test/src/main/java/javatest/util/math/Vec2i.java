@@ -3,7 +3,7 @@ package main.java.javatest.util.math;
 public class Vec2i {
 	
 	public static final Vec2i NULL_VECTOR = new Vec2i();
-	public final int x, y;
+	public int x, y;
 	
 	public Vec2i(int x, int y) {
 		this.x = x;

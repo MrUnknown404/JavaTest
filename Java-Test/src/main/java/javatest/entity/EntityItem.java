@@ -42,28 +42,8 @@ public class EntityItem extends Entity {
 				setVelocityY(-2);
 			}
 			
-			boolean tb = false;
 			if (getBoundsAll().intersects(Main.getWorldHandler().getWorld().getPlayer().getPickupBounds())) {
-				if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().isFull()) {
-					for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
-						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getItem().equals(item.getItem())) {
-							Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, new ItemStack(item.getCount() + Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount(), item.getItem()));
-							tb = true;
-							break;
-						}
-					}
-					
-					if (!tb) {
-						for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
-							if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
-								Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, item);
-								break;
-							}
-						}
-					}
-					
-					Main.getWorldHandler().getWorld().removeObjectAll(this, false);
-				}
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().addItem(item, this);
 			}
 		} else if (!doGravity && getEntityProperties().getDoGravity()) {
 			doGravity = true;

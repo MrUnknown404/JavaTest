@@ -20,8 +20,8 @@ public class DebugHud extends Canvas {
 	private static String mouseString = "(0, 0)";
 	private static String mouseWorldString = "(0, 0)";
 	private static String mouseWorldBlockString = "(0, 0)";
-	private static String posString = "";
-	private static String blockPosString = "";
+	private static String posString = "(0, 0)";
+	private static String blockPosString = "(0, 0)";
 	private static String blockCountAll;
 	private static String blockCountActive;
 	private static String entityCountAll;
@@ -80,24 +80,24 @@ public class DebugHud extends Canvas {
 		}
 		
 		if (!Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld && !Main.getWorldHandler().isSaving && !Main.getWorldHandler().isLoading) {
-			final int w1 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS1, g).getWidth() / 2;
-			final int h1 = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(PRESS1, g).getHeight() / 2;
-			final int w2 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS3, g).getWidth() / 2;
-			final int h2 = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(PRESS3, g).getHeight() / 2;
+			final int w1 = Main.WIDTH_DEF / 2 - (int) g.getFontMetrics().getStringBounds(PRESS1, g).getWidth() / 2;
+			final int h1 = Main.HEIGHT_DEF / 2 - (int) g.getFontMetrics().getStringBounds(PRESS1, g).getHeight() / 2;
+			final int w2 = Main.WIDTH_DEF / 2 - (int) g.getFontMetrics().getStringBounds(PRESS3, g).getWidth() / 2;
+			final int h2 = Main.HEIGHT_DEF / 2 - (int) g.getFontMetrics().getStringBounds(PRESS3, g).getHeight() / 2;
 			
 			g.drawString(PRESS1, w1, h1);
 			g.drawString(PRESS3, w2, h2 + 16);
 		} else if (Main.getWorldHandler().isGeneratingWorld && !Main.getWorldHandler().isSaving && !Main.getWorldHandler().isLoading) {
-			final int w = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(generating, g).getWidth() / 2;
-			final int h = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(generating, g).getHeight() / 2;
+			final int w = Main.WIDTH_DEF / 2 - (int) g.getFontMetrics().getStringBounds(generating, g).getWidth() / 2;
+			final int h = Main.HEIGHT_DEF / 2 - (int) g.getFontMetrics().getStringBounds(generating, g).getHeight() / 2;
 			
 			g.drawString(generating, w, h);
 		} else if (Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld && !Main.getWorldHandler().isSaving && !Main.getWorldHandler().isLoading) {
-			final int w1 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS4, g).getWidth() / 2;
-			final int w2 = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(PRESS2, g).getWidth() / 2;
+			final int w1 = Main.WIDTH_DEF / 2 - (int) g.getFontMetrics().getStringBounds(PRESS4, g).getWidth() / 2;
+			final int w2 = Main.WIDTH_DEF / 2 - (int) g.getFontMetrics().getStringBounds(PRESS2, g).getWidth() / 2;
 			
-			g.drawString(PRESS4, w1, Main.HEIGHT - 42);
-			g.drawString(PRESS2, w2, Main.HEIGHT - 58);
+			g.drawString(PRESS4, w1, Main.HEIGHT_DEF - 42);
+			g.drawString(PRESS2, w2, Main.HEIGHT_DEF - 58);
 			
 			g.drawString("Mouse pos: " + mouseString, 1, y += 32);
 			g.drawString("Mouse world pos: " + mouseWorldString, 1, y += 16);
@@ -113,13 +113,13 @@ public class DebugHud extends Canvas {
 			g.drawString("Player block pos: " + blockPosString, 1, y += 16);
 			g.drawString("Player Gravity: " + gravityY, 1, y += 16);
 		} else if (!Main.getWorldHandler().isLoading && Main.getWorldHandler().isSaving && Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld) {
-			final int w = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(saving, g).getWidth() / 2;
-			final int h = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(saving, g).getHeight() / 2;
+			final int w = Main.WIDTH_DEF / 2 - (int) g.getFontMetrics().getStringBounds(saving, g).getWidth() / 2;
+			final int h = Main.HEIGHT_DEF / 2 - (int) g.getFontMetrics().getStringBounds(saving, g).getHeight() / 2;
 			
 			g.drawString(saving, w, h);
 		} else if (!Main.getWorldHandler().isSaving && Main.getWorldHandler().isLoading && !Main.getWorldHandler().doesWorldExist && !Main.getWorldHandler().isGeneratingWorld) {
-			final int w = Main.WIDTH / 2 - (int) g.getFontMetrics().getStringBounds(loading, g).getWidth() / 2;
-			final int h = Main.HEIGHT / 2 - (int) g.getFontMetrics().getStringBounds(loading, g).getHeight() / 2;
+			final int w = Main.WIDTH_DEF / 2 - (int) g.getFontMetrics().getStringBounds(loading, g).getWidth() / 2;
+			final int h = Main.HEIGHT_DEF / 2 - (int) g.getFontMetrics().getStringBounds(loading, g).getHeight() / 2;
 			
 			g.drawString(loading, w, h);
 		}

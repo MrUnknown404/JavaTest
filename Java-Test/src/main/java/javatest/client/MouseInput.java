@@ -11,7 +11,6 @@ import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.init.Blocks;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.MathHelper;
-import main.java.javatest.util.math.Vec2d;
 import main.java.javatest.util.math.Vec2i;
 
 public class MouseInput extends MouseAdapter {
@@ -20,7 +19,7 @@ public class MouseInput extends MouseAdapter {
 	private Block block;
 	private Camera camera = Main.getCamera();
 	
-	public static Vec2d vec = new Vec2d();
+	public static Vec2i vec = new Vec2i();
 	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
@@ -43,8 +42,8 @@ public class MouseInput extends MouseAdapter {
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		DebugHud.setMouseVec(new Vec2i(MathHelper.floor((e.getX() - camera.getPositionX()) / Block.getBlockSize()), MathHelper.floor((e.getY() - camera.getPositionY()) / Block.getBlockSize())));
-		vec = new Vec2d(e.getX(), e.getY());
+		vec = new Vec2i(e.getX() / Main.scaleWidth, e.getY() / Main.scaleHeight);
+		DebugHud.setMouseVec(new Vec2i(MathHelper.floor(((vec.x) - camera.getPositionX()) / Block.getBlockSize()), MathHelper.floor(((vec.y) - camera.getPositionY()) / Block.getBlockSize())));
 	}
 	
 	@Override
@@ -53,14 +52,14 @@ public class MouseInput extends MouseAdapter {
 			return;
 		}
 		if (e.getButton() == 3) {
-			Vec2i vec = new Vec2i((e.getX() - camera.getPositionX()) / Block.getBlockSize(), (e.getY() - camera.getPositionY()) / Block.getBlockSize());
+			Vec2i tPos = new Vec2i(((vec.x) - camera.getPositionX()) / Block.getBlockSize(), ((vec.y) - camera.getPositionY()) / Block.getBlockSize());
 			
 			for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
 				Block b = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
 				
-				if (!b.getBlockPos().equals(new BlockPos(vec))) {
-					pos = vec;
-				} else if (b.getBlockPos().equals(new BlockPos(vec))) {
+				if (!b.getBlockPos().equals(new BlockPos(tPos))) {
+					pos = tPos;
+				} else if (b.getBlockPos().equals(new BlockPos(tPos))) {
 					pos = null;
 					break;
 				}
@@ -93,12 +92,12 @@ public class MouseInput extends MouseAdapter {
 				pos = null;
 			}
 		} else if (e.getButton() == 1) {
-			Vec2i pos = new Vec2i((e.getX() - camera.getPositionX()) / Block.getBlockSize(), (e.getY() - camera.getPositionY()) / Block.getBlockSize());
+			Vec2i tPos = new Vec2i(((vec.x) - camera.getPositionX()) / Block.getBlockSize(), ((vec.y) - camera.getPositionY()) / Block.getBlockSize());
 			
 			for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
 				Block b = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
 				
-				if (b.getBlockPos().equals(new BlockPos(pos))) {
+				if (b.getBlockPos().equals(new BlockPos(tPos))) {
 					block = b;
 					break;
 				}

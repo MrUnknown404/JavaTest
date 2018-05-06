@@ -2,8 +2,11 @@ package main.java.javatest;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
 
 import main.java.javatest.client.Camera;
@@ -17,6 +20,7 @@ import main.java.javatest.init.Blocks;
 import main.java.javatest.init.Items;
 import main.java.javatest.items.Item;
 import main.java.javatest.util.Console;
+import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2i;
 import main.java.javatest.world.WorldHandler;
 
@@ -24,7 +28,8 @@ public class Main extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = -2518563563721413864L;
 	
-	public static final int WIDTH = 854, HEIGHT = 480;
+	public static final int WIDTH_DEF = 800, HEIGHT_DEF = 450;
+	private static int WIDTH = WIDTH_DEF, HEIGHT = HEIGHT_DEF;
 	
 	private int fps;
 	private boolean running = false;
@@ -33,20 +38,16 @@ public class Main extends Canvas implements Runnable {
 	private static final Camera CAMERA = new Camera();
 	private final Renderer renderer = new Renderer();
 	private final DebugHud debugHud = new DebugHud();
-	private final InventoryHud invHud = new InventoryHud();
+	private final InventoryHud INV_HUD = new InventoryHud();
 	
 	private static final WorldHandler WORLD_HANDLER = new WorldHandler();
-	
-	public static WorldHandler getWorldHandler() {
-		return WORLD_HANDLER;
-	}
 	
 	public static void main(String args[]) {
 		new Main();
 	}
 	
 	public Main() {
-		new Window(WIDTH, HEIGHT, "Java Test!", this);
+		new Window(WIDTH_DEF, HEIGHT_DEF, "Java Test!", this);
 	}
 	
 	public synchronized void start() {
@@ -71,7 +72,7 @@ public class Main extends Canvas implements Runnable {
 			new Item(Items.EnumItems.getNumber(i).toString()).addThis();
 		}
 		
-		invHud.updateTextures();
+		INV_HUD.updateTextures();
 		
 		MouseInput mouse = new MouseInput();
 		
@@ -79,6 +80,18 @@ public class Main extends Canvas implements Runnable {
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
 		addMouseWheelListener(mouse);
+		addComponentListener(new ComponentListener() {
+			@Override public void componentShown(ComponentEvent e) {}
+			@Override public void componentMoved(ComponentEvent e) {}
+			@Override public void componentHidden(ComponentEvent e) {}
+			
+			@Override
+			public void componentResized(ComponentEvent e) {
+				Component c = (Component) e.getSource();
+				WIDTH = MathHelper.clamp(c.getWidth(), WIDTH_DEF, Integer.MAX_VALUE);
+				HEIGHT = MathHelper.clamp(c.getHeight(), HEIGHT_DEF, Integer.MAX_VALUE);
+			}
+		});
 		
 		Console.print(Console.WarningType.Info, "-Pre-Initialization Finished!");
 	}
@@ -166,7 +179,9 @@ public class Main extends Canvas implements Runnable {
 		}
 	}
 	
-	private void render() {
+	public static float scaleWidth, scaleHeight;
+	
+	public void render() {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
 			createBufferStrategy(3);
@@ -177,14 +192,19 @@ public class Main extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		Graphics2D g2 = (Graphics2D) g;
 		
+		scaleWidth = (float) WIDTH / (float) WIDTH_DEF; 
+		scaleHeight = (float) HEIGHT / (float) HEIGHT_DEF;
+		
+		g2.scale(scaleWidth, scaleHeight);
+		
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.fillRect(0, 0, WIDTH * 2, HEIGHT * 2);
 		
 		g2.translate(CAMERA.getPositionX(), CAMERA.getPositionY());
 		renderer.render(g);
 		g2.translate(-CAMERA.getPositionX(), -CAMERA.getPositionY());
 		
-		invHud.draw(g);
+		INV_HUD.draw(g);
 		debugHud.getInfo();
 		debugHud.drawText(g, "FPS: " + fps);
 		
@@ -194,5 +214,9 @@ public class Main extends Canvas implements Runnable {
 	
 	public static Camera getCamera() {
 		return CAMERA;
+	}
+	
+	public static WorldHandler getWorldHandler() {
+		return WORLD_HANDLER;
 	}
 }

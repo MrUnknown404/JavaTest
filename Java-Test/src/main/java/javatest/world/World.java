@@ -130,7 +130,7 @@ public class World {
 		activeEntities.clear();
 		activeItemEntities.clear();
 		
-		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH, Main.HEIGHT);
+		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH_DEF, Main.HEIGHT_DEF);
 		
 		for (int i = 0; i < allBlocks.size(); i++) {
 			Block obj = allBlocks.get(i);
@@ -182,7 +182,7 @@ public class World {
 			return;
 		}
 		
-		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH, Main.HEIGHT);
+		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH_DEF, Main.HEIGHT_DEF);
 		
 		if (obj instanceof Block) {
 			activeBlocks.remove(obj);

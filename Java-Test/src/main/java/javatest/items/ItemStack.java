@@ -23,8 +23,11 @@ public class ItemStack {
 	}
 	
 	public void addCount() {
-		count++;
-		count = MathHelper.clamp(count, 0, MAX_STACK);
+		count = MathHelper.clamp(count + 1, 0, MAX_STACK);
+	}
+	
+	public void addCount(int i) {
+		count = MathHelper.clamp(count + i, 0, MAX_STACK);
 	}
 	
 	public static int getMaxStack() {
@@ -50,7 +53,7 @@ public class ItemStack {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof ItemStack) {
-			if (((ItemStack) obj).getCount() == getCount() && ((ItemStack) obj).getItem().equals(getItem())) {
+			if (((ItemStack) obj).getItem().equals(getItem())) {
 				return true;
 			}
 		}

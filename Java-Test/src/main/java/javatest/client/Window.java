@@ -1,5 +1,7 @@
 package main.java.javatest.client;
 
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -15,12 +17,18 @@ public class Window {
 		frame.setMinimumSize(new Dimension(width, height));
 		frame.setMaximumSize(new Dimension(width, height));
 		
+		Container pane = frame.getContentPane();
+		pane.setBackground(Color.BLACK);
+		
+		frame.setContentPane(pane);
+		frame.pack();
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setFocusable(true);
 		frame.setLocationRelativeTo(null);
-		frame.add(game);
 		frame.setVisible(true);
+		frame.add(game);
 		
 		game.start();
 	}
