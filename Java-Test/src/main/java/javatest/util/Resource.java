@@ -58,7 +58,7 @@ public class Resource {
 		private ResourceType(int id) {
 			fId = id;
 		}
-
+		
 		public static ResourceType getNumber(int id) {
 			for (ResourceType type : values()) {
 				if (type.fId == id) {
