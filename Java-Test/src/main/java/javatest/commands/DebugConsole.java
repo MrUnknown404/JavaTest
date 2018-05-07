@@ -8,7 +8,7 @@ public class DebugConsole {
 	public List<Command> commands = new ArrayList<Command>();
 	
 	private static final int MAX_ARGS = 5;
-	private static final int MAX_LINES = 6;
+	private static final int MAX_LINES = Command.ArgumentType.values().length;
 	public boolean isConsoleOpen;
 	public String input = "";
 	public List<String> lines = new ArrayList<String>();;

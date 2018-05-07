@@ -107,7 +107,7 @@ public class Renderer {
 				g.fillRect((int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight());
 			}
 			
-			if (obj.getBlockPos().equals(new BlockPos(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize()))) {
+			if (obj.getBlockPos().equals(new BlockPos(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize())) && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(obj.getBoundsAll())) {
 				g.setColor(new Color(0.1f, 0.1f, 0.1f));
 				g.drawRect((int) obj.getPositionX(), (int) obj.getPositionY(), 15, 15);
 			}

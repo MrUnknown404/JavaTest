@@ -11,7 +11,6 @@ import java.util.List;
 import main.java.javatest.Main;
 import main.java.javatest.client.MouseInput;
 import main.java.javatest.init.Items;
-import main.java.javatest.items.ItemStack;
 import main.java.javatest.items.Slot;
 import main.java.javatest.util.Resource;
 
@@ -24,8 +23,6 @@ public class InventoryHud extends Canvas {
 	private final BufferedImage slotSel = Resource.getTexture(Resource.ResourceType.gui, "slot_selected");
 	private List<BufferedImage> imgs = new ArrayList<BufferedImage>();
 	private List<String> keys = new ArrayList<String>();
-	
-	public static ItemStack itemInHand;
 	
 	public void updateTextures() {
 		imgs.clear();
@@ -76,11 +73,11 @@ public class InventoryHud extends Canvas {
 				}
 			}
 			
-			if (itemInHand != null) {
+			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse != null) {
 				for (int i = 0; i < imgs.size(); i++) {
-					if (keys.get(i).equals(itemInHand.getItem().getName())) {
+					if (keys.get(i).equals(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse.getItem().getName())) {
 						g.drawImage(imgs.get(i), MouseInput.vec.x, MouseInput.vec.y , imgs.get(i).getWidth(), imgs.get(i).getHeight(), null);
-						g.drawString(String.valueOf(itemInHand.getCount()), MouseInput.vec.x + 6, MouseInput.vec.y + 34);
+						g.drawString(String.valueOf(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse.getCount()), MouseInput.vec.x + 6, MouseInput.vec.y + 34);
 					}
 				}
 			}

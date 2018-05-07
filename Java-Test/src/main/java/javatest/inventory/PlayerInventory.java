@@ -7,6 +7,7 @@ public class PlayerInventory extends Inventory {
 
 	private boolean isInventoryOpen = false;
 	private int selectedSlot = 0;
+	public ItemStack itemInMouse;
 	
 	public PlayerInventory() {
 		super(10, 3);
@@ -26,14 +27,5 @@ public class PlayerInventory extends Inventory {
 	
 	public void setSelectedSlot(int number) {
 		selectedSlot = MathHelper.clamp(selectedSlot = number, 0, slotsX - 1);
-	}
-
-	public int findItemInt(ItemStack stack) {
-		for (int i = 0; i < items.size(); i++) {
-			if (items.get(i) == stack) {
-				return i;
-			}
-		}
-		return 0;
 	}
 }

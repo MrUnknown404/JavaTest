@@ -8,7 +8,6 @@ import main.java.javatest.Main;
 import main.java.javatest.blocks.Block;
 import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.client.gui.DebugHud;
-import main.java.javatest.client.gui.InventoryHud;
 import main.java.javatest.init.Blocks;
 import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.math.BlockPos;
@@ -50,10 +49,49 @@ public class MouseInput extends MouseAdapter {
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if (!Main.getWorldHandler().doesWorldExist) {
+		if (!Main.getWorldHandler().doesWorldExist || Main.getCommandConsole().isConsoleOpen) {
 			return;
 		}
+		
 		if (e.getButton() == 3) {
+			if (Main.getWorldHandler().getWorld().getPlayer() != null && Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
+				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == null) {
+					for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
+						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
+							if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
+								int ic1 = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount();
+								if (ic1 > 1) {
+									if ((ic1 & 1) == 0) {
+										Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = new ItemStack(ic1 / 2, Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getItem());
+										Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).setCount(ic1 / 2);
+									} else {
+										Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = new ItemStack(ic1 / 2 + 1, Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getItem());
+										Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).setCount(ic1 / 2);
+									}
+								} else {
+									Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
+									Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).setCount(0);
+								}
+							}
+						}
+					}
+				} else {
+					for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
+						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
+							if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
+								if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse != null) {
+									Main.getWorldHandler().getWorld().getPlayer().getInventory().addItemTo(new ItemStack(1, Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse.getItem()), i);
+									Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse.decreaseCount();
+								}
+							} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse != null && Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse)) {
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse.decreaseCount();
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).increaseCount();
+							}
+						}
+					}
+				}
+			}
+			
 			Vec2i tPos = new Vec2i(((vec.x) - camera.getPositionX()) / Block.getBlockSize(), ((vec.y) - camera.getPositionY()) / Block.getBlockSize());
 			
 			for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
@@ -99,11 +137,11 @@ public class MouseInput extends MouseAdapter {
 			}
 		} else if (e.getButton() == 1) {
 			if (Main.getWorldHandler().getWorld().getPlayer() != null && Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
-				if (InventoryHud.itemInHand == null) {
+				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == null) {
 					for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
 						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
 							if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
-								InventoryHud.itemInHand = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
 								Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, ItemStack.EMPTY);
 							}
 						}
@@ -112,16 +150,22 @@ public class MouseInput extends MouseAdapter {
 					for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
 						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
 							if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
-								Main.getWorldHandler().getWorld().getPlayer().getInventory().addItemTo(InventoryHud.itemInHand, i);
-								InventoryHud.itemInHand = null;
-							} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(InventoryHud.itemInHand)) {
-								Main.getWorldHandler().getWorld().getPlayer().getInventory().combindItemTo(InventoryHud.itemInHand, i);
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().addItemTo(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse, i);
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
+							} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse)) {
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().combindItemTo(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse, i);
 							} else {
-								ItemStack ti = InventoryHud.itemInHand;
-								InventoryHud.itemInHand = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
+								ItemStack ti = Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse;
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
 								Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, ti);
 							}
 						}
+					}
+				}
+			} else if (Main.getWorldHandler().getWorld().getPlayer() != null && !Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
+				for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
+					if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
+						Main.getWorldHandler().getWorld().getPlayer().getInventory().setSelectedSlot(i);
 					}
 				}
 			}

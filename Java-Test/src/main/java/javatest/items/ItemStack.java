@@ -18,15 +18,18 @@ public class ItemStack {
 	public void decreaseCount() {
 		count--;
 		if (count == 0) {
-			Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(Main.getWorldHandler().getWorld().getPlayer().getInventory().findItemInt(this), ItemStack.EMPTY);
+			item = ItemStack.EMPTY.getItem();
+			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == this) {
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
+			}
 		}
 	}
 	
-	public void addCount() {
+	public void increaseCount() {
 		count = MathHelper.clamp(count + 1, 0, MAX_STACK);
 	}
 	
-	public void addCount(int i) {
+	public void increaseCount(int i) {
 		count = MathHelper.clamp(count + i, 0, MAX_STACK);
 	}
 	
@@ -44,6 +47,12 @@ public class ItemStack {
 	
 	public void setCount(int i) {
 		count = MathHelper.clamp(i, 0, MAX_STACK);
+		if (count == 0) {
+			item = ItemStack.EMPTY.getItem();
+			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == this) {
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
+			}
+		}
 	}
 	
 	public void setItem(Item item) {
