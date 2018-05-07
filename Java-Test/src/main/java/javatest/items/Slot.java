@@ -1,5 +1,7 @@
 package main.java.javatest.items;
 
+import java.awt.Rectangle;
+
 public class Slot {
 	public int x, y, slotID;
 	
@@ -23,6 +25,10 @@ public class Slot {
 	
 	public String toString() {
 		return "(" + x + ", " + y + ", " + slotID + ")";
+	}
+	
+	public Rectangle getBoundsAll() {
+		return new Rectangle(x + 4, y + 4, 32, 32);
 	}
 	
 	@Override

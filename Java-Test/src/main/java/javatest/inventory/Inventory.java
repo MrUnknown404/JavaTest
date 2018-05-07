@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.javatest.Main;
+import main.java.javatest.client.gui.InventoryHud;
 import main.java.javatest.entity.EntityItem;
 import main.java.javatest.items.ItemStack;
+import main.java.javatest.items.Slot;
 
 public abstract class Inventory {
 	
 	protected List<ItemStack> items;
+	protected List<Slot> slotsList = new ArrayList<Slot>();
 	protected int slotsX, slotsY;
 	protected final int slots;
 	
@@ -21,6 +24,16 @@ public abstract class Inventory {
 		
 		for (int i = 0; i < slots; i++) {
 			items.add(ItemStack.EMPTY);
+		}
+		
+		for (int sy = 0; sy < slotsY; sy++) {
+			for (int sx = 0; sx < slotsX; sx++) {
+				if (sy == 0) {
+					slotsList.add(new Slot(4 + ((sx * 32) + (sx * 12)), 4 + ((sy * 32) + (sy * 12)), sx + (sy * 10)));
+				} else {
+					slotsList.add(new Slot(4 + ((sx * 32) + (sx * 12)), 8 + ((sy * 32) + (sy * 12)), sx + (sy * 10)));
+				}
+			}
 		}
 	}
 	
@@ -47,17 +60,19 @@ public abstract class Inventory {
 			for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
 				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(it)) {
 					if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount() < ItemStack.getMaxStack()) {
-						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount() < ItemStack.getMaxStack()) {
+						if (item.getCount() + it.getCount() > ItemStack.getMaxStack()) {
+							int itc = it.getCount() + item.getCount() - ItemStack.getMaxStack();
+							it.setCount(ItemStack.getMaxStack());
+							Main.getWorldHandler().getWorld().getPlayer().getInventory().addItem(new ItemStack(itc, it.getItem()));
+						} else {
 							it.addCount(item.getCount());
-							Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, it);
-							Main.getWorldHandler().getWorld().removeObjectAll(ei, false);
-							break;
 						}
+						Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, it);
+						Main.getWorldHandler().getWorld().removeObjectAll(ei, false);
+						break;
 					}
 				}
 			}
-		} else {
-			System.out.println("3");
 		}
 	}
 	
@@ -73,9 +88,48 @@ public abstract class Inventory {
 		} else if (it.getCount() < ItemStack.getMaxStack()) {
 			for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
 				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(it)) {
-					it.addCount(item.getCount());
-					Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, it);
-					break;
+					if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount() < ItemStack.getMaxStack()) {
+						if (item.getCount() + it.getCount() > ItemStack.getMaxStack()) {
+							int itc = it.getCount() + item.getCount() - ItemStack.getMaxStack();
+							it.setCount(ItemStack.getMaxStack());
+							Main.getWorldHandler().getWorld().getPlayer().getInventory().addItem(new ItemStack(itc, it.getItem()));
+						} else {
+							it.addCount(item.getCount());
+						}
+						Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, it);
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	public void addItemTo(ItemStack item, int slot) {
+		ItemStack it = Main.getWorldHandler().getWorld().getPlayer().getInventory().findItem(item);
+		if (it == null) {
+			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(slot).equals(ItemStack.EMPTY)) {
+				Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(slot, item);
+			}
+		} else if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(slot).equals(it)) {
+			Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(slot, item);
+		}
+	}
+	
+	public void combindItemTo(ItemStack item, int slot) {
+		ItemStack it = Main.getWorldHandler().getWorld().getPlayer().getInventory().findItem(item);
+		if (it == null) {
+			return;
+		}
+		if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(slot).equals(it)) {
+			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(slot).getCount() < ItemStack.getMaxStack()) {
+				if (item.getCount() + it.getCount() > ItemStack.getMaxStack()) {
+					int itc = it.getCount() + item.getCount() - ItemStack.getMaxStack();
+					
+					it.setCount(ItemStack.getMaxStack());
+					InventoryHud.itemInHand = new ItemStack(itc, it.getItem());
+				} else {
+					it.setCount(item.getCount() + it.getCount());
+					InventoryHud.itemInHand = null;
 				}
 			}
 		}
@@ -83,6 +137,10 @@ public abstract class Inventory {
 	
 	public List<ItemStack> getItems() {
 		return items;
+	}
+	
+	public List<Slot> getSlotsList() {
+		return slotsList;
 	}
 	
 	public int getSlots() {
@@ -95,6 +153,17 @@ public abstract class Inventory {
 	
 	public int getSlotsY() {
 		return slotsY;
+	}
+	
+	public boolean canPickup(ItemStack item) {
+		for (int i = 0; i < items.size(); i++) {
+			if (items.get(i).equals(item) && items.get(i).getCount() < ItemStack.getMaxStack()) {
+				return true;
+			} else if (items.get(i).equals(ItemStack.EMPTY)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean isFull() {

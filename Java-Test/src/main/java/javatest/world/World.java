@@ -10,6 +10,7 @@ import main.java.javatest.blocks.Block;
 import main.java.javatest.blocks.BlockDirt;
 import main.java.javatest.blocks.BlockGrass;
 import main.java.javatest.blocks.BlockStone;
+import main.java.javatest.client.Renderer;
 import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.EntityItem;
 import main.java.javatest.entity.entityliving.EntityPlayer;
@@ -217,6 +218,7 @@ public class World {
 			return;
 		}
 		
+		Renderer.i = 0;
 		if (obj instanceof Block) {
 			if (!allBlocks.contains(obj)) {
 				allBlocks.add((Block) obj);
@@ -240,6 +242,7 @@ public class World {
 			Console.print(Console.WarningType.Error, "object is null!");
 		}
 		
+		Renderer.i = 0;
 		if (obj instanceof Block) {
 			if (allBlocks.contains(obj)) {
 				if (didPlayerBreak) {

@@ -57,12 +57,14 @@ public class Renderer {
 		Console.print("Finished setting textures!");
 	}
 	
+	public static int i;
+	
 	public void render(Graphics go) {
 		Graphics2D g = (Graphics2D) go;
 		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
-			for (int i2 = 0; i2 < valueList.size(); i2++) {
-				if (keyList.get(i2).toString().equals(((Entity) Main.getWorldHandler().getWorld().getPlayer()).getEntityProperties().getEntityType().toString())) {
-					g.drawImage(valueList.get(i2), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionX(), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionY(), Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getHeight(), null);
+			for (int i = 0; i < valueList.size(); i++) {
+				if (keyList.get(i).toString().equals(((Entity) Main.getWorldHandler().getWorld().getPlayer()).getEntityProperties().getEntityType().toString())) {
+					g.drawImage(valueList.get(i), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionX(), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionY(), Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getHeight(), null);
 				}
 			}
 			
@@ -74,10 +76,10 @@ public class Renderer {
 			}
 			
 			if (b != null && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(b.getBoundsAll())) {
-				for (int i2 = 0; i2 < valueList.size(); i2++) {
-					if (keyList.get(i2).toString() == b.getBlockProperties().getBlockType().toString()) {
+				for (int i = 0; i < valueList.size(); i++) {
+					if (keyList.get(i).toString() == b.getBlockProperties().getBlockType().toString()) {
 						g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-						g.drawImage(valueList.get(i2), (int) b.getPositionX(), (int) b.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
+						g.drawImage(valueList.get(i), (int) b.getPositionX(), (int) b.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
 						g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 						g.setColor(new Color(0.1f, 0.1f, 0.1f));
 						g.drawRect((int) b.getPositionX(), (int) b.getPositionY(), 15, 15);
@@ -86,7 +88,7 @@ public class Renderer {
 			}
 		}
 		
-		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
+		for (i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
 			Block obj = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
 			
 			if (obj == null) {
@@ -111,7 +113,7 @@ public class Renderer {
 			}
 		}
 		
-		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveItemEntities().size(); i++) {
+		for (i = 0; i < Main.getWorldHandler().getWorld().getActiveItemEntities().size(); i++) {
 			EntityItem obj = Main.getWorldHandler().getWorld().getActiveItemEntities().get(i);
 			
 			if (obj == null) {
@@ -125,7 +127,7 @@ public class Renderer {
 			}
 		}
 		
-		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveEntities().size(); i++) {
+		for (i = 0; i < Main.getWorldHandler().getWorld().getActiveEntities().size(); i++) {
 			Entity obj = Main.getWorldHandler().getWorld().getActiveEntities().get(i);
 			
 			if (obj == null) {

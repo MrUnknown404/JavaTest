@@ -59,7 +59,7 @@ public class Main extends Canvas implements Runnable {
 	
 	public synchronized void start() {
 		Console.getTimeExample();
-		Console.print("Window size: " + new Vec2i(WIDTH, HEIGHT).toString());
+		Console.print("Window size: " + new Vec2i(width, height).toString());
 		Console.print(Console.WarningType.Info, "Starting!");
 		
 		preInit();

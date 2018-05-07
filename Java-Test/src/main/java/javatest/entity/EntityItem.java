@@ -25,7 +25,7 @@ public class EntityItem extends Entity {
 			return;
 		}
 		
-		if (getBoundsAll().intersects(Main.getWorldHandler().getWorld().getPlayer().getMagnetBounds())) {
+		if (getBoundsAll().intersects(Main.getWorldHandler().getWorld().getPlayer().getMagnetBounds()) && Main.getWorldHandler().getWorld().getPlayer().getInventory().canPickup(item)) {
 			if (getEntityProperties().getDoGravity() && doGravity) {
 				doGravity = false;
 			}

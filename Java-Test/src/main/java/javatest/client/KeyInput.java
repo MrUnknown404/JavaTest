@@ -83,7 +83,7 @@ public class KeyInput extends KeyAdapter {
 						return;
 					}
 					EntityItem item = null;
-					if (MouseInput.vec.x > Main.HEIGHT_DEF / 2) {
+					if (MouseInput.vec.x > Main.WIDTH_DEF / 2) {
 						item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() + Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), new ItemStack(1 , Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem()));
 						item.addVelocityX(5);
 					} else {

@@ -42,8 +42,8 @@ public class ItemStack {
 		return item;
 	}
 	
-	public void setCount(int count) {
-		this.count = count;
+	public void setCount(int i) {
+		count = MathHelper.clamp(i, 0, MAX_STACK);
 	}
 	
 	public void setItem(Item item) {

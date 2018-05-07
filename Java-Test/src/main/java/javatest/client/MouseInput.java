@@ -8,7 +8,9 @@ import main.java.javatest.Main;
 import main.java.javatest.blocks.Block;
 import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.client.gui.DebugHud;
+import main.java.javatest.client.gui.InventoryHud;
 import main.java.javatest.init.Blocks;
+import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2i;
@@ -96,6 +98,34 @@ public class MouseInput extends MouseAdapter {
 				pos = null;
 			}
 		} else if (e.getButton() == 1) {
+			if (Main.getWorldHandler().getWorld().getPlayer() != null && Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
+				if (InventoryHud.itemInHand == null) {
+					for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
+						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
+							if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
+								InventoryHud.itemInHand = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, ItemStack.EMPTY);
+							}
+						}
+					}
+				} else {
+					for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
+						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
+							if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().addItemTo(InventoryHud.itemInHand, i);
+								InventoryHud.itemInHand = null;
+							} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(InventoryHud.itemInHand)) {
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().combindItemTo(InventoryHud.itemInHand, i);
+							} else {
+								ItemStack ti = InventoryHud.itemInHand;
+								InventoryHud.itemInHand = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
+								Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, ti);
+							}
+						}
+					}
+				}
+			}
+			
 			Vec2i tPos = new Vec2i(((vec.x) - camera.getPositionX()) / Block.getBlockSize(), ((vec.y) - camera.getPositionY()) / Block.getBlockSize());
 			
 			for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
