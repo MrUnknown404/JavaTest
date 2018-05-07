@@ -6,23 +6,45 @@ import main.java.javatest.Main;
 
 public class CommandHelp extends Command {
 	
+	private static Command.ArgumentType[] types = {Command.ArgumentType.String};
+	
 	public CommandHelp() {
-		super("help", 0, null);
+		super("help", types, true);
 	}
 	
 	@Override
-	public String useage() {
-		return "/help : usage -> /help : Prints all commands and there useage!";
+	public String usage() {
+		StringBuilder b = new StringBuilder();
+		for (Command.ArgumentType type : types) {
+			b.append("<" + type.toString() + "> ");
+		}
+		
+		return "/help : usage -> /help (optional) " + b.toString() + " : Prints all commands and there useage!";
 	}
 	
 	@Override
-	public void doCommand(List<Integer> arg1, List<Float> arg2, List<Double> arg3, List<Boolean> arg4, List<String> arg5) {
+	public void doCommand(List<Integer> argInt, List<Float> argFloat, List<Double> argDouble, List<Boolean> argBool, List<String> argString) {
+		boolean tb = false;
 		for (Command cmd : Main.getCommandConsole().commands) {
-			if (cmd instanceof CommandHelp) {
-				Main.getCommandConsole().addLine(useage());
-			} else if (cmd instanceof CommandDebug) {
-				Main.getCommandConsole().addLine(((CommandDebug) cmd).useage());
+			if (argString.isEmpty()) {
+				if (cmd instanceof CommandHelp) {
+					Main.getCommandConsole().addLine(usage());
+				} else if (cmd instanceof CommandDebug) {
+					Main.getCommandConsole().addLine(((CommandDebug) cmd).usage());
+				} else if (cmd instanceof CommandGiveItem) {
+					Main.getCommandConsole().addLine(((CommandGiveItem) cmd).usage());
+				}
+				tb = true;
+			} else {
+				if (Main.getCommandConsole().findCommand(cmd.getName()).getName().equals(argString.get(0))) {
+					Main.getCommandConsole().addLine(cmd.usage());
+					tb = true;
+				}
 			}
+		}
+		if (!tb) {
+			Main.getCommandConsole().addLine("/" + getName() + " " + argString.get(0));
+			Main.getCommandConsole().addLine("* Did not find any commands named " + argString.get(0) + "!");
 		}
 	}
 }

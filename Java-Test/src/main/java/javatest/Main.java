@@ -18,6 +18,7 @@ import main.java.javatest.client.gui.ConsoleHud;
 import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.client.gui.InventoryHud;
 import main.java.javatest.commands.CommandDebug;
+import main.java.javatest.commands.CommandGiveItem;
 import main.java.javatest.commands.CommandHelp;
 import main.java.javatest.commands.DebugConsole;
 import main.java.javatest.init.Blocks;
@@ -105,6 +106,7 @@ public class Main extends Canvas implements Runnable {
 	private void init() {
 		Console.print(Console.WarningType.Info, "-Initialization started...");
 		
+		new CommandGiveItem();
 		new CommandDebug();
 		new CommandHelp();
 		

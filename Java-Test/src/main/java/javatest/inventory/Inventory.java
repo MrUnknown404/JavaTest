@@ -46,12 +46,18 @@ public abstract class Inventory {
 		} else if (it.getCount() < ItemStack.getMaxStack()) {
 			for (int i = 0; i < Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlots(); i++) {
 				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).equals(it)) {
-					it.addCount(item.getCount());
-					Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, it);
-					Main.getWorldHandler().getWorld().removeObjectAll(ei, false);
-					break;
+					if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount() < ItemStack.getMaxStack()) {
+						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount() < ItemStack.getMaxStack()) {
+							it.addCount(item.getCount());
+							Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().set(i, it);
+							Main.getWorldHandler().getWorld().removeObjectAll(ei, false);
+							break;
+						}
+					}
 				}
 			}
+		} else {
+			System.out.println("3");
 		}
 	}
 	

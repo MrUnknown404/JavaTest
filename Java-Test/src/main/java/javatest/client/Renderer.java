@@ -1,7 +1,9 @@
 package main.java.javatest.client;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Map;
 
 import main.java.javatest.Main;
 import main.java.javatest.blocks.Block;
+import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.EntityItem;
 import main.java.javatest.entity.util.EntityProperties;
@@ -18,6 +21,8 @@ import main.java.javatest.init.Blocks.EnumBlocks;
 import main.java.javatest.init.Items;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.Resource;
+import main.java.javatest.util.math.BlockPos;
+import main.java.javatest.util.math.Vec2i;
 
 public class Renderer {
 
@@ -52,11 +57,31 @@ public class Renderer {
 		Console.print("Finished setting textures!");
 	}
 	
-	public void render(Graphics g) {
+	public void render(Graphics go) {
+		Graphics2D g = (Graphics2D) go;
 		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
 			for (int i2 = 0; i2 < valueList.size(); i2++) {
 				if (keyList.get(i2).toString().equals(((Entity) Main.getWorldHandler().getWorld().getPlayer()).getEntityProperties().getEntityType().toString())) {
 					g.drawImage(valueList.get(i2), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionX(), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionY(), Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getHeight(), null);
+				}
+			}
+			
+			Block b = null;
+			Vec2i tPos = new Vec2i(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize());
+			if (Blocks.findBlock(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem().getName()) == null) {
+			} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().size() > Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() && Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getCount() != 0) {
+				b = new Block(new BlockPos(tPos.getX(), tPos.getY()), BlockProperties.findBlockPropertyWithName(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem().getName()));
+			}
+			
+			if (b != null && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(b.getBoundsAll())) {
+				for (int i2 = 0; i2 < valueList.size(); i2++) {
+					if (keyList.get(i2).toString() == b.getBlockProperties().getBlockType().toString()) {
+						g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+						g.drawImage(valueList.get(i2), (int) b.getPositionX(), (int) b.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
+						g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+						g.setColor(new Color(0.1f, 0.1f, 0.1f));
+						g.drawRect((int) b.getPositionX(), (int) b.getPositionY(), 15, 15);
+					}
 				}
 			}
 		}
@@ -69,7 +94,7 @@ public class Renderer {
 			}
 			
 			for (int i2 = 0; i2 < valueList.size(); i2++) {
-				if (keyList.get(i2).toString() == ((Block) obj).getBlockProperties().getBlockType().toString()) {
+				if (keyList.get(i2).toString() == obj.getBlockProperties().getBlockType().toString()) {
 					g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
 				}
 			}
@@ -78,6 +103,11 @@ public class Renderer {
 			if (obj.getLightLevel() != 0) {
 				g.setColor(new Color(0, 0, 0, obj.getLightLevel()));
 				g.fillRect((int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight());
+			}
+			
+			if (obj.getBlockPos().equals(new BlockPos(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize()))) {
+				g.setColor(new Color(0.1f, 0.1f, 0.1f));
+				g.drawRect((int) obj.getPositionX(), (int) obj.getPositionY(), 15, 15);
 			}
 		}
 		
@@ -103,7 +133,7 @@ public class Renderer {
 			}
 			
 			for (int i2 = 0; i2 < valueList.size(); i2++) {
-				if (keyList.get(i2).toString().equals(((Entity) obj).getEntityProperties().getEntityType().toString())) {
+				if (keyList.get(i2).toString().equals(obj.getEntityProperties().getEntityType().toString())) {
 					g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight(), null);
 				}
 			}

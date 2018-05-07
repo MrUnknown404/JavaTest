@@ -9,11 +9,11 @@ public class CommandDebug extends Command {
 	private static Command.ArgumentType[] types = {Command.ArgumentType.Float, Command.ArgumentType.String};
 	
 	public CommandDebug() {
-		super("debug", 2, types);
+		super("debug", types, false);
 	}
 	
 	@Override
-	public String useage() {
+	public String usage() {
 		StringBuilder b = new StringBuilder();
 		for (Command.ArgumentType type : types) {
 			b.append("<" + type.toString() + "> ");
@@ -23,7 +23,7 @@ public class CommandDebug extends Command {
 	}
 	
 	@Override
-	public void doCommand(List<Integer> arg1, List<Float> arg2, List<Double> arg3, List<Boolean> arg4, List<String> arg5) {
-		Console.print("SUCCESSFUL!" + " :" + arg2.get(0) + ":" + arg5.get(0));
+	public void doCommand(List<Integer> argInt, List<Float> argFloat, List<Double> argDouble, List<Boolean> argBool, List<String> argString) {
+		Console.print("SUCCESSFUL!" + " :" + argFloat.get(0) + ":" + argString.get(0));
 	}
 }

@@ -8,21 +8,24 @@ import main.java.javatest.Main;
 
 public abstract class Command {
 
+	protected boolean isArgsOptional;
 	private String name;
 	private int amountOfArgs;
 	private ArgumentType[] typeOfArgs;
 	
-	public Command(String name, int amountOfArgs, @Nullable ArgumentType[] typeOfArgs) {
+	public Command(String name, @Nullable ArgumentType[] typeOfArgs, boolean isArgsOptional) {
 		this.name = name;
-		this.amountOfArgs = amountOfArgs;
+		this.amountOfArgs = typeOfArgs.length;
+		this.isArgsOptional = isArgsOptional;
 		if (typeOfArgs != null) {
 			this.typeOfArgs = typeOfArgs;
 		}
+		
 		Main.getCommandConsole().commands.add(this);
 	}
 	
-	public abstract String useage();
-	public abstract void doCommand(List<Integer> arg1, List<Float> arg2, List<Double> arg3, List<Boolean> arg4, List<String> arg5);
+	public abstract String usage();
+	public abstract void doCommand(List<Integer> argInt, List<Float> argFloat, List<Double> argDouble, List<Boolean> argBool, List<String> argString);
 	
 	public String getName() {
 		return name;

@@ -15,6 +15,11 @@ public class BlockPos {
 		this.y = y;
 	}
 	
+	public BlockPos(double x, double y) {
+		this.x = (int) x;
+		this.y = (int) y;
+	}
+	
 	public BlockPos() {
 		this(0, 0);
 	}

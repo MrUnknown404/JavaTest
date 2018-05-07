@@ -43,6 +43,15 @@ public class DebugConsole {
 		input = "";
 	}
 	
+	public Command findCommand(String name) {
+		for (int i = 0; i < commands.size(); i++) {
+			if (commands.get(i).getName().equals(name)) {
+				return commands.get(i);
+			}
+		}
+		return null;
+	}
+	
 	public void finishCommand() throws CommandException {
 		String cmd = input.trim();
 		if (!cmd.startsWith("/")) {
@@ -153,14 +162,14 @@ public class DebugConsole {
 					throw new CommandException(CommandException.Exceptions.nil);
 				}
 			}
-		} else if (command.getAmountOfArgs() != 0) {
+		} else if (command.getAmountOfArgs() != 0 && !command.isArgsOptional) {
 			throw new CommandException(CommandException.Exceptions.noArgs);
 		}
 		
-		command.doCommand(intArgs, floatArgs, doubleArgs, boolArgs, stringArgs);
 		if (!(command instanceof CommandHelp)) {
 			addLine(cmd);
 		}
+		command.doCommand(intArgs, floatArgs, doubleArgs, boolArgs, stringArgs);
 		clearInput();
 	}
 	

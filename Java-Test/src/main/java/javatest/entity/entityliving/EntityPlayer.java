@@ -41,6 +41,6 @@ public class EntityPlayer extends EntityLiving {
 	
 	/** Returns the entities interaction bounds */
 	public Rectangle getInteractionBounds() {
-		return new Rectangle(MathHelper.floor(getPositionX()) - 48, MathHelper.floor(getPositionY()) - 48, width + 96, height + 96);
+		return new Rectangle(MathHelper.floor(getPositionX()) - 64, MathHelper.floor(getPositionY()) - 64, width + 128, height + 128);
 	}
 }

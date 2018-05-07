@@ -87,8 +87,12 @@ public class MouseInput extends MouseAdapter {
 					return;
 				}
 				
-				Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).decreaseCount();
-				Main.getWorldHandler().getWorld().addObjectAll(b);
+				if (Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(b.getBoundsAll())) {
+					if (!Main.getWorldHandler().getWorld().getPlayer().getBoundsAll().intersects(b.getBoundsAll())) {
+						Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).decreaseCount();
+						Main.getWorldHandler().getWorld().addObjectAll(b);
+					}
+				}
 				pos = null;
 			}
 		} else if (e.getButton() == 1) {
@@ -104,7 +108,9 @@ public class MouseInput extends MouseAdapter {
 			}
 			
 			if (block != null) {
-				Main.getWorldHandler().getWorld().removeObjectAll(block, true);
+				if (Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(block.getBoundsAll())) {
+					Main.getWorldHandler().getWorld().removeObjectAll(block, true);
+				}
 				block = null;
 			}
 		}

@@ -36,8 +36,8 @@ public class CommandException extends Exception {
 				System.err.println("Too many arguments were written");
 				break;
 			case wrongArg:
-				Main.getCommandConsole().addLine("* The written argument is not the same type of the required argument");
-				System.err.println("The written argument is not the same type of the required argument");
+				Main.getCommandConsole().addLine("* One of the written arguments is not the correct type");
+				System.err.println("One of the written arguments is not the correct type");
 				break;
 			case notACommand:
 				Main.getCommandConsole().addLine("* No valid command was written");
