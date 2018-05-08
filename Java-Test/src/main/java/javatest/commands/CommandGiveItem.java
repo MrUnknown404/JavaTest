@@ -11,7 +11,7 @@ public class CommandGiveItem extends Command {
 	private static Command.ArgumentType[] types = {Command.ArgumentType.String, Command.ArgumentType.Integer};
 	
 	public CommandGiveItem() {
-		super("giveitem", types, false);
+		super("giveitem", types, true);
 	}
 	
 	@Override
@@ -27,10 +27,18 @@ public class CommandGiveItem extends Command {
 	@Override
 	public void doCommand(List<Integer> argInt, List<Float> argFloat, List<Double> argDouble, List<Boolean> argBool, List<String> argString) {
 		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
-			if (argInt.get(0) <= ItemStack.getMaxStack()) {
-				Main.getWorldHandler().getWorld().getPlayer().getInventory().addItem(new ItemStack(argInt.get(0), Items.findItem(argString.get(0))));
+			if (!argString.isEmpty()) {
+				if (argInt.isEmpty()) {
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().addItem(new ItemStack(1, Items.findItem(argString.get(0))));
+					Main.getCommandConsole().addLine("Given player -> " + argString.get(0) + " x 1");
+				} else if (argInt.get(0) <= Items.findItem(argString.get(0)).getMaxStack()) {
+					Main.getWorldHandler().getWorld().getPlayer().getInventory().addItem(new ItemStack(argInt.get(0), Items.findItem(argString.get(0))));
+					Main.getCommandConsole().addLine("Given player -> " + argString.get(0) + " x " + argInt.get(0));
+				} else {
+					Main.getCommandConsole().addLine("* Item count is higher then allowed!");
+				}
 			} else {
-				Main.getCommandConsole().addLine("* Item count is higher then allowed!");
+				Main.getCommandConsole().addLine("* Item name needed!");
 			}
 		} else {
 			Main.getCommandConsole().addLine("* Cannot find the player!");

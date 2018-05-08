@@ -3,30 +3,39 @@ package main.java.javatest.items;
 import main.java.javatest.init.Items;
 
 public class Item {
-	private String name;
-	private int id = 0;
+	protected String name;
+	protected int maxStack;
+	protected float speed;
+	protected ItemType type;
 	
-	public Item(String name) {
+	public Item(String name, int maxStack, float speed, ItemType type) {
 		this.name = name;
-	}
-	
-	public void addThis() {
+		this.maxStack = maxStack;
+		this.speed = speed;
+		this.type = type;
 		Items.items.add(this);
-		id = Items.findItemInt(this);
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public int getId() {
-		return id;
+	public int getMaxStack() {
+		return maxStack;
+	}
+	
+	public float getSpeed() {
+		return speed;
+	}
+	
+	public ItemType getItemType() {
+		return type;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Item) {
-			if (((Item) obj).name.equals(name) && ((Item) obj).id == id) {
+			if (((Item) obj).name.equals(name)) {
 				return true;
 			}
 		}
@@ -36,5 +45,26 @@ public class Item {
 	@Override
 	public String toString() {
 		return "(" + name + ")";
+	}
+	
+	public enum ItemType {
+		item (0),
+		block(1),
+		tool (2);
+		
+		private final int fId;
+		
+		private ItemType(int id) {
+			fId = id;
+		}
+		
+		public static ItemType getNumber(int id) {
+			for (ItemType type : values()) {
+				if (type.fId == id) {
+					return type;
+				}
+			}
+			throw new IllegalArgumentException("Invalid Type id: " + id);
+		}
 	}
 }

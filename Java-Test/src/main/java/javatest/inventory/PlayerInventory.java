@@ -1,5 +1,6 @@
 package main.java.javatest.inventory;
 
+import main.java.javatest.init.Items;
 import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.math.MathHelper;
 
@@ -11,6 +12,11 @@ public class PlayerInventory extends Inventory {
 	
 	public PlayerInventory() {
 		super(10, 3);
+		addItemTo(new ItemStack(1, Items.PICKAXE), 0);
+	}
+	
+	public ItemStack getSelectedItem() {
+		return items.get(selectedSlot);
 	}
 	
 	public boolean getIsInventoryOpen() {

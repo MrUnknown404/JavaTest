@@ -21,9 +21,7 @@ import main.java.javatest.commands.CommandDebug;
 import main.java.javatest.commands.CommandGiveItem;
 import main.java.javatest.commands.CommandHelp;
 import main.java.javatest.commands.DebugConsole;
-import main.java.javatest.init.Blocks;
 import main.java.javatest.init.Items;
-import main.java.javatest.items.Item;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2i;
@@ -43,6 +41,7 @@ public class Main extends Canvas implements Runnable {
 	private static final Camera CAMERA = new Camera();
 	private static final DebugConsole CONSOLE = new DebugConsole();
 	private final Renderer renderer = new Renderer();
+	private MouseInput mouse = new MouseInput();
 	private final DebugHud debugHud = new DebugHud();
 	private final ConsoleHud consoleHud = new ConsoleHud();
 	private final InventoryHud invHud = new InventoryHud();
@@ -69,19 +68,11 @@ public class Main extends Canvas implements Runnable {
 	
 	private void preInit() {
 		Console.print(Console.WarningType.Info, "-Pre-Initialization started...");
-		renderer.findTextures();
-		
-		for (int i = 0; i < Blocks.EnumBlocks.values().length; i++) {
-			new Item(Blocks.EnumBlocks.getNumber(i).toString()).addThis();
-		}
-		
-		for (int i = 0; i < Items.EnumItems.values().length; i++) {
-			new Item(Items.EnumItems.getNumber(i).toString()).addThis();
-		}
+		new Items();
 		
 		invHud.updateTextures();
-		
-		MouseInput mouse = new MouseInput();
+		renderer.findTextures();
+		renderer.setImgsAndKeys(invHud.getImgs(), invHud.getKeys());
 		
 		addKeyListener(new KeyInput());
 		addMouseListener(mouse);
@@ -182,6 +173,7 @@ public class Main extends Canvas implements Runnable {
 			CAMERA.tick();
 			WORLD_HANDLER.tick();
 			consoleHud.tick();
+			mouse.tick();
 		}
 	}
 	

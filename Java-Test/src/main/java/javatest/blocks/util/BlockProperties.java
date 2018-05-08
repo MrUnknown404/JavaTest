@@ -11,6 +11,7 @@ public class BlockProperties {
 	public static final BlockProperties GRASS = new BlockProperties(Blocks.EnumBlocks.grass);
 	
 	private boolean hasCollision;
+	private int hardness;
 	private Blocks.EnumBlocks type;
 	
 	public BlockProperties(Blocks.EnumBlocks type) {
@@ -22,9 +23,23 @@ public class BlockProperties {
 		
 		switch (type) {
 			case air:
+				setHardness(0);
 				setHasCollision(false);
 				break;
+			case dirt:
+				setHardness(35);
+				setHasCollision(true);
+				break;
+			case grass:
+				setHardness(45);
+				setHasCollision(true);
+				break;
+			case stone:
+				setHardness(60);
+				setHasCollision(true);
+				break;
 			default:
+				setHardness(-1);
 				setHasCollision(true);
 				break;
 		}
@@ -39,12 +54,21 @@ public class BlockProperties {
 		return null;
 	}
 	
+	public int getHardness() {
+		return hardness;
+	}
+	
 	public boolean getHasCollision() {
 		return hasCollision;
 	}
 	
 	public BlockProperties setHasCollision(boolean bool) {
 		hasCollision = bool;
+		return this;
+	}
+	
+	public BlockProperties setHardness(int hardness) {
+		this.hardness = hardness;
 		return this;
 	}
 	

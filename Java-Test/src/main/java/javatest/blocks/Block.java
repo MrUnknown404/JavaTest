@@ -12,6 +12,7 @@ public class Block extends GameObject {
 	protected BlockProperties type;
 	private BlockPos bPos = new BlockPos();
 	private final static int SIZE = 16;
+	public float brokenness;
 	
 	public Block(BlockPos bPos, BlockProperties type) {
 		super(bPos.x, bPos.y, SIZE, SIZE);

@@ -11,6 +11,7 @@ import main.java.javatest.util.math.MathHelper;
 public class EntityPlayer extends EntityLiving {
 	
 	private PlayerInventory inventory = new PlayerInventory();
+	public int direction = 1;
 	
 	public EntityPlayer(double x, double y) {
 		super(x, y, 24, 44, EntityProperties.PLAYER);

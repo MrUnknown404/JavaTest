@@ -104,10 +104,16 @@ public class DebugConsole {
 				}
 			}
 			
-			if (formatedArgs.size() < command.getAmountOfArgs()) {
-				throw new CommandException(CommandException.Exceptions.notEnoughArgs);
-			} else if (formatedArgs.size() > MAX_ARGS || formatedArgs.size() > command.getAmountOfArgs()) {
-				throw new CommandException(CommandException.Exceptions.tooManyArgs);
+			if (!command.isArgsOptional) {
+				if (formatedArgs.size() < command.getAmountOfArgs()) {
+					throw new CommandException(CommandException.Exceptions.notEnoughArgs);
+				} else if (formatedArgs.size() > MAX_ARGS || formatedArgs.size() > command.getAmountOfArgs()) {
+					throw new CommandException(CommandException.Exceptions.tooManyArgs);
+				}
+			} else {
+				if (formatedArgs.size() > MAX_ARGS || formatedArgs.size() > command.getAmountOfArgs()) {
+					throw new CommandException(CommandException.Exceptions.tooManyArgs);
+				}
 			}
 			
 			for (int i = 0; i < formatedArgs.size(); i++) {

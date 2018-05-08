@@ -18,17 +18,31 @@ import main.java.javatest.entity.EntityItem;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.init.Blocks;
 import main.java.javatest.init.Blocks.EnumBlocks;
-import main.java.javatest.init.Items;
+import main.java.javatest.items.Item;
+import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.Resource;
 import main.java.javatest.util.math.BlockPos;
+import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2i;
 
 public class Renderer {
 
+	private final BufferedImage border = Resource.getTexture(Resource.ResourceType.blocks, "border");
 	private Map<String, BufferedImage> hashImages = new HashMap<String, BufferedImage>();
 	private List<BufferedImage> valueList = new ArrayList<BufferedImage>();
 	private List<String> keyList = new ArrayList<String>();
+	
+	private List<BufferedImage> imgs = new ArrayList<BufferedImage>();
+	private List<String> keys = new ArrayList<String>();
+	
+	private List<BufferedImage> crackImgs = new ArrayList<BufferedImage>();
+	private List<String> crackKeys = new ArrayList<String>();
+	
+	public void setImgsAndKeys(List<BufferedImage> imgs, List<String> keys) {
+		this.imgs = imgs;
+		this.keys = keys;
+	}
 	
 	public void findTextures() {
 		Console.print(Console.WarningType.Info, "-Finding all textures...");
@@ -36,6 +50,11 @@ public class Renderer {
 		for (int i = 1; i < Blocks.EnumBlocks.values().length; i++) {
 			hashImages.put(Blocks.EnumBlocks.getNumber(i).toString(), Resource.getTexture(Resource.ResourceType.blocks, EnumBlocks.getNumber(i)));
 		}
+		for (int i = 1; i < 11; i++) {
+			crackImgs.add(Resource.getTexture(Resource.ResourceType.blocks, "crack_" + i));
+			crackKeys.add("crack_" + i);
+		}
+		
 		Console.print("Found all block textures!");
 		Console.print("Finding all entity textures...");
 		for (int i = 0; i < EntityProperties.EntityType.values().length; i++) {
@@ -44,11 +63,6 @@ public class Renderer {
 			}
 		}
 		Console.print("Found all entity textures!");
-		Console.print("Finding all item textures...");
-		for (int i = 1; i < Items.items.size(); i++) {
-			hashImages.put(Items.items.get(i).getName().toString(), Resource.getTexture(Resource.ResourceType.items, Items.items.get(i).getName()));
-		}
-		Console.print("Found all item textures!");
 		Console.print(Console.WarningType.Info, "-Found all Textures!");
 		
 		Console.print("Setting textures for use...");
@@ -68,11 +82,23 @@ public class Renderer {
 				}
 			}
 			
+			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem() != ItemStack.EMPTY) {
+				for (int i = 0; i < imgs.size(); i++) {
+					if (keys.get(i).toString().equals((Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getName()))) {
+						if (Main.getWorldHandler().getWorld().getPlayer().direction == 1) {
+							g.drawImage(imgs.get(i), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionX() + Main.getWorldHandler().getWorld().getPlayer().getWidth(), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionY() + 4, imgs.get(i).getWidth() / 2, imgs.get(i).getHeight() / 2, null);
+						} else if (Main.getWorldHandler().getWorld().getPlayer().direction == -1) {
+							g.drawImage(imgs.get(i), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionX(), (int) Main.getWorldHandler().getWorld().getPlayer().getPositionY() + 4, -imgs.get(i).getWidth() / 2, imgs.get(i).getHeight() / 2, null);
+						}
+					}
+				}
+			}
+			
 			Block b = null;
 			Vec2i tPos = new Vec2i(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize());
-			if (Blocks.findBlock(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem().getName()) == null) {
+			if (Blocks.findBlock(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getName()) == null) {
 			} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().size() > Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() && Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getCount() != 0) {
-				b = new Block(new BlockPos(tPos.getX(), tPos.getY()), BlockProperties.findBlockPropertyWithName(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem().getName()));
+				b = new Block(new BlockPos(tPos.getX(), tPos.getY()), BlockProperties.findBlockPropertyWithName(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getName()));
 			}
 			
 			if (b != null && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(b.getBoundsAll())) {
@@ -81,8 +107,7 @@ public class Renderer {
 						g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 						g.drawImage(valueList.get(i), (int) b.getPositionX(), (int) b.getPositionY(), Block.getBlockSize(), Block.getBlockSize(), null);
 						g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-						g.setColor(new Color(0.1f, 0.1f, 0.1f));
-						g.drawRect((int) b.getPositionX(), (int) b.getPositionY(), 15, 15);
+						g.drawImage(border, (int) b.getPositionX(), (int) b.getPositionY(), border.getWidth(), border.getHeight(), null);
 					}
 				}
 			}
@@ -107,9 +132,12 @@ public class Renderer {
 				g.fillRect((int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight());
 			}
 			
-			if (obj.getBlockPos().equals(new BlockPos(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize())) && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(obj.getBoundsAll())) {
-				g.setColor(new Color(0.1f, 0.1f, 0.1f));
-				g.drawRect((int) obj.getPositionX(), (int) obj.getPositionY(), 15, 15);
+			if (obj.getBlockPos().equals(new BlockPos(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize())) && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(obj.getBoundsAll()) && Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getItemType() == Item.ItemType.tool) {
+				g.drawImage(border, (int) obj.getPositionX(), (int) obj.getPositionY(), border.getWidth(), border.getHeight(), null);
+			}
+			
+			if (obj.brokenness != 0) {
+				g.drawImage(crackImgs.get((int) MathHelper.clamp(obj.brokenness * 10, 0, crackImgs.size() - 1)), (int) obj.getPositionX(), (int) obj.getPositionY(), 16, 16, null);
 			}
 		}
 		
@@ -120,9 +148,9 @@ public class Renderer {
 				return;
 			}
 			
-			for (int i2 = 0; i2 < valueList.size(); i2++) {
-				if (keyList.get(i2).toString().equals(obj.getItemStack().getItem().getName())) {
-					g.drawImage(valueList.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight(), null);
+			for (int i2 = 0; i2 < imgs.size(); i2++) {
+				if (keys.get(i2).toString().equals(obj.getItemStack().getItem().getName())) {
+					g.drawImage(imgs.get(i2), (int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight(), null);
 				}
 			}
 		}

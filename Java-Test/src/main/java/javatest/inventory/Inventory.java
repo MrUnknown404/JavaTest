@@ -47,7 +47,7 @@ public abstract class Inventory {
 	
 	public ItemStack findItem(ItemStack item) {
 		for (int i = 0; i < items.size(); i++) {
-			if (items.get(i).equals(item) && items.get(i).getCount() < ItemStack.getMaxStack()) {
+			if (items.get(i).equals(item) && items.get(i).getCount() < item.getItem().getMaxStack()) {
 				return items.get(i);
 			}
 		}
@@ -64,13 +64,13 @@ public abstract class Inventory {
 					break;
 				}
 			}
-		} else if (it.getCount() < ItemStack.getMaxStack()) {
+		} else if (it.getCount() < item.getItem().getMaxStack()) {
 			for (int i = 0; i < slots; i++) {
 				if (items.get(i).equals(it)) {
-					if (items.get(i).getCount() < ItemStack.getMaxStack()) {
-						if (item.getCount() + it.getCount() > ItemStack.getMaxStack()) {
-							int itc = it.getCount() + item.getCount() - ItemStack.getMaxStack();
-							it.setCount(ItemStack.getMaxStack());
+					if (items.get(i).getCount() < item.getItem().getMaxStack()) {
+						if (item.getCount() + it.getCount() > item.getItem().getMaxStack()) {
+							int itc = it.getCount() + item.getCount() - item.getItem().getMaxStack();
+							it.setCount(item.getItem().getMaxStack());
 							addItem(new ItemStack(itc, it.getItem()));
 						} else {
 							it.increaseCount(item.getCount());
@@ -93,13 +93,13 @@ public abstract class Inventory {
 					break;
 				}
 			}
-		} else if (it.getCount() < ItemStack.getMaxStack()) {
+		} else if (it.getCount() < item.getItem().getMaxStack()) {
 			for (int i = 0; i < slots; i++) {
 				if (items.get(i).equals(it)) {
-					if (items.get(i).getCount() < ItemStack.getMaxStack()) {
-						if (item.getCount() + it.getCount() > ItemStack.getMaxStack()) {
-							int itc = it.getCount() + item.getCount() - ItemStack.getMaxStack();
-							it.setCount(ItemStack.getMaxStack());
+					if (items.get(i).getCount() < item.getItem().getMaxStack()) {
+						if (item.getCount() + it.getCount() > item.getItem().getMaxStack()) {
+							int itc = it.getCount() + item.getCount() - item.getItem().getMaxStack();
+							it.setCount(item.getItem().getMaxStack());
 							addItem(new ItemStack(itc, it.getItem()));
 						} else {
 							it.increaseCount(item.getCount());
@@ -129,11 +129,11 @@ public abstract class Inventory {
 			return;
 		}
 		if (items.get(slot).equals(it)) {
-			if (items.get(slot).getCount() < ItemStack.getMaxStack()) {
-				if (item.getCount() + it.getCount() > ItemStack.getMaxStack()) {
-					int itc = it.getCount() + item.getCount() - ItemStack.getMaxStack();
+			if (items.get(slot).getCount() < item.getItem().getMaxStack()) {
+				if (item.getCount() + it.getCount() > item.getItem().getMaxStack()) {
+					int itc = it.getCount() + item.getCount() - item.getItem().getMaxStack();
 					
-					it.setCount(ItemStack.getMaxStack());
+					it.setCount(item.getItem().getMaxStack());
 					Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = new ItemStack(itc, it.getItem());
 				} else {
 					it.setCount(item.getCount() + it.getCount());
@@ -165,7 +165,7 @@ public abstract class Inventory {
 	
 	public boolean canPickup(ItemStack item) {
 		for (int i = 0; i < items.size(); i++) {
-			if (items.get(i).equals(item) && items.get(i).getCount() < ItemStack.getMaxStack()) {
+			if (items.get(i).equals(item) && items.get(i).getCount() < item.getItem().getMaxStack()) {
 				return true;
 			} else if (items.get(i).equals(ItemStack.EMPTY)) {
 				return true;

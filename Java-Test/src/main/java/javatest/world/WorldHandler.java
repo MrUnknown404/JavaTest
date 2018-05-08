@@ -32,6 +32,10 @@ public class WorldHandler {
 		Gson g  = new Gson().newBuilder().create();
 		FileWriter fileWorld = null;
 		
+		if (!(new File(LOC + name).exists())) {
+			new File(LOC + name).mkdirs();
+		}
+		
 		try {
 			fileWorld = new FileWriter(new File(LOC + name + "/world" + TYPE));
 			
@@ -49,6 +53,15 @@ public class WorldHandler {
 		isLoading = true;
 		Gson g = new Gson();
 		FileReader fileWorld = null;
+		
+		if (!(new File(LOC + name).exists())) {
+			new File(LOC + name).mkdirs();
+			Console.print(Console.WarningType.Error, "World at " + LOC + name + " does not exist!");
+			return;
+		} else if (!(new File(LOC + name + "/world" + TYPE).exists())) {
+			Console.print(Console.WarningType.Error, "World at " + LOC + name + " does not exist!");
+			return;
+		}
 		
 		try {
 			fileWorld = new FileReader(new File(LOC + name + "/world" + TYPE));

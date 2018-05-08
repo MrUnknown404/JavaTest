@@ -74,14 +74,16 @@ public class KeyInput extends KeyAdapter {
 					if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
 						EntityItem item = null;
 						if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse != null) {
-							if (MouseInput.vec.x > Main.WIDTH_DEF / 2) {
+							if (Main.getWorldHandler().getWorld().getPlayer().direction == 1) {
 								item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() + Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse);
 								Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
 								item.addVelocityX(5);
-							} else {
+								item.addVelocityY(-2);
+							} else if (Main.getWorldHandler().getWorld().getPlayer().direction == -1) {
 								item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() - 12, Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse);
 								Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
 								item.addVelocityX(-5);
+								item.addVelocityY(-2);
 							}
 							Main.getWorldHandler().getWorld().addObjectAll(item);
 						}
@@ -94,22 +96,26 @@ public class KeyInput extends KeyAdapter {
 				
 				if (key == KeyEvent.VK_Q) {
 					EntityItem item = null;
-					if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).equals(ItemStack.EMPTY) && Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == null) {
-						if (MouseInput.vec.x > Main.WIDTH_DEF / 2) {
-							item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() + Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), new ItemStack(1 , Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem()));
+					if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().equals(ItemStack.EMPTY) && Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == null) {
+						if (Main.getWorldHandler().getWorld().getPlayer().direction == 1) {
+							item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() + Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), new ItemStack(1 , Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem()));
 							item.addVelocityX(5);
-						} else {
-							item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() - 12, Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), new ItemStack(1 , Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getItem()));
+							item.addVelocityY(-2);
+						} else if (Main.getWorldHandler().getWorld().getPlayer().direction == -1) {
+							item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() - 12, Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), new ItemStack(1 , Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem()));
 							item.addVelocityX(-5);
+							item.addVelocityY(-2);
 						}
-						Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).decreaseCount();
+						Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().decreaseCount();
 					} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse != null) {
-						if (MouseInput.vec.x > Main.WIDTH_DEF / 2) {
+						if (Main.getWorldHandler().getWorld().getPlayer().direction == 1) {
 							item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() + Main.getWorldHandler().getWorld().getPlayer().getWidth(), Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse);
 							item.addVelocityX(5);
-						} else {
+							item.addVelocityY(-2);
+						} else if (Main.getWorldHandler().getWorld().getPlayer().direction == -1) {
 							item = new EntityItem(Main.getWorldHandler().getWorld().getPlayer().getPositionX() - 12, Main.getWorldHandler().getWorld().getPlayer().getPositionY() + (Main.getWorldHandler().getWorld().getPlayer().getHeight() / 6), Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse);
 							item.addVelocityX(-5);
+							item.addVelocityY(-2);
 						}
 						Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
 					}

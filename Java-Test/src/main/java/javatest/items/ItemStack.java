@@ -1,12 +1,12 @@
 package main.java.javatest.items;
 
 import main.java.javatest.Main;
+import main.java.javatest.items.Item.ItemType;
 import main.java.javatest.util.math.MathHelper;
 
 public class ItemStack {
-	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty"));
+	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty", 1, 0, ItemType.item));
 	
-	private static final int MAX_STACK = 999;
 	private int count;
 	private Item item;
 	
@@ -14,7 +14,7 @@ public class ItemStack {
 		this.count = count;
 		this.item = item;
 	}
-	
+
 	public void decreaseCount() {
 		count--;
 		if (count == 0) {
@@ -26,15 +26,11 @@ public class ItemStack {
 	}
 	
 	public void increaseCount() {
-		count = MathHelper.clamp(count + 1, 0, MAX_STACK);
+		count = MathHelper.clamp(count + 1, 0, item.getMaxStack());
 	}
 	
 	public void increaseCount(int i) {
-		count = MathHelper.clamp(count + i, 0, MAX_STACK);
-	}
-	
-	public static int getMaxStack() {
-		return MAX_STACK;
+		count = MathHelper.clamp(count + i, 0, item.getMaxStack());
 	}
 	
 	public int getCount() {
@@ -46,7 +42,7 @@ public class ItemStack {
 	}
 	
 	public void setCount(int i) {
-		count = MathHelper.clamp(i, 0, MAX_STACK);
+		count = MathHelper.clamp(i, 0, item.getMaxStack());
 		if (count == 0) {
 			item = ItemStack.EMPTY.getItem();
 			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == this) {
