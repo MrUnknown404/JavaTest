@@ -28,11 +28,19 @@ public class MouseInput extends MouseAdapter {
 	
 	private boolean leftClick;
 	private int it = -2;
+	private ItemStack itemInUse;
 	
 	private Timer t = new Timer(1000 / 60, new ActionListener () {
 		@Override
 		public void actionPerformed (ActionEvent e) {
 			if (block == null) {
+				t.stop();
+				return;
+			} else if (itemInUse == null || itemInUse != Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem()) {
+				it = -2;
+				block.brokenness = 0;
+				block = null;
+				itemInUse = null;
 				t.stop();
 				return;
 			} else if (!block.getBlockPos().equals(new BlockPos(((vec.x) - camera.getPositionX()) / Block.getBlockSize(), ((vec.y) - camera.getPositionY()) / Block.getBlockSize()))) {
@@ -41,20 +49,20 @@ public class MouseInput extends MouseAdapter {
 				block = null;
 				t.stop();
 				return;
-			} else if (!(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getItemType() == Item.ItemType.tool)) {
-				it = -2;
-				block.brokenness = 0;
-				block = null;
-				t.stop();
-				return;
-			} else if (it == -2) {
+			} else if (it == -2 && Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getItemType() == Item.ItemType.tool) {
 				it = (int) (block.getBlockProperties().getHardness() / Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getSpeed());
+			} else if (it == -2 && !(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getItemType() == Item.ItemType.tool)) {
+				it = (int) (block.getBlockProperties().getHardness() * block.getBlockProperties().getWrongToolMultiplier());
 			}
 			if (it == -1) {
 				return;
 			} else if (it != 0) {
 				it--;
-				block.brokenness = MathHelper.normalize(it, block.getBlockProperties().getHardness() / Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getSpeed());
+				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getItemType() == Item.ItemType.tool) {
+					block.brokenness = MathHelper.normalize(it, block.getBlockProperties().getHardness() / Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getSpeed());
+				} else {
+					block.brokenness = MathHelper.normalize(it, block.getBlockProperties().getHardness() * block.getBlockProperties().getWrongToolMultiplier());
+				}
 				return;
 			}
 			
@@ -126,16 +134,13 @@ public class MouseInput extends MouseAdapter {
 								int ic1 = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getCount();
 								if (ic1 > 1) {
 									if ((ic1 & 1) == 0) {
-										System.out.println("1");
 										Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = new ItemStack(ic1 / 2, Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getItem());
 										Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).setCount(ic1 / 2);
 									} else {
-										System.out.println("2");
 										Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = new ItemStack(ic1 / 2 + 1, Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).getItem());
 										Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).setCount(ic1 / 2);
 									}
 								} else {
-									System.out.println("3");
 									Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i);
 									Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i).setCount(0);
 								}
@@ -237,6 +242,7 @@ public class MouseInput extends MouseAdapter {
 				}
 			}
 			getBlock();
+			itemInUse = Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem();
 			leftClick = true;
 		}
 	}
@@ -249,6 +255,7 @@ public class MouseInput extends MouseAdapter {
 			block = null;
 		}
 		leftClick = false;
+		itemInUse = null;
 		if (t.isRunning()) {
 			t.stop();
 		}
@@ -268,10 +275,6 @@ public class MouseInput extends MouseAdapter {
 		it = -2;
 		
 		Vec2i tPos = new Vec2i(((vec.x) - camera.getPositionX()) / Block.getBlockSize(), ((vec.y) - camera.getPositionY()) / Block.getBlockSize());
-		
-		if (!(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getItemType() == Item.ItemType.tool)) {
-			return;
-		}
 		
 		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
 			Block b = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
@@ -296,6 +299,10 @@ public class MouseInput extends MouseAdapter {
 			} else {
 				getBlock();
 				it = -2;
+			}
+			
+			if (itemInUse == null) {
+				itemInUse = Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem();
 			}
 		}
 	}

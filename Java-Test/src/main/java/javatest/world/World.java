@@ -237,7 +237,7 @@ public class World {
 		}
 	}
 	
-	public void removeObjectAll(GameObject obj, boolean didPlayerBreak) {
+	public void removeObjectAll(GameObject obj, boolean shouldDrop) {
 		if (obj == null) {
 			Console.print(Console.WarningType.Error, "object is null!");
 		}
@@ -245,7 +245,7 @@ public class World {
 		Renderer.i = 0;
 		if (obj instanceof Block) {
 			if (allBlocks.contains(obj)) {
-				if (didPlayerBreak) {
+				if (shouldDrop) {
 					Main.getWorldHandler().getWorld().addObjectAll(new EntityItem(obj.getPositionX() + 2, obj.getPositionY() + 2, new ItemStack(1, Items.findItem(((Block) obj).getBlockProperties().getBlockType().toString()))));
 				}
 				allBlocks.remove(obj);

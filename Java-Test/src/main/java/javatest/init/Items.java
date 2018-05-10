@@ -10,7 +10,7 @@ public class Items {
 	public static List<Item> items = new ArrayList<Item>();
 	
 	public static final Item STICK = new Item("stick", 999, 0, Item.ItemType.item);
-	public static final Item PICKAXE = new Item("pickaxe", 1, 10, Item.ItemType.tool);
+	public static final Item PICKAXE = new Item("pickaxe", 1, 25, Item.ItemType.tool);
 	
 	public Items() {
 		for (int i = 0; i < Blocks.EnumBlocks.values().length; i++) {

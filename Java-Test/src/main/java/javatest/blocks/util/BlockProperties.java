@@ -11,7 +11,7 @@ public class BlockProperties {
 	public static final BlockProperties GRASS = new BlockProperties(Blocks.EnumBlocks.grass);
 	
 	private boolean hasCollision;
-	private int hardness;
+	private int hardness, wrongToolMultiplier;
 	private Blocks.EnumBlocks type;
 	
 	public BlockProperties(Blocks.EnumBlocks type) {
@@ -24,22 +24,27 @@ public class BlockProperties {
 		switch (type) {
 			case air:
 				setHardness(0);
+				setWrongToolMultiplier(0);
 				setHasCollision(false);
 				break;
 			case dirt:
 				setHardness(35);
+				setWrongToolMultiplier(2);
 				setHasCollision(true);
 				break;
 			case grass:
 				setHardness(45);
+				setWrongToolMultiplier(2);
 				setHasCollision(true);
 				break;
 			case stone:
 				setHardness(60);
+				setWrongToolMultiplier(8);
 				setHasCollision(true);
 				break;
 			default:
 				setHardness(-1);
+				setWrongToolMultiplier(0);
 				setHasCollision(true);
 				break;
 		}
@@ -58,17 +63,26 @@ public class BlockProperties {
 		return hardness;
 	}
 	
+	public int getWrongToolMultiplier() {
+		return wrongToolMultiplier;
+	}
+	
 	public boolean getHasCollision() {
 		return hasCollision;
 	}
 	
-	public BlockProperties setHasCollision(boolean bool) {
+	protected BlockProperties setHasCollision(boolean bool) {
 		hasCollision = bool;
 		return this;
 	}
 	
-	public BlockProperties setHardness(int hardness) {
+	protected BlockProperties setHardness(int hardness) {
 		this.hardness = hardness;
+		return this;
+	}
+	
+	protected BlockProperties setWrongToolMultiplier(int wrongToolMultiplier) {
+		this.wrongToolMultiplier = wrongToolMultiplier;
 		return this;
 	}
 	

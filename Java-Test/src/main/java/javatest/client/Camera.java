@@ -28,8 +28,8 @@ public class Camera {
 				bool = true;
 			}
 		} else {
-			if (pos.x != -MouseInput.vec.x - Main.getWorldHandler().getWorld().getPlayer().getPositionX() - Main.getWorldHandler().getWorld().getPlayer().getWidth() + Main.HEIGHT_DEF) {
-				pos.x = -MouseInput.vec.x - Main.getWorldHandler().getWorld().getPlayer().getPositionX() - Main.getWorldHandler().getWorld().getPlayer().getWidth() + Main.HEIGHT_DEF;
+			if (pos.x != -MouseInput.vec.x - Main.getWorldHandler().getWorld().getPlayer().getPositionX() - Main.getWorldHandler().getWorld().getPlayer().getWidth() + Main.WIDTH_DEF) {
+				pos.x = -MouseInput.vec.x - Main.getWorldHandler().getWorld().getPlayer().getPositionX() - Main.getWorldHandler().getWorld().getPlayer().getWidth() + Main.WIDTH_DEF;
 				bool = true;
 			}
 			if (pos.y != -MouseInput.vec.y - Main.getWorldHandler().getWorld().getPlayer().getPositionY() - Main.getWorldHandler().getWorld().getPlayer().getHeight() + Main.HEIGHT_DEF) {

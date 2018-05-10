@@ -18,7 +18,6 @@ import main.java.javatest.entity.EntityItem;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.init.Blocks;
 import main.java.javatest.init.Blocks.EnumBlocks;
-import main.java.javatest.items.Item;
 import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.Resource;
@@ -97,7 +96,7 @@ public class Renderer {
 			Block b = null;
 			Vec2i tPos = new Vec2i(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize());
 			if (Blocks.findBlock(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getName()) == null) {
-			} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().size() > Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() && Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot()).getCount() != 0) {
+			} else if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().size() > Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() && Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getCount() != 0) {
 				b = new Block(new BlockPos(tPos.getX(), tPos.getY()), BlockProperties.findBlockPropertyWithName(Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getName()));
 			}
 			
@@ -132,7 +131,7 @@ public class Renderer {
 				g.fillRect((int) obj.getPositionX(), (int) obj.getPositionY(), obj.getWidth(), obj.getHeight());
 			}
 			
-			if (obj.getBlockPos().equals(new BlockPos(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize())) && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(obj.getBoundsAll()) && Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedItem().getItem().getItemType() == Item.ItemType.tool) {
+			if (obj.getBlockPos().equals(new BlockPos(((MouseInput.vec.x) - Main.getCamera().getPositionX()) / Block.getBlockSize(), ((MouseInput.vec.y) - Main.getCamera().getPositionY()) / Block.getBlockSize())) && Main.getWorldHandler().getWorld().getPlayer().getInteractionBounds().intersects(obj.getBoundsAll())) {
 				g.drawImage(border, (int) obj.getPositionX(), (int) obj.getPositionY(), border.getWidth(), border.getHeight(), null);
 			}
 			
