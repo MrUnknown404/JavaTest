@@ -4,6 +4,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import main.java.javatest.Main;
 import main.java.javatest.blocks.util.BlockProperties;
+import main.java.javatest.init.Blocks;
 import main.java.javatest.util.GameObject;
 import main.java.javatest.util.math.BlockPos;
 import main.java.javatest.util.math.Vec2d;
@@ -97,11 +98,11 @@ public class Block extends GameObject {
 	
 	/** Returns a random block */
 	public static Block getRandomBlock(int x, int y) {
-		return new Block(new BlockPos(x, y), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size() - 1)));
+		return new Block(new BlockPos(x, y), Blocks.getBlocks().get(ThreadLocalRandom.current().nextInt(1, Blocks.getBlocks().size() - 1)));
 	}
 	
 	/** Returns a random block */
 	public static Block getRandomBlock() {
-		return new Block(new BlockPos(0, 0), BlockProperties.getBlocks().get(ThreadLocalRandom.current().nextInt(1, BlockProperties.getBlocks().size() - 1)));
+		return new Block(new BlockPos(0, 0), Blocks.getBlocks().get(ThreadLocalRandom.current().nextInt(1, Blocks.getBlocks().size() - 1)));
 	}
 }

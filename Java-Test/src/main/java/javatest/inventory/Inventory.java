@@ -36,15 +36,6 @@ public abstract class Inventory {
 		}
 	}
 	
-	public int findItemInt(ItemStack stack) {
-		for (int i = 0; i < items.size(); i++) {
-			if (items.get(i) == stack) {
-				return i;
-			}
-		}
-		return 0;
-	}
-	
 	public ItemStack findItem(ItemStack item) {
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i).equals(item) && items.get(i).getCount() < item.getItem().getMaxStack()) {
@@ -170,20 +161,6 @@ public abstract class Inventory {
 			} else if (items.get(i).equals(ItemStack.EMPTY)) {
 				return true;
 			}
-		}
-		return false;
-	}
-	
-	public boolean isFull() {
-		List<ItemStack> its = new ArrayList<ItemStack>(slots);
-		for (int i = 0; i < items.size(); i++) {
-			if (!items.get(i).equals(ItemStack.EMPTY)) {
-				its.add(items.get(i));
-			}
-		}
-		
-		if (its.size() == slots) {
-			return true;
 		}
 		return false;
 	}

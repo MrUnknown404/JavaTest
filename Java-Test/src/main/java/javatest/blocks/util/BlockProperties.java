@@ -1,8 +1,7 @@
 package main.java.javatest.blocks.util;
 
-import java.util.List;
-
 import main.java.javatest.init.Blocks;
+import main.java.javatest.util.Console;
 
 public class BlockProperties {
 	public static final BlockProperties AIR = new BlockProperties(Blocks.EnumBlocks.air);
@@ -43,9 +42,7 @@ public class BlockProperties {
 				setHasCollision(true);
 				break;
 			default:
-				setHardness(-1);
-				setWrongToolMultiplier(0);
-				setHasCollision(true);
+				Console.print(Console.WarningType.Error, "Invalid type");
 				break;
 		}
 	}
@@ -84,10 +81,6 @@ public class BlockProperties {
 	protected BlockProperties setWrongToolMultiplier(int wrongToolMultiplier) {
 		this.wrongToolMultiplier = wrongToolMultiplier;
 		return this;
-	}
-	
-	public static List<BlockProperties> getBlocks() {
-		return Blocks.blocks;
 	}
 	
 	public Blocks.EnumBlocks getBlockType() {

@@ -273,37 +273,6 @@ public class World {
 		}
 	}
 	
-	public int findObjectInt(GameObject obj) {
-		if (obj == null) {
-			Console.print(Console.WarningType.Error, "object is null!");
-		}
-		
-		if (obj instanceof Block) {
-			for (int i = 0; i < allBlocks.size(); i++) {
-				Block o = allBlocks.get(i);
-				if (o == obj) {
-					return i;
-				}
-			}
-		} else if (obj instanceof EntityItem) {
-			for (int i = 0; i < allItemEntities.size(); i++) {
-				Entity o = allItemEntities.get(i);
-				if (o == obj) {
-					return i;
-				}
-			}
-		} else if (obj instanceof Entity) {
-			for (int i = 0; i < allEntities.size(); i++) {
-				Entity o = allEntities.get(i);
-				if (o == obj) {
-					return i;
-				}
-			}
-		}
-		Console.print(Console.WarningType.Error, "Cannot find object : " + obj.toString());
-		return 0;
-	}
-	
 	public List<Block> getAllBlocks() {
 		return allBlocks;
 	}

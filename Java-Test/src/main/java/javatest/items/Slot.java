@@ -3,7 +3,7 @@ package main.java.javatest.items;
 import java.awt.Rectangle;
 
 public class Slot {
-	public int x, y, slotID;
+	private int x, y, slotID;
 	
 	public Slot(int x, int y, int slotID) {
 		this.x = x;

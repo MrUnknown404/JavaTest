@@ -44,6 +44,7 @@ public class Vec2d {
 		return false;
 	}
 	
+	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ")";
 	}

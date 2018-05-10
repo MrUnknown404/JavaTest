@@ -112,11 +112,6 @@ public class EntityLiving extends Entity {
 		return isDead;
 	}
 	
-	/** Sets isDead */
-	public void setIsDead(boolean bool) {
-		isDead = bool;
-	}
-	
 	/** Kills the entity */
 	public void killEntity() {
 		isDead = true;

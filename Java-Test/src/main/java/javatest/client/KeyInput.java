@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 import main.java.javatest.Main;
-import main.java.javatest.commands.CommandException;
 import main.java.javatest.entity.EntityItem;
 import main.java.javatest.items.ItemStack;
 
@@ -41,11 +40,7 @@ public class KeyInput extends KeyAdapter {
 		if (key == KeyEvent.VK_BACK_QUOTE && !Main.getCommandConsole().isConsoleOpen) {
 			Main.getCommandConsole().isConsoleOpen = true;
 		} else if (key == KeyEvent.VK_ENTER && Main.getCommandConsole().isConsoleOpen) {
-			try {
-				Main.getCommandConsole().finishCommand();
-			} catch (CommandException e1) {
-				e1.printStackTrace();
-			}
+			Main.getCommandConsole().finishCommand();
 		} else if (key == KeyEvent.VK_SLASH && !Main.getCommandConsole().isConsoleOpen) {
 			Main.getCommandConsole().isConsoleOpen = true;
 			Main.getCommandConsole().addKey(e.getKeyChar());

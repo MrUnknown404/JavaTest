@@ -11,10 +11,7 @@ public class Camera {
 	private boolean bool;
 	
 	public void tick() {
-		if (Main.getWorldHandler().getWorld().getPlayer() == null) {
-			if (!Main.getWorldHandler().doesWorldExist) {
-				return;
-			}
+		if (Main.getWorldHandler().getWorld().getPlayer() == null && !Main.getWorldHandler().doesWorldExist) {
 			return;
 		}
 		
