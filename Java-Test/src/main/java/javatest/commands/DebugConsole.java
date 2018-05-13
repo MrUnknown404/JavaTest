@@ -51,28 +51,28 @@ public class DebugConsole {
 		String errorStr = null;
 		switch (error) {
 			case noSlash:
-				errorStr = "* Commands must start with a /";
+				errorStr = "Commands must start with a /";
 				break;
 			case noCommand:
-				errorStr = "* No command was written";
+				errorStr = "No command was written";
 				break;
 			case noArgs:
-				errorStr = "* No arguments were written";
+				errorStr = "No arguments were written";
 				break;
 			case notEnoughArgs:
-				errorStr = "* Not enough arguments were written";
+				errorStr = "Not enough arguments were written";
 				break;
 			case tooManyArgs:
-				errorStr = "* Too many arguments were written";
+				errorStr = "Too many arguments were written";
 				break;
 			case wrongArg:
-				errorStr = "* One of the written arguments is not the correct type";
+				errorStr = "Atleast one of the written arguments is not the correct type";
 				break;
 			case notACommand:
-				errorStr = "* No valid command was written";
+				errorStr = "No valid command was written";
 				break;
 			default:
-				errorStr = "* Null something broke!";
+				errorStr = "Null something broke!";
 				break;
 		}
 		

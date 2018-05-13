@@ -1,105 +1,92 @@
 package main.java.javatest.world;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-import com.google.gson.Gson;
-
+import main.java.javatest.Main;
 import main.java.javatest.blocks.Block;
+import main.java.javatest.blocks.BlockStoneBrick;
 import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.EntityItem;
+import main.java.javatest.entity.entityliving.EntityDummy;
 import main.java.javatest.entity.entityliving.EntityLiving;
+import main.java.javatest.entity.entityliving.EntityPlayer;
+import main.java.javatest.init.Items;
+import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.Console;
+import main.java.javatest.util.TickableGameObject;
+import main.java.javatest.util.math.BlockPos;
+import main.java.javatest.world.util.WorldInfo;
 
 public class WorldHandler {
 
-	private static final String LOC = "C:/Users/" + System.getProperty("user.name") + "/Documents/My Games/JavaTest/worlds/";
-	private static final String TYPE = ".sav";//, TYPE2 = ".properties";//, TYPE3 = ".config";
+	//private static final String LOC = "C:/Users/" + System.getProperty("user.name") + "/Documents/My Games/JavaTest/worlds/";
 	
-	public boolean isGeneratingWorld, doesWorldExist, isSaving, isLoading;
-	private World world = new World();
-	float amountGenerated, amountLoaded, amountSaved;
+	private List<Block> allBlocks = new ArrayList<Block>();
+	private List<Entity> allEntities = new ArrayList<Entity>();
+	private List<Block> activeBlocks = new ArrayList<Block>();
+	private List<Entity> activeEntities = new ArrayList<Entity>();
+	
+	private boolean wasCreated;
+	private WorldInfo worldInfo = new WorldInfo();
+	private Random random;
+	private EntityPlayer player = null;;
 	
 	public void generateWorld(int xSize, int ySize, int seed) {
-		world = new World(xSize, ySize, seed, this);
+		Console.print(Console.WarningType.Info, "-Creating a new World..");
+		
+		worldInfo.worldLength = xSize;
+		worldInfo.worldHeight = ySize;
+		worldInfo.worldSeed = seed;
+		
+		random = new Random(seed);
+		
+		Main.getCamera().setPosition(((worldInfo.worldLength / 2) * Block.getBlockSize()), -15 * -Block.getBlockSize());
+		
+		Console.print("Placing blocks...");
+		for (int width = 0; width < worldInfo.worldLength; width++) {
+			for (int height = 0; height < worldInfo.worldHeight; height++) {
+				addObjectAll(new BlockStoneBrick(new BlockPos(width, height)));
+			}
+		}
+		Console.print("Finished placing blocks!");
+		
+		Console.print("Placing player && dummy!");
+		player = new EntityPlayer(worldInfo.worldLength  / 2 * Block.getBlockSize() - 12, -64);
+		addObjectAll(new EntityDummy(worldInfo.worldLength  / 2 * Block.getBlockSize() - 12, -64));
+		
+		Console.print("Checking what block need to be active...");
+		redoActives();
+		Console.print("Finished checking what block need to be active!");
+		wasCreated = true;
+		Console.print(Console.WarningType.Info, "-Finished creating the world!");
 	}
 	
-	public void saveWorld(String name) {
-		isSaving = true;
-		Gson g  = new Gson().newBuilder().create();
-		FileWriter fileWorld = null;
-		
-		if (!(new File(LOC + name).exists())) {
-			new File(LOC + name).mkdirs();
-		}
-		
-		try {
-			fileWorld = new FileWriter(new File(LOC + name + "/world" + TYPE));
-			
-			g.toJson(world, fileWorld);
-			
-			fileWorld.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		isSaving = false;
-	}
-	
-	public void loadWorld(String name) {
-		isLoading = true;
-		Gson g = new Gson();
-		FileReader fileWorld = null;
-		
-		if (!(new File(LOC + name).exists())) {
-			new File(LOC + name).mkdirs();
-			Console.print(Console.WarningType.Error, "World at " + LOC + name + " does not exist!");
-			return;
-		} else if (!(new File(LOC + name + "/world" + TYPE).exists())) {
-			Console.print(Console.WarningType.Error, "World at " + LOC + name + " does not exist!");
-			return;
-		}
-		
-		try {
-			fileWorld = new FileReader(new File(LOC + name + "/world" + TYPE));
-			
-			world = g.fromJson(fileWorld, World.class);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		
-		doesWorldExist = true;
-		isLoading = false;
-	}
-	
+	/** delete this */
 	public void clearWorld() {
 		Console.print(Console.WarningType.Info, "-Reseting the world...");
 		Console.print("Reseting blocks...");
-		world.allBlocks.clear();
-		world.activeBlocks.clear();
+		allBlocks.clear();
+		activeBlocks.clear();
 		Console.print("Finished reseting blocks!");
 		Console.print("Reseting entities...");
-		world.allEntities.clear();
-		world.activeEntities.clear();
-		world.allItemEntities.clear();
-		world.activeItemEntities.clear();
-		world.player = null;
+		allEntities.clear();
+		activeEntities.clear();
+		player = null;
 		Console.print("Finished reseting entities!");
-		doesWorldExist = false;
 		Console.print(Console.WarningType.Info, "-Finished reseting the world!");
 	}
 	
 	public void tick() {
-		if (world.getPlayer() != null) {
-			world.getPlayer().tick();
-			world.getPlayer().tickAlive();
+		if (getPlayer() != null) {
+			getPlayer().tick();
+			getPlayer().tickAlive();
 		}
 		
-		for (int i = 0; i < world.activeBlocks.size(); i++) {
-			Block obj = world.activeBlocks.get(i);
+		for (int i = 0; i < activeBlocks.size(); i++) {
+			Block obj = activeBlocks.get(i);
 			
 			if (obj == null) {
 				return;
@@ -108,18 +95,8 @@ public class WorldHandler {
 			obj.tick();
 		}
 		
-		for (int i = 0; i < world.activeItemEntities.size(); i++) {
-			EntityItem obj = world.activeItemEntities.get(i);
-			
-			if (obj == null) {
-				return;
-			}
-			
-			obj.tick();
-		}
-		
-		for (int i = 0; i < world.activeEntities.size(); i++) {
-			Entity obj = world.activeEntities.get(i);
+		for (int i = 0; i < activeEntities.size(); i++) {
+			Entity obj = activeEntities.get(i);
 			
 			if (obj == null) {
 				return;
@@ -132,53 +109,144 @@ public class WorldHandler {
 		}
 	}
 	
-	public void gameTick() {
-		if (world.getPlayer() != null) {
-			world.getPlayer().gameTick();
-			world.getPlayer().gameTickAlive();
+	public void redoActives() {
+		activeBlocks.clear();
+		activeEntities.clear();
+		
+		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH_DEF, Main.HEIGHT_DEF);
+		
+		for (int i = 0; i < allBlocks.size(); i++) {
+			Block obj = allBlocks.get(i);
+			
+			if (obj == null) {
+				continue;
+			}
+			
+			if (obj.getBoundsAll().intersects(rect)) {
+				obj.setIsActive(true);
+				activeBlocks.add(obj);
+			} else {
+				obj.setIsActive(false);
+			}
 		}
 		
-		for (int i = 0; i < world.activeBlocks.size(); i++) {
-			Block obj = world.activeBlocks.get(i);
-			
-			if (obj != null && !obj.getIsActive()) {
+		for (int i = 0; i < allEntities.size(); i++) {
+			Entity obj = allEntities.get(i);
+			if (obj == null) {
 				continue;
-			} else if (obj == null) {
-				return;
 			}
 			
-			obj.gameTick();
+			if (obj.getBoundsAll().intersects(rect) || obj.getEntityProperties().getAlwaysLoad()) {
+				obj.setIsActive(true);
+				activeEntities.add(obj);
+			} else {
+				obj.setIsActive(false);
+			}
+		}
+	}
+	
+	public void redoSpecificActiveObject(TickableGameObject obj) {
+		if (obj == null) {
+			Console.print(Console.WarningType.Error, "object is null!");
+			return;
 		}
 		
-		for (int i = 0; i < world.activeEntities.size(); i++) {
-			Entity obj = world.activeEntities.get(i);
-			
-			if (obj != null && !obj.getIsActive()) {
-				continue;
-			} else if (obj == null) {
-				return;
+		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH_DEF, Main.HEIGHT_DEF);
+		
+		if (obj instanceof Block) {
+			activeBlocks.remove(obj);
+			if (obj.getBoundsAll().intersects(rect) && !obj.getIsActive() && allBlocks.contains(obj)) {
+				obj.setIsActive(true);
+				activeBlocks.add((Block) obj);
+			} else {
+				obj.setIsActive(false);
 			}
-			
-			obj.gameTick();
-			if (obj instanceof EntityLiving) {
-				((EntityLiving) obj).gameTickAlive();
+		} else if (obj instanceof Entity) {
+			activeEntities.remove(obj);
+			if ((((obj.getBoundsAll().intersects(rect) && !obj.getIsActive()) || ((Entity) obj).getEntityProperties().getAlwaysLoad())) && allEntities.contains(obj)) {
+				obj.setIsActive(true);
+				activeEntities.add((Entity) obj);
+			} else {
+				obj.setIsActive(false);
 			}
 		}
 	}
 	
-	public float getAmountGenerated() {
-		return amountGenerated;
+	public void addObjectAll(TickableGameObject obj) {
+		if (obj == null) {
+			Console.print(Console.WarningType.Error, "object is null!");
+			return;
+		}
+		
+		if (obj instanceof Block) {
+			if (!allBlocks.contains(obj)) {
+				allBlocks.add((Block) obj);
+				redoSpecificActiveObject(obj);
+			}
+		} else if (obj instanceof Entity) {
+			if (!allEntities.contains(obj)) {
+				allEntities.add((Entity) obj);
+				redoSpecificActiveObject(obj);
+			}
+		}
 	}
 	
-	public float getAmountLoaded() {
-		return amountLoaded;
+	public void removeObjectAll(TickableGameObject obj, boolean shouldDrop) {
+		if (obj == null) {
+			Console.print(Console.WarningType.Error, "object is null!");
+		}
+		
+		if (obj instanceof Block) {
+			if (allBlocks.contains(obj)) {
+				if (shouldDrop) {
+					Main.getWorldHandler().addObjectAll(new EntityItem(obj.getPositionX() + 2, obj.getPositionY() + 2, new ItemStack(1, Items.findItem(((Block) obj).getBlockProperties().getBlockType().toString()))));
+				}
+				allBlocks.remove(obj);
+				redoSpecificActiveObject(obj);
+				if (activeBlocks.contains(obj)) {
+					activeBlocks.remove(obj);
+				}
+			}
+		} else if (obj instanceof Entity) {
+			if (allEntities.contains(obj)) {
+				allEntities.remove(obj);
+				redoSpecificActiveObject(obj);
+				if (activeEntities.contains(obj)) {
+					activeEntities.remove(obj);
+				}
+			}
+		}
 	}
 	
-	public float getAmountSaved() {
-		return amountSaved;
+	public List<Block> getAllBlocks() {
+		return allBlocks;
 	}
 	
-	public World getWorld() {
-		return world;
+	public List<Entity> getAllEntities() {
+		return allEntities;
+	}
+	
+	public List<Block> getActiveBlocks() {
+		return activeBlocks;
+	}
+	
+	public List<Entity> getActiveEntities() {
+		return activeEntities;
+	}
+	
+	public WorldInfo getWorldInfo() {
+		return worldInfo;
+	}
+	
+	public EntityPlayer getPlayer() {
+		return player;
+	}
+	
+	public Random getSeededRandom() {
+		return random;
+	}
+	
+	public boolean getWasCreated() {
+		return wasCreated;
 	}
 }

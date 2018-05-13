@@ -25,10 +25,12 @@ public class Blocks {
 	}
 	
 	public enum EnumBlocks {
-		air  (0),
-		stone(1),
-		dirt (2),
-		grass(3);
+		air       (0),
+		stone     (1),
+		dirt      (2),
+		grass     (3),
+		dirtbrick (4),
+		stonebrick(5);
 		
 		private final int fId;
 		

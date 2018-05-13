@@ -4,21 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.javatest.items.Item;
-import main.java.javatest.items.Item.ItemType;
 
 public class Items {
 	public static List<Item> items = new ArrayList<Item>();
 	
-	public static final Item STICK = new Item("stick", 999, 0, Item.ItemType.item);
-	public static final Item PICKAXE = new Item("pickaxe", 1, 25, Item.ItemType.tool);
-	
-	public Items() {
-		for (int i = 0; i < Blocks.EnumBlocks.values().length; i++) {
-			if (Blocks.EnumBlocks.getNumber(i) != Blocks.EnumBlocks.air) {
-				new Item(Blocks.EnumBlocks.getNumber(i).toString(), 999, 0, ItemType.block);//.addThis();
-			}
-		}
-	}
+	public static final Item STICK = new Item("stick", 999, 32, 1, 1f, 1f, Item.ItemType.item);
+	public static final Item SWORD = new Item("sword", 1, 32, 10, 100f, 1.25f, Item.ItemType.sword);
 	
 	public static Item findItem(String name) {
 		if (name.equals("") || name == null) {

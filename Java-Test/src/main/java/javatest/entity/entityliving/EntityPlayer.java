@@ -1,28 +1,83 @@
 package main.java.javatest.entity.entityliving;
 
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Timer;
 
 import main.java.javatest.Main;
-import main.java.javatest.blocks.Block;
+import main.java.javatest.client.MouseInput;
+import main.java.javatest.entity.Entity;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.inventory.PlayerInventory;
+import main.java.javatest.items.Item;
+import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.math.MathHelper;
 
 public class EntityPlayer extends EntityLiving {
 	
 	private PlayerInventory inventory = new PlayerInventory();
-	public int direction = 1;
+	private final double speed = 3;
+	public int tiMax = 50, ti = tiMax;
 	
 	public EntityPlayer(double x, double y) {
-		super(x, y, 24, 44, EntityProperties.PLAYER);
+		super(x, y, 24, 44, 30, EntityProperties.PLAYER);
+	}
+	
+	private Timer t = new Timer(1000 / 600, new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			getInventory().getSelectedItem().getItem().addSwingAmount();
+			if (getInventory().getSelectedItem().getItem().getSwingAmount() == 90) {
+				if (ti == tiMax) {
+					getInventory().getSelectedItem().getItem().setSwingAmount(-45);
+				}
+				if (ti == 0) {
+					getInventory().getSelectedItem().getItem().setSwingAmount(90);
+					ti = tiMax;
+					t.stop();
+				} else {
+					ti--;
+				}
+			}
+		}
+	});
+	
+	@Override
+	public void tick() {
+		super.tick();
+		if (MouseInput.leftClick) {
+			attack(getInventory().getSelectedItem().getItem());
+		}
 	}
 	
 	@Override
-	public void gameTickAlive() {
-		super.gameTick();
-		if (getPositionY() > (Main.getWorldHandler().getWorld().getWorldInfo().worldHeight * 3) * Block.getBlockSize()) {
-			setPositionY(-44 - (-15 * -Block.getBlockSize()));
+	public void onHit(float damage, boolean isCrit) {
+		
+	}
+	
+	public void attack(Item item) {
+		if (!t.isRunning()) {
+			t.start();
 		}
+		
+		if (Main.getWorldHandler().getActiveEntities().size() != 0 && !getInventory().getSelectedItem().equals(ItemStack.EMPTY)) {
+			for (int i = 0; i < Main.getWorldHandler().getActiveEntities().size(); i++) {
+				Entity e = Main.getWorldHandler().getActiveEntities().get(i);
+				
+				if (e.getBoundsAll().intersects(getSwingBounds(item, direction))) {
+					if (e instanceof EntityLiving) {
+						((EntityLiving) e).hit(getInventory().getSelectedItem().getItem().getDamage(), getInventory().getSelectedItem().getItem().getCritChance(), this);
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	public double getSpeed() {
+		return speed;
 	}
 	
 	/** Returns the player's inventory */
@@ -30,18 +85,28 @@ public class EntityPlayer extends EntityLiving {
 		return inventory;
 	}
 	
-	/** Returns the entities magnet bounds */
+	/** Returns the player's magnet bounds */
 	public Rectangle getMagnetBounds() {
 		return new Rectangle(MathHelper.floor(getPositionX()) - 32, MathHelper.floor(getPositionY()) - 32, width + 64, height + 64);
 	}
 	
-	/** Returns the entities pickup bounds */
+	/** Returns the player's pickup bounds */
 	public Rectangle getPickupBounds() {
 		return new Rectangle(MathHelper.floor(getPositionX()) - 4, MathHelper.floor(getPositionY()) - 4, width + 8, height + 8);
 	}
 	
-	/** Returns the entities interaction bounds */
+	/** Returns the player's interaction bounds */
 	public Rectangle getInteractionBounds() {
 		return new Rectangle(MathHelper.floor(getPositionX()) - 64, MathHelper.floor(getPositionY()) - 64, width + 128, height + 128);
+	}
+	
+	/** Returns the player's swing bounds */
+	public Rectangle getSwingBounds(Item item, int dir) {
+		if (dir == 1) {
+			return new Rectangle(MathHelper.floor(getPositionX() + width), MathHelper.floor(getPositionY() - 12), item.getRange(), item.getRange() + 20);
+		} else if (dir == -1) {
+			return new Rectangle(MathHelper.floor(getPositionX()) - item.getRange(), MathHelper.floor(getPositionY() - 12), item.getRange(), item.getRange() + 20);
+		}
+		return null;
 	}
 }

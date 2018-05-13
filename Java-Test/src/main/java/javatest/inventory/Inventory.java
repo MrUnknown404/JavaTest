@@ -51,7 +51,7 @@ public abstract class Inventory {
 			for (int i = 0; i < slots; i++) {
 				if (items.get(i).equals(ItemStack.EMPTY)) {
 					items.set(i, item);
-					Main.getWorldHandler().getWorld().removeObjectAll(ei, false);
+					Main.getWorldHandler().removeObjectAll(ei, false);
 					break;
 				}
 			}
@@ -67,7 +67,7 @@ public abstract class Inventory {
 							it.increaseCount(item.getCount());
 						}
 						items.set(i, it);
-						Main.getWorldHandler().getWorld().removeObjectAll(ei, false);
+						Main.getWorldHandler().removeObjectAll(ei, false);
 						break;
 					}
 				}
@@ -125,10 +125,10 @@ public abstract class Inventory {
 					int itc = it.getCount() + item.getCount() - item.getItem().getMaxStack();
 					
 					it.setCount(item.getItem().getMaxStack());
-					Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = new ItemStack(itc, it.getItem());
+					Main.getWorldHandler().getPlayer().getInventory().setItemInMouse(new ItemStack(itc, it.getItem()));
 				} else {
 					it.setCount(item.getCount() + it.getCount());
-					Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
+					Main.getWorldHandler().getPlayer().getInventory().setItemInMouse(null);
 				}
 			}
 		}

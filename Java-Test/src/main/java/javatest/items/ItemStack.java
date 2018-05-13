@@ -5,7 +5,7 @@ import main.java.javatest.items.Item.ItemType;
 import main.java.javatest.util.math.MathHelper;
 
 public class ItemStack {
-	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty", 1, 0, ItemType.item));
+	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty", 1, 0, 0, 0, 0, ItemType.item));
 	
 	private int count;
 	private Item item;
@@ -19,8 +19,8 @@ public class ItemStack {
 		count--;
 		if (count == 0) {
 			item = ItemStack.EMPTY.getItem();
-			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == this) {
-				Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
+			if (Main.getWorldHandler().getPlayer().getInventory().getItemInMouse() == this) {
+				Main.getWorldHandler().getPlayer().getInventory().setItemInMouse(null);
 			}
 		}
 	}
@@ -45,8 +45,8 @@ public class ItemStack {
 		count = MathHelper.clamp(i, 0, item.getMaxStack());
 		if (count == 0) {
 			item = ItemStack.EMPTY.getItem();
-			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse == this) {
-				Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse = null;
+			if (Main.getWorldHandler().getPlayer().getInventory().getItemInMouse() == this) {
+				Main.getWorldHandler().getPlayer().getInventory().setItemInMouse(null);
 			}
 		}
 	}

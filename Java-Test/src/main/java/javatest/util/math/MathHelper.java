@@ -33,6 +33,15 @@ public class MathHelper {
 		return Math.round(number * tempDecimal) / tempDecimal;
 	}
 	
+	/** Returns the number rounded to the specified decimal */
+	public static float roundTo(float number, int decimal) {
+		double tempDecimal = 1;
+		for (int i = 0; i < decimal; i++) {
+			tempDecimal *= 10;
+		}
+		return (float) (Math.round(number * tempDecimal) / tempDecimal);
+	}
+	
 	/** Returns a normalized version of the given number */
 	public static float normalize(float number, float max) {
 		if (number > max) {

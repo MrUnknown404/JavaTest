@@ -4,11 +4,11 @@ import main.java.javatest.Main;
 import main.java.javatest.blocks.Block;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.entity.util.EntityProperties;
-import main.java.javatest.util.GameObject;
+import main.java.javatest.util.TickableGameObject;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
-public class Entity extends GameObject {
+public abstract class Entity extends TickableGameObject {
 	
 	protected EntityProperties type;
 	protected boolean doGravity = false;
@@ -26,19 +26,14 @@ public class Entity extends GameObject {
 		doVelocity();
 	}
 	
-	@Override
-	public void gameTick() {
-		
-	}
-	
 	/** Gets what's below the entity plus the argument */
-	public GameObject getBelow(double y) {
-		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
-			GameObject obj = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
+	public TickableGameObject getBelow(double y) {
+		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
+			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - Main.getWorldHandler().getWorld().getWorldInfo().gravity + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
+					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - Main.getWorldHandler().getWorldInfo().gravity + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
 						return tObj;
 					}
 				}
@@ -48,13 +43,13 @@ public class Entity extends GameObject {
 	}
 
 	/** Gets what's above the entity plus the argument */
-	public GameObject getAbove(double y) {
-		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
-			GameObject obj = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
+	public TickableGameObject getAbove(double y) {
+		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
+			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - Main.getWorldHandler().getWorld().getWorldInfo().gravity + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
+					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - Main.getWorldHandler().getWorldInfo().gravity + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
 						return tObj;
 					}
 				}
@@ -64,9 +59,9 @@ public class Entity extends GameObject {
 	}
 	
 	/** Gets what's left the entity plus the argument */
-	public GameObject getLeft(double x) {
-		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
-			GameObject obj = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
+	public TickableGameObject getLeft(double x) {
+		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
+			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
@@ -80,9 +75,9 @@ public class Entity extends GameObject {
 	}
 	
 	/** Gets what's right the entity plus the argument */
-	public GameObject getRight(double x) {
-		for (int i = 0; i < Main.getWorldHandler().getWorld().getActiveBlocks().size(); i++) {
-			GameObject obj = Main.getWorldHandler().getWorld().getActiveBlocks().get(i);
+	public TickableGameObject getRight(double x) {
+		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
+			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
 			if (obj instanceof Block && obj != this) {
 				Block tObj = (Block) obj;
 				if (tObj.getBlockProperties().getHasCollision()) {
@@ -96,7 +91,7 @@ public class Entity extends GameObject {
 	}
 	
 	public boolean isGrounded() {
-		GameObject obj = getBelow(0);
+		TickableGameObject obj = getBelow(0);
 		if (obj != null && obj instanceof Block) {
 			return true;
 		}
@@ -105,8 +100,8 @@ public class Entity extends GameObject {
 	
 	public void doVelocity() {
 		if (getVelocityX() != 0) {
-			GameObject o = getLeft(-getVelocityX());
-			GameObject o2 = getRight(-getVelocityX());
+			TickableGameObject o = getLeft(-getVelocityX());
+			TickableGameObject o2 = getRight(-getVelocityX());
 			if ((o != null || o2 != null) && getEntityProperties().getDoCollision()) {
 				if (o != null) {
 					double y = o.getPositionX() - getPositionX();
@@ -124,15 +119,15 @@ public class Entity extends GameObject {
 			}
 			
 			if (getVelocityX() > 0) {
-				setVelocityX(MathHelper.clamp(getVelocityX() - Main.getWorldHandler().getWorld().getWorldInfo().friction, 0, Double.MAX_VALUE));
+				setVelocityX(MathHelper.clamp(getVelocityX() - Main.getWorldHandler().getWorldInfo().friction, 0, Double.MAX_VALUE));
 			} else if (getVelocityX() < 0) {
-				setVelocityX(MathHelper.clamp(getVelocityX() + Main.getWorldHandler().getWorld().getWorldInfo().friction, -Double.MAX_VALUE, 0));
+				setVelocityX(MathHelper.clamp(getVelocityX() + Main.getWorldHandler().getWorldInfo().friction, -Double.MAX_VALUE, 0));
 			}
 		}
 		
 		if (getVelocityY() != 0) {
-			GameObject o = getBelow(-getVelocityY());
-			GameObject o2 = getAbove(-getVelocityY());
+			TickableGameObject o = getBelow(-getVelocityY());
+			TickableGameObject o2 = getAbove(-getVelocityY());
 			if ((o != null || o2 != null) && getEntityProperties().getDoCollision()) {
 				if (o != null) {
 					double y = o.getPositionY() - getPositionY();
@@ -143,7 +138,6 @@ public class Entity extends GameObject {
 					double y = o2.getPositionY() - getPositionY();
 					if (y < getVelocityY()) {
 						addPositionY(y + o2.getHeight());
-						//setVelocityY(0);
 					}
 				}
 			} else {
@@ -151,14 +145,14 @@ public class Entity extends GameObject {
 			}
 			
 			if (getVelocityY() > 0) {
-				setVelocityY(MathHelper.clamp(getVelocityY() - Main.getWorldHandler().getWorld().getWorldInfo().friction, 0, Double.MAX_VALUE));
+				setVelocityY(MathHelper.clamp(getVelocityY() - Main.getWorldHandler().getWorldInfo().friction, 0, Double.MAX_VALUE));
 			} else if (getVelocityY() < 0) {
-				setVelocityY(MathHelper.clamp(getVelocityY() + Main.getWorldHandler().getWorld().getWorldInfo().friction, -Double.MAX_VALUE, 0));
+				setVelocityY(MathHelper.clamp(getVelocityY() + Main.getWorldHandler().getWorldInfo().friction, -Double.MAX_VALUE, 0));
 			}
 		}
 		
 		if (getGravityY() != 0) {
-			GameObject o = getBelow(-getGravityY());
+			TickableGameObject o = getBelow(-getGravityY());
 			if (o != null && this instanceof EntityPlayer) {
 				double y = o.getPositionY() - getPositionY();
 				if (y > getGravityY()) {
@@ -169,9 +163,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (getGravityY() > 0) {
-				setGravityY(MathHelper.clamp(getGravityY() - Main.getWorldHandler().getWorld().getWorldInfo().friction, 0, Double.MAX_VALUE));
+				setGravityY(MathHelper.clamp(getGravityY() - Main.getWorldHandler().getWorldInfo().friction, 0, Double.MAX_VALUE));
 			} else if (getGravityY() < 0) {
-				setGravityY(MathHelper.clamp(getGravityY() + Main.getWorldHandler().getWorld().getWorldInfo().friction, -Double.MAX_VALUE, 0));
+				setGravityY(MathHelper.clamp(getGravityY() + Main.getWorldHandler().getWorldInfo().friction, -Double.MAX_VALUE, 0));
 			}
 		}
 		
@@ -187,9 +181,9 @@ public class Entity extends GameObject {
 			}
 			
 			if (!isGrounded()) {
-				addGravityY(Main.getWorldHandler().getWorld().getWorldInfo().gravity / (Main.getWorldHandler().getWorld().getWorldInfo().gravity * 2));
-				if (getGravityY() > Main.getWorldHandler().getWorld().getWorldInfo().maxFallSpeed) {
-					setGravityY(Main.getWorldHandler().getWorld().getWorldInfo().maxFallSpeed);
+				addGravityY(Main.getWorldHandler().getWorldInfo().gravity / (Main.getWorldHandler().getWorldInfo().gravity * 2));
+				if (getGravityY() > Main.getWorldHandler().getWorldInfo().maxFallSpeed) {
+					setGravityY(Main.getWorldHandler().getWorldInfo().maxFallSpeed);
 				}
 			}
 		} else {

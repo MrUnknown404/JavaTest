@@ -3,7 +3,7 @@ package main.java.javatest.util.math;
 public class BlockPos {
 
 	public static final BlockPos ZERO = new BlockPos();
-	public int x, y;
+	private int x, y;
 	
 	public BlockPos(Vec2i vec) {
 		this.x = vec.x;
@@ -24,12 +24,28 @@ public class BlockPos {
 		this(0, 0);
 	}
 	
-	public BlockPos add(int x, int y) {
-		return new BlockPos(this.x + x, this.y + y);
+	public void addX(int x) {
+		this.x += x;
 	}
 	
-	public BlockPos add(BlockPos pos) {
-		return add(pos.x, pos.y);
+	public void addY(int y) {
+		this.y += y;
+	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
 	}
 	
 	@Override

@@ -36,24 +36,24 @@ public class InventoryHud extends Canvas {
 	}
 	
 	public void draw(Graphics g) {
-		if (Main.getWorldHandler().getWorld().getPlayer() != null) {
+		if (Main.getWorldHandler().getPlayer() != null) {
 			g.setColor(Color.RED);
 			g.setFont(FONT);
 			
-			if (!Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList().isEmpty()) {
-				List<Slot> slots = Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsList();
-				for (int i = 0; i < slots.size() - (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsX() * (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsY() - 1)); i++) {
-					if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getSelectedSlot() == slots.get(i).getSlotID()) {
+			if (!Main.getWorldHandler().getPlayer().getInventory().getSlotsList().isEmpty()) {
+				List<Slot> slots = Main.getWorldHandler().getPlayer().getInventory().getSlotsList();
+				for (int i = 0; i < slots.size() - (Main.getWorldHandler().getPlayer().getInventory().getSlotsX() * (Main.getWorldHandler().getPlayer().getInventory().getSlotsY() - 1)); i++) {
+					if (Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() == slots.get(i).getSlotID()) {
 						g.drawImage(slotSel, slots.get(i).getX(), slots.get(i).getY(), slotSel.getWidth(), slotSel.getHeight(), null);
 					} else {
 						g.drawImage(slot, slots.get(i).getX(), slots.get(i).getY(), slot.getWidth(), slot.getHeight(), null);
 					}
-					for (int i2 = 0; i2 < Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().size(); i2++) {
+					for (int i2 = 0; i2 < Main.getWorldHandler().getPlayer().getInventory().getItems().size(); i2++) {
 						for (int i3 = 0; i3 < imgs.size(); i3++) {
-							if (keys.get(i3).equals(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i2).getItem().getName()) && i2 == i) {
+							if (keys.get(i3).equals(Main.getWorldHandler().getPlayer().getInventory().getItems().get(i2).getItem().getName()) && i2 == i) {
 								g.drawImage(imgs.get(i3), slots.get(i).getX() + 4, slots.get(i).getY() + 4, imgs.get(i3).getWidth(), imgs.get(i3).getHeight(), null);
-								if (!(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i2).getItem().getItemType() == Item.ItemType.tool)) {
-									g.drawString(String.valueOf(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i2).getCount()), slots.get(i).getX() + 6, slots.get(i).getY() + 34);
+								if (Main.getWorldHandler().getPlayer().getInventory().getItems().get(i2).getItem().getItemType() == Item.ItemType.item) {
+									g.drawString(String.valueOf(Main.getWorldHandler().getPlayer().getInventory().getItems().get(i2).getCount()), slots.get(i).getX() + 6, slots.get(i).getY() + 34);
 								}
 							}
 						}
@@ -61,15 +61,15 @@ public class InventoryHud extends Canvas {
 				}
 				
 				
-				if (Main.getWorldHandler().getWorld().getPlayer().getInventory().getIsInventoryOpen()) {
-					for (int i = Main.getWorldHandler().getWorld().getPlayer().getInventory().getSlotsX(); i < slots.size(); i++) {
+				if (Main.getWorldHandler().getPlayer().getInventory().getIsInventoryOpen()) {
+					for (int i = Main.getWorldHandler().getPlayer().getInventory().getSlotsX(); i < slots.size(); i++) {
 						g.drawImage(slot, slots.get(i).getX(), slots.get(i).getY(), slot.getWidth(), slot.getHeight(), null);
-						for (int i2 = 0; i2 < Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().size(); i2++) {
+						for (int i2 = 0; i2 < Main.getWorldHandler().getPlayer().getInventory().getItems().size(); i2++) {
 							for (int i3 = 0; i3 < imgs.size(); i3++) {
-								if (keys.get(i3).equals(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i2).getItem().getName()) && i2 == i) {
+								if (keys.get(i3).equals(Main.getWorldHandler().getPlayer().getInventory().getItems().get(i2).getItem().getName()) && i2 == i) {
 									g.drawImage(imgs.get(i3), slots.get(i).getX() + 4, slots.get(i).getY() + 4, imgs.get(i3).getWidth(), imgs.get(i3).getHeight(), null);
-									if (!(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i2).getItem().getItemType() == Item.ItemType.tool)) {
-										g.drawString(String.valueOf(Main.getWorldHandler().getWorld().getPlayer().getInventory().getItems().get(i2).getCount()), slots.get(i).getX() + 6, slots.get(i).getY() + 34);
+									if (Main.getWorldHandler().getPlayer().getInventory().getItems().get(i2).getItem().getItemType() == Item.ItemType.item) {
+										g.drawString(String.valueOf(Main.getWorldHandler().getPlayer().getInventory().getItems().get(i2).getCount()), slots.get(i).getX() + 6, slots.get(i).getY() + 34);
 									}
 								}
 							}
@@ -78,11 +78,13 @@ public class InventoryHud extends Canvas {
 				}
 			}
 			
-			if (Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse != null) {
+			if (Main.getWorldHandler().getPlayer().getInventory().getItemInMouse() != null) {
 				for (int i = 0; i < imgs.size(); i++) {
-					if (keys.get(i).equals(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse.getItem().getName())) {
+					if (keys.get(i).equals(Main.getWorldHandler().getPlayer().getInventory().getItemInMouse().getItem().getName())) {
 						g.drawImage(imgs.get(i), MouseInput.vec.x - 16, MouseInput.vec.y - 16, imgs.get(i).getWidth(), imgs.get(i).getHeight(), null);
-						g.drawString(String.valueOf(Main.getWorldHandler().getWorld().getPlayer().getInventory().itemInMouse.getCount()), MouseInput.vec.x - 14, MouseInput.vec.y + 14);
+						if (Main.getWorldHandler().getPlayer().getInventory().getItemInMouse().getItem().getItemType() == Item.ItemType.item) {
+							g.drawString(String.valueOf(Main.getWorldHandler().getPlayer().getInventory().getItemInMouse().getCount()), MouseInput.vec.x - 14, MouseInput.vec.y + 14);
+						}
 					}
 				}
 			}

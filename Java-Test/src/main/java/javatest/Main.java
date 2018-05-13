@@ -41,7 +41,6 @@ public class Main extends Canvas implements Runnable {
 	private static final Camera CAMERA = new Camera();
 	private static final DebugConsole CONSOLE = new DebugConsole();
 	private final Renderer renderer = new Renderer();
-	private MouseInput mouse = new MouseInput();
 	private final DebugHud debugHud = new DebugHud();
 	private final ConsoleHud consoleHud = new ConsoleHud();
 	private final InventoryHud invHud = new InventoryHud();
@@ -73,6 +72,8 @@ public class Main extends Canvas implements Runnable {
 		invHud.updateTextures();
 		renderer.findTextures();
 		renderer.setImgsAndKeys(invHud.getImgs(), invHud.getKeys());
+		
+		MouseInput mouse = new MouseInput();
 		
 		addKeyListener(new KeyInput());
 		addMouseListener(mouse);
@@ -129,28 +130,19 @@ public class Main extends Canvas implements Runnable {
 		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
-		double amountOfGameTicks = 20.0;
 		double ns = 1000000000 / amountOfTicks;
-		double ns2 = 1000000000 / amountOfGameTicks;
 		double delta = 0;
-		double delta2 = 0;
 		long timer = System.currentTimeMillis();
 		int frames = 0;
 		
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
-			delta2 += (now - lastTime) / ns2;
 			lastTime = now;
 			
 			while (delta >= 1) {
 				tick();
 				delta--;
-			}
-			
-			while (delta2 >= 1) {
-				gameTick();
-				delta2--;
 			}
 			
 			if (running) {
@@ -169,18 +161,9 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	private void tick() {
-		if (!getWorldHandler().isSaving && !WORLD_HANDLER.isLoading) {
-			CAMERA.tick();
-			WORLD_HANDLER.tick();
-			consoleHud.tick();
-			mouse.tick();
-		}
-	}
-	
-	private void gameTick() {
-		if (!WORLD_HANDLER.isSaving && !WORLD_HANDLER.isLoading) {
-			WORLD_HANDLER.gameTick();
-		}
+		CAMERA.tick();
+		WORLD_HANDLER.tick();
+		consoleHud.tick();
 	}
 	
 	public static float scaleWidth, scaleHeight;
