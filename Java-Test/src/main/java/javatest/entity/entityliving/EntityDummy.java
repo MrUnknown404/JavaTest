@@ -8,11 +8,11 @@ import main.java.javatest.util.math.MathHelper;
 public class EntityDummy extends EntityLiving {
 	
 	private float damage, initDamage;
-	private int damageDisapearTimeMax = 60, damageDisapearTime = damageDisapearTimeMax;
+	private int damageDisapearTimeMax = 120, damageDisapearTime = damageDisapearTimeMax;
 	private boolean isCrit;
 	
 	public EntityDummy(double x, double y) {
-		super(x, y, 32, 48, 10, EntityProperties.DUMMY);
+		super(x, y, 32, 48, 1, EntityProperties.DUMMY);
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class EntityDummy extends EntityLiving {
 		
 		if (damage > 0) {
 			if (damageDisapearTime == 0) {
-				damage = MathHelper.clamp(MathHelper.roundTo(damage - (initDamage / 8), 3), 0, Float.MAX_VALUE);
+				damage = MathHelper.clamp(MathHelper.roundTo(damage - (initDamage / 8), 2), 0, Float.MAX_VALUE);
 			} else {
 				damageDisapearTime--;
 			}

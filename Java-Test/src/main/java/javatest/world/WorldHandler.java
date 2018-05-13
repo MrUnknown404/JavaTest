@@ -22,7 +22,7 @@ import main.java.javatest.world.util.WorldInfo;
 
 public class WorldHandler {
 
-	//private static final String LOC = "C:/Users/" + System.getProperty("user.name") + "/Documents/My Games/JavaTest/worlds/";
+	//private static final String SAVE_LOC = "C:/Users/" + System.getProperty("user.name") + "/Documents/My Games/JavaTest/worlds/";
 	
 	private List<Block> allBlocks = new ArrayList<Block>();
 	private List<Entity> allEntities = new ArrayList<Entity>();
@@ -55,7 +55,9 @@ public class WorldHandler {
 		
 		Console.print("Placing player && dummy!");
 		player = new EntityPlayer(worldInfo.worldLength  / 2 * Block.getBlockSize() - 12, -64);
+		addObjectAll(new EntityDummy(worldInfo.worldLength  / 2 * Block.getBlockSize() - 60, -64));
 		addObjectAll(new EntityDummy(worldInfo.worldLength  / 2 * Block.getBlockSize() - 12, -64));
+		addObjectAll(new EntityDummy(worldInfo.worldLength  / 2 * Block.getBlockSize() + 36, -64));
 		
 		Console.print("Checking what block need to be active...");
 		redoActives();

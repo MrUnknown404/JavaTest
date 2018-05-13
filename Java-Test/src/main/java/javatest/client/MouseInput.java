@@ -116,9 +116,9 @@ public class MouseInput extends MouseAdapter {
 				return;
 			}
 			
-			Main.getWorldHandler().getPlayer().attack(Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem());
+			Main.getWorldHandler().getPlayer().attack();
 			leftClick = true;
-				
+			
 			if (Main.getWorldHandler().getPlayer().getInventory().getIsInventoryOpen()) {
 				if (Main.getWorldHandler().getPlayer().getInventory().getItemInMouse() == null) {
 					for (int i = 0; i < Main.getWorldHandler().getPlayer().getInventory().getSlots(); i++) {

@@ -11,9 +11,10 @@ import main.java.javatest.util.math.MathHelper;
 
 public abstract class EntityLiving extends Entity {
 
-	protected int maxInvincibilityTime, invincibilityTime;
 	public int direction = 1;
-	protected boolean isDead = false;
+	protected int maxInvincibilityTime, invincibilityTime;
+	protected boolean isDead, wasHit;
+	protected EntityLiving attacker;
 	private double moveDirX = 0, jumpY = 0;
 	
 	public EntityLiving(double x, double y, int width, int height, int maxInvincibilityTime, EntityProperties type) {
@@ -29,28 +30,45 @@ public abstract class EntityLiving extends Entity {
 	}
 	
 	protected void hit(float damage, int critChance, EntityLiving attacker) {
-		if (invincibilityTime == 0) {
+		if (invincibilityTime == 0 && wasHit) {
+			wasHit = false;
 			if (new Random().nextBoolean()) {
 				damage = (float) (damage + ThreadLocalRandom.current().nextDouble((double) damage / 8));
 			} else {
 				damage = (float) (damage - ThreadLocalRandom.current().nextDouble((double) damage / 8));
 			}
 			
-			damage = (float) MathHelper.roundTo(damage, 3);
+			this.attacker = attacker;
+			damage = (float) MathHelper.roundTo(damage, 2);
 			
 			if (new Random().nextInt(100) < critChance) {
 				onHit(damage * 2, true);
+				knockback(attacker, true);
 			} else {
 				onHit(damage, false);
+				knockback(attacker, false);
 			}
-			
-			if (attacker.direction == 1) {
-				addVelocity(getEntityProperties().getKnockback(), -getEntityProperties().getKnockback());
-			} else if (attacker.direction == -1) {
-				addVelocity(-getEntityProperties().getKnockback(), -getEntityProperties().getKnockback());
-			}
-			
 			invincibilityTime = maxInvincibilityTime;
+		}
+	}
+	
+	protected void knockback(EntityLiving attacker, boolean wasCrit) {
+		if (wasCrit) {
+			if (getEntityProperties().getKnockback() != 0) {
+				if (attacker.direction == 1) {
+					addVelocity(getEntityProperties().getKnockback() * 2, -getEntityProperties().getKnockback() * 2);
+				} else if (attacker.direction == -1) {
+					addVelocity(-getEntityProperties().getKnockback() * 2, -getEntityProperties().getKnockback() * 2);
+				}
+			}
+		} else {
+			if (getEntityProperties().getKnockback() != 0) {
+				if (attacker.direction == 1) {
+					addVelocity(getEntityProperties().getKnockback(), -getEntityProperties().getKnockback());
+				} else if (attacker.direction == -1) {
+					addVelocity(-getEntityProperties().getKnockback(), -getEntityProperties().getKnockback());
+				}
+			}
 		}
 	}
 	

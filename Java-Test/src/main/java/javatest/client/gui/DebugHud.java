@@ -28,7 +28,7 @@ public class DebugHud extends Canvas {
 	private static String entityCountActive;
 	private static String gravityY;
 	
-	private static final String PRESS1 = "Press F1 to generate a new world!";
+	private static final String PRESS1 = "Press F1 to start!";
 	
 	public void getInfo() {
 		if (Main.getWorldHandler().getPlayer() != null) {

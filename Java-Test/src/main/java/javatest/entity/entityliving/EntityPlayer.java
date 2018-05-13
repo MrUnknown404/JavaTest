@@ -21,22 +21,31 @@ public class EntityPlayer extends EntityLiving {
 	private final double speed = 3;
 	public int tiMax = 50, ti = tiMax;
 	
-	public EntityPlayer(double x, double y) {
-		super(x, y, 24, 44, 30, EntityProperties.PLAYER);
-	}
-	
-	private Timer t = new Timer(1000 / 600, new ActionListener() {
+	private Timer atkT = new Timer(1000 / 600, new ActionListener() {
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent ee) {
 			getInventory().getSelectedItem().getItem().addSwingAmount();
 			if (getInventory().getSelectedItem().getItem().getSwingAmount() == 90) {
 				if (ti == tiMax) {
 					getInventory().getSelectedItem().getItem().setSwingAmount(-45);
+					
+					if (Main.getWorldHandler().getActiveEntities().size() != 0 && !getInventory().getSelectedItem().equals(ItemStack.EMPTY)) {
+						for (int i = 0; i < Main.getWorldHandler().getActiveEntities().size(); i++) {
+							Entity e = Main.getWorldHandler().getActiveEntities().get(i);
+							
+							if (e.getBoundsAll().intersects(getSwingBounds(getInventory().getSelectedItem().getItem(), direction))) {
+								if (e instanceof EntityLiving) {
+									((EntityLiving) e).wasHit = true;
+									((EntityLiving) e).hit(getInventory().getSelectedItem().getItem().getDamage(), getInventory().getSelectedItem().getItem().getCritChance(), Main.getWorldHandler().getPlayer());
+								}
+							}
+						}
+					}
 				}
 				if (ti == 0) {
 					getInventory().getSelectedItem().getItem().setSwingAmount(90);
 					ti = tiMax;
-					t.stop();
+					atkT.stop();
 				} else {
 					ti--;
 				}
@@ -44,11 +53,15 @@ public class EntityPlayer extends EntityLiving {
 		}
 	});
 	
+	public EntityPlayer(double x, double y) {
+		super(x, y, 24, 44, 30, EntityProperties.PLAYER);
+	}
+	
 	@Override
 	public void tick() {
 		super.tick();
 		if (MouseInput.leftClick) {
-			attack(getInventory().getSelectedItem().getItem());
+			attack();
 		}
 	}
 	
@@ -57,22 +70,9 @@ public class EntityPlayer extends EntityLiving {
 		
 	}
 	
-	public void attack(Item item) {
-		if (!t.isRunning()) {
-			t.start();
-		}
-		
-		if (Main.getWorldHandler().getActiveEntities().size() != 0 && !getInventory().getSelectedItem().equals(ItemStack.EMPTY)) {
-			for (int i = 0; i < Main.getWorldHandler().getActiveEntities().size(); i++) {
-				Entity e = Main.getWorldHandler().getActiveEntities().get(i);
-				
-				if (e.getBoundsAll().intersects(getSwingBounds(item, direction))) {
-					if (e instanceof EntityLiving) {
-						((EntityLiving) e).hit(getInventory().getSelectedItem().getItem().getDamage(), getInventory().getSelectedItem().getItem().getCritChance(), this);
-						break;
-					}
-				}
-			}
+	public void attack() {
+		if (!atkT.isRunning()) {
+			atkT.start();
 		}
 	}
 	
