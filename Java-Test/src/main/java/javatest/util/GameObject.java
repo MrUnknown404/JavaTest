@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
 
-public class GameObject {
+public abstract class GameObject {
 	
 	protected Vec2d pos = new Vec2d();
 	protected boolean isActive;

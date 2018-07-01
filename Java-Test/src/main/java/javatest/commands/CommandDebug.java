@@ -24,6 +24,22 @@ public class CommandDebug extends Command {
 	
 	@Override
 	public void doCommand(List<Integer> argInt, List<Float> argFloat, List<Double> argDouble, List<Boolean> argBool, List<String> argString) {
-		Console.print("SUCCESSFUL!" + " :" + argFloat.get(0) + ":" + argString.get(0));
+		StringBuilder b = new StringBuilder();
+		if (!argInt.isEmpty()) {
+			b.append(argInt.get(0) + ", ");
+		}
+		if (!argFloat.isEmpty()) {
+			b.append(argFloat.get(0) + ", ");
+		}
+		if (!argDouble.isEmpty()) {
+			b.append(argDouble.get(0) + ", ");
+		}
+		if (!argBool.isEmpty()) {
+			b.append(argBool.get(0) + ", ");
+		}
+		if (!argString.isEmpty()) {
+			b.append(argString.get(0) + "!");
+		}
+		Console.print("SUCCESSFUL!" + " : " + b);
 	}
 }

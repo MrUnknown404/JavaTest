@@ -14,7 +14,6 @@ public abstract class EntityLiving extends Entity {
 	public int direction = 1;
 	protected int maxInvincibilityTime, invincibilityTime;
 	protected boolean isDead, wasHit;
-	protected EntityLiving attacker;
 	private double moveDirX = 0, jumpY = 0;
 	
 	public EntityLiving(double x, double y, int width, int height, int maxInvincibilityTime, EntityProperties type) {
@@ -38,7 +37,6 @@ public abstract class EntityLiving extends Entity {
 				damage = (float) (damage - ThreadLocalRandom.current().nextDouble((double) damage / 8));
 			}
 			
-			this.attacker = attacker;
 			damage = (float) MathHelper.roundTo(damage, 2);
 			
 			if (new Random().nextInt(100) < critChance) {
@@ -72,7 +70,7 @@ public abstract class EntityLiving extends Entity {
 		}
 	}
 	
-	public abstract void onHit(float damage, boolean isCrit);
+	protected abstract void onHit(float damage, boolean isCrit);
 	
 	@Override
 	public void doVelocity() {

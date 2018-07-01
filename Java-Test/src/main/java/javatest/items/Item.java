@@ -7,27 +7,24 @@ public class Item {
 	protected String name;
 	protected int maxStack, range, critChance;
 	protected float damage, swingSpeed, swingAmount = 90;
-	protected ItemType type;
 	
-	public Item(String name, int maxStack, int range, int critChance, float damage, float swingSpeed, ItemType type) {
+	public Item(String name, int maxStack, int range, int critChance, float damage, float swingSpeed) {
 		this.name = name;
 		this.maxStack = maxStack;
 		this.range = range;
 		this.critChance = critChance;
 		this.damage = damage;
 		this.swingSpeed = swingSpeed;
-		this.type = type;
 		Items.items.add(this);
 	}
 	
-	public Item(String name, int maxStack, int range, int critChance, double damage, double swingSpeed, ItemType type) {
+	public Item(String name, int maxStack, int range, int critChance, double damage, double swingSpeed) {
 		this.name = name;
 		this.maxStack = maxStack;
 		this.range = range;
 		this.critChance = critChance;
 		this.damage = (float) damage;
 		this.swingSpeed = (float) swingSpeed;
-		this.type = type;
 		Items.items.add(this);
 	}
 	
@@ -63,10 +60,6 @@ public class Item {
 		return swingAmount;
 	}
 	
-	public ItemType getItemType() {
-		return type;
-	}
-	
 	public void setSwingAmount(float i) {
 		swingAmount = i;
 	}
@@ -86,23 +79,4 @@ public class Item {
 		return "(" + name + ")";
 	}
 	
-	public enum ItemType {
-		item (0),
-		sword(1);
-		
-		private final int fId;
-		
-		private ItemType(int id) {
-			fId = id;
-		}
-		
-		public static ItemType getNumber(int id) {
-			for (ItemType type : values()) {
-				if (type.fId == id) {
-					return type;
-				}
-			}
-			throw new IllegalArgumentException("Invalid Type id: " + id);
-		}
-	}
 }

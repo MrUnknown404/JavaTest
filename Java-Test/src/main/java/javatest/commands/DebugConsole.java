@@ -9,14 +9,15 @@ import main.java.javatest.Main;
 public class DebugConsole {
 	public List<Command> commands = new ArrayList<Command>();
 	
-	private static final int MAX_ARGS = 5;
-	private static final int MAX_LINES = Command.ArgumentType.values().length;
+	private static final int MAX_ARGS = Command.ArgumentType.values().length, MAX_LINES = 7;
 	public boolean isConsoleOpen;
+	public int curLine;
 	public String input = "";
-	public List<String> lines = new ArrayList<String>();;
+	public List<String> lines = new ArrayList<String>(), writtenLines = new ArrayList<String>();
 	
 	public DebugConsole() {
 		lines.add("");
+		writtenLines.add("");
 	}
 	
 	public void addKey(Character c) {
@@ -72,17 +73,28 @@ public class DebugConsole {
 				errorStr = "No valid command was written";
 				break;
 			default:
-				errorStr = "Null something broke!";
+				errorStr = "Null! something broke!";
 				break;
 		}
 		
 		addLine(Main.getCommandConsole().input.trim());
 		clearInput();
-		addLine("* " + errorStr);
+		addLine("* " + errorStr.trim());
 	}
 	
 	public void finishCommand() {
 		String cmd = input.trim();
+		if (cmd.equals("")) {
+			isConsoleOpen = false;
+			curLine = 0;
+			return;
+		}
+		
+		if (writtenLines.size() > MAX_LINES) {
+			writtenLines.remove(writtenLines.size() - 1);
+		}
+		writtenLines.add(1, cmd);
+		
 		if (!cmd.startsWith("/")) {
 			printError(CommandError.noSlash);
 			return;
@@ -125,14 +137,14 @@ public class DebugConsole {
 		List<Boolean> boolArgs = new ArrayList<Boolean>();
 		List<String> stringArgs = new ArrayList<String>();
 		
-		String[] unFormatedArgs = null;
+		String[] unformatedArgs = null;
 		List<String> formatedArgs = new ArrayList<String>();
 		if (cmd.indexOf(" ") != -1) {
-			unFormatedArgs = cmd.substring(cmd.indexOf(" "), cmd.length()).split(" ");
+			unformatedArgs = cmd.substring(cmd.indexOf(" "), cmd.length()).split(" ");
 			
-			for (int i = 0; i < unFormatedArgs.length; i++) {
-				if (!unFormatedArgs[i].isEmpty()) {
-					formatedArgs.add(unFormatedArgs[i]);
+			for (int i = 0; i < unformatedArgs.length; i++) {
+				if (!unformatedArgs[i].isEmpty()) {
+					formatedArgs.add(unformatedArgs[i]);
 				}
 			}
 			

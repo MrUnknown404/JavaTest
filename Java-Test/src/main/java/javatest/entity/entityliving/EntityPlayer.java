@@ -19,7 +19,7 @@ public class EntityPlayer extends EntityLiving {
 	
 	private PlayerInventory inventory = new PlayerInventory();
 	private final double speed = 3;
-	public int tiMax = 50, ti = tiMax;
+	private int tiMax = 50, ti = tiMax;
 	
 	private Timer atkT = new Timer(1000 / 600, new ActionListener() {
 		@Override
@@ -42,6 +42,7 @@ public class EntityPlayer extends EntityLiving {
 						}
 					}
 				}
+				
 				if (ti == 0) {
 					getInventory().getSelectedItem().getItem().setSwingAmount(90);
 					ti = tiMax;

@@ -7,6 +7,7 @@ import java.util.Random;
 import main.java.javatest.Main;
 import main.java.javatest.entity.EntityItem;
 import main.java.javatest.items.ItemStack;
+import main.java.javatest.util.math.MathHelper;
 
 public class KeyInput extends KeyAdapter {
 
@@ -22,9 +23,22 @@ public class KeyInput extends KeyAdapter {
 		int key = e.getKeyCode();
 		
 		if (Main.getCommandConsole().isConsoleOpen) {
+			if (key == KeyEvent.VK_UP) {
+				if (Main.getCommandConsole().writtenLines.size() > 0) {
+					Main.getCommandConsole().curLine = MathHelper.clamp(Main.getCommandConsole().curLine += 1, 0, Main.getCommandConsole().writtenLines.size() - 1);
+					Main.getCommandConsole().input = Main.getCommandConsole().writtenLines.get(Main.getCommandConsole().curLine);
+				}
+			} else if (key == KeyEvent.VK_DOWN) {
+				if (Main.getCommandConsole().writtenLines.size() > 0) {
+					Main.getCommandConsole().curLine = MathHelper.clamp(Main.getCommandConsole().curLine -= 1, 0, Main.getCommandConsole().writtenLines.size() - 1);
+					Main.getCommandConsole().input = Main.getCommandConsole().writtenLines.get(Main.getCommandConsole().curLine);
+				}
+			}
+			
 			if (key == KeyEvent.VK_ESCAPE) {
 				Main.getCommandConsole().clearInput();
 				Main.getCommandConsole().isConsoleOpen = false;
+				Main.getCommandConsole().curLine = 0;
 			} else if (key != KeyEvent.VK_BACK_SPACE) {
 				if (e.getKeyChar() != '\uFFFF' && e.getKeyCode() != KeyEvent.VK_DELETE) {
 					Main.getCommandConsole().addKey(e.getKeyChar());
@@ -120,37 +134,51 @@ public class KeyInput extends KeyAdapter {
 				
 				if (key == KeyEvent.VK_0) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(9);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_1) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(0);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_2) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(1);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_3) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(2);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_4) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(3);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_5) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(4);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_6) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(5);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_7) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(6);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_8) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(7);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else if (key == KeyEvent.VK_9) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(8);
+					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				}
 				
 				if (key == KeyEvent.VK_EQUALS) {
 					if (Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() != Main.getWorldHandler().getPlayer().getInventory().getSlotsX() - 1) {
 						Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() + 1);
+						Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 					} else {
 						Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(0);
+						Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 					}
 				} else if (key == KeyEvent.VK_MINUS) {
 					if (Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() != 0) {
 						Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() - 1);
+						Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 					} else {
 						Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(9);
+						Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 					}
 				}
 			}

@@ -35,7 +35,7 @@ public class WorldHandler {
 	private EntityPlayer player = null;;
 	
 	public void generateWorld(int xSize, int ySize, int seed) {
-		Console.print(Console.WarningType.Info, "-Creating a new World..");
+		Console.print(Console.WarningType.Info, "Creating a new World..");
 		
 		worldInfo.worldLength = xSize;
 		worldInfo.worldHeight = ySize;
@@ -63,12 +63,12 @@ public class WorldHandler {
 		redoActives();
 		Console.print("Finished checking what block need to be active!");
 		wasCreated = true;
-		Console.print(Console.WarningType.Info, "-Finished creating the world!");
+		Console.print(Console.WarningType.Info, "Finished creating the world!");
 	}
 	
 	/** delete this */
 	public void clearWorld() {
-		Console.print(Console.WarningType.Info, "-Reseting the world...");
+		Console.print(Console.WarningType.Info, "Reseting the world...");
 		Console.print("Reseting blocks...");
 		allBlocks.clear();
 		activeBlocks.clear();
@@ -78,7 +78,7 @@ public class WorldHandler {
 		activeEntities.clear();
 		player = null;
 		Console.print("Finished reseting entities!");
-		Console.print(Console.WarningType.Info, "-Finished reseting the world!");
+		Console.print(Console.WarningType.Info, "Finished reseting the world!");
 	}
 	
 	public void tick() {

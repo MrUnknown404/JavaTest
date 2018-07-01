@@ -28,9 +28,9 @@ public abstract class Inventory {
 		for (int sy = 0; sy < slotsY; sy++) {
 			for (int sx = 0; sx < slotsX; sx++) {
 				if (sy == 0) {
-					slotsList.add(new Slot(4 + ((sx * 32) + (sx * 12)), 4 + ((sy * 32) + (sy * 12)), sx + (sy * 10)));
+					slotsList.add(new Slot(4 + (sx * 44), 4 + (sy * 44), sx + (sy * 10)));
 				} else {
-					slotsList.add(new Slot(4 + ((sx * 32) + (sx * 12)), 8 + ((sy * 32) + (sy * 12)), sx + (sy * 10)));
+					slotsList.add(new Slot(4 + (sx * 44), 8 + (sy * 44), sx + (sy * 10)));
 				}
 			}
 		}

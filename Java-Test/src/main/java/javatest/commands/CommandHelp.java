@@ -27,13 +27,7 @@ public class CommandHelp extends Command {
 		boolean tb = false;
 		for (Command cmd : Main.getCommandConsole().commands) {
 			if (argString.isEmpty()) {
-				if (cmd instanceof CommandHelp) {
-					Main.getCommandConsole().addLine(usage());
-				} else if (cmd instanceof CommandDebug) {
-					Main.getCommandConsole().addLine(((CommandDebug) cmd).usage());
-				} else if (cmd instanceof CommandGiveItem) {
-					Main.getCommandConsole().addLine(((CommandGiveItem) cmd).usage());
-				}
+				Main.getCommandConsole().addLine(cmd.usage());
 				tb = true;
 			} else {
 				if (Main.getCommandConsole().findCommand(cmd.getName()).getName().equals(argString.get(0))) {

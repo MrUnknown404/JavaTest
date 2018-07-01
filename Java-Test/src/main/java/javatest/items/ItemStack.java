@@ -1,11 +1,10 @@
 package main.java.javatest.items;
 
 import main.java.javatest.Main;
-import main.java.javatest.items.Item.ItemType;
 import main.java.javatest.util.math.MathHelper;
 
 public class ItemStack {
-	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty", 1, 0, 0, 0, 0, ItemType.item));
+	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty", 1, 0, 0, 0, 0));
 	
 	private int count;
 	private Item item;

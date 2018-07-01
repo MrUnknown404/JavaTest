@@ -28,7 +28,7 @@ public class Slot {
 	}
 	
 	public Rectangle getBoundsAll() {
-		return new Rectangle(x + 4, y + 4, 32, 32);
+		return new Rectangle(x, y, 40, 40);
 	}
 	
 	@Override

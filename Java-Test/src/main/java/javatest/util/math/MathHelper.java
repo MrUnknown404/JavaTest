@@ -3,6 +3,7 @@ package main.java.javatest.util.math;
 import main.java.javatest.util.Console;
 
 public class MathHelper {
+	
 	/** Returns the greatest integer less than or equal to the double argument */
 	public static int floor(double value) {
 		int i = (int) value;

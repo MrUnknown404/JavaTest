@@ -58,7 +58,7 @@ public class DebugHud extends Canvas {
 		g.setFont(FONT);
 		if (Main.getWorldHandler().getPlayer() != null) {
 			if (Main.getWorldHandler().getPlayer().getInventory().getIsInventoryOpen()) {
-				g.drawString(fps, 1, y += 134);
+				g.drawString(fps, 1, y += Main.getWorldHandler().getPlayer().getInventory().getSlotsY() * 44 + 4);
 			} else {
 				g.drawString(fps, 1, y += 46);
 			}

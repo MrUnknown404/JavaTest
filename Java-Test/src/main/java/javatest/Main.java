@@ -66,12 +66,12 @@ public class Main extends Canvas implements Runnable {
 	}
 	
 	private void preInit() {
-		Console.print(Console.WarningType.Info, "-Pre-Initialization started...");
+		Console.print(Console.WarningType.Info, "Pre-Initialization started...");
 		new Items();
 		
-		invHud.updateTextures();
 		renderer.findTextures();
 		renderer.setImgsAndKeys(invHud.getImgs(), invHud.getKeys());
+		invHud.updateTextures();
 		
 		MouseInput mouse = new MouseInput();
 		
@@ -92,23 +92,23 @@ public class Main extends Canvas implements Runnable {
 			}
 		});
 		
-		Console.print(Console.WarningType.Info, "-Pre-Initialization Finished!");
+		Console.print(Console.WarningType.Info, "Pre-Initialization Finished!");
 	}
 	
 	private void init() {
-		Console.print(Console.WarningType.Info, "-Initialization started...");
+		Console.print(Console.WarningType.Info, "Initialization started...");
 		
 		new CommandGiveItem();
 		new CommandDebug();
 		new CommandHelp();
 		
-		Console.print(Console.WarningType.Info, "-Initialization Finished!");
+		Console.print(Console.WarningType.Info, "Initialization Finished!");
 	}
 	
 	private void postInit() {
-		Console.print(Console.WarningType.Info, "-Post-Initialization started...");
+		Console.print(Console.WarningType.Info, "Post-Initialization started...");
 		
-		Console.print(Console.WarningType.Info, "-Post-Initialization Finished!");
+		Console.print(Console.WarningType.Info, "Post-Initialization Finished!");
 		
 		thread = new Thread(this);
 		thread.start();

@@ -22,6 +22,7 @@ public class ConsoleHud extends Canvas {
 			g.setColor(new Color(0.2f, 0.2f, 0.2f, 0.5f));
 			g.fillRect(0, 0, Main.WIDTH_DEF, ((Main.getCommandConsole().getMaxLines() + 2) * 16) - 10);
 			g.setColor(Color.GREEN);
+			
 			if (tb) {
 				g.drawString(">: " + Main.getCommandConsole().input + ":", 2, ((Main.getCommandConsole().getMaxLines() + 2) * 16) - 12);
 			} else {
