@@ -1,10 +1,10 @@
-package main.java.javatest.items;
+package main.java.javatest.items.util;
 
 import main.java.javatest.Main;
 import main.java.javatest.util.math.MathHelper;
 
 public class ItemStack {
-	public static final ItemStack EMPTY = new ItemStack(0, new Item("empty", 1, 0, 0, 0, 0));
+	public static final ItemStack EMPTY = new ItemStack(0, new ItemEmpty());
 	
 	private int count;
 	private Item item;
@@ -13,7 +13,12 @@ public class ItemStack {
 		this.count = count;
 		this.item = item;
 	}
-
+	
+	public ItemStack(Item item) {
+		this.count = 1;
+		this.item = item;
+	}
+	
 	public void decreaseCount() {
 		count--;
 		if (count == 0) {

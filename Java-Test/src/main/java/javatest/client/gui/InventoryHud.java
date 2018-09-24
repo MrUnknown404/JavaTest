@@ -11,7 +11,7 @@ import java.util.List;
 import main.java.javatest.Main;
 import main.java.javatest.client.MouseInput;
 import main.java.javatest.init.Items;
-import main.java.javatest.items.Slot;
+import main.java.javatest.items.util.Slot;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.Resource;
 

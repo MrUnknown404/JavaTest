@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import main.java.javatest.Main;
-
 public abstract class Command {
 
 	protected boolean isArgsOptional;
@@ -20,8 +18,6 @@ public abstract class Command {
 		if (typeOfArgs != null) {
 			this.typeOfArgs = typeOfArgs;
 		}
-		
-		Main.getCommandConsole().commands.add(this);
 	}
 	
 	public abstract String usage();

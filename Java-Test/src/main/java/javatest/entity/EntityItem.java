@@ -2,7 +2,7 @@ package main.java.javatest.entity;
 
 import main.java.javatest.Main;
 import main.java.javatest.entity.util.EntityProperties;
-import main.java.javatest.items.ItemStack;
+import main.java.javatest.items.util.ItemStack;
 
 public class EntityItem extends Entity {
 

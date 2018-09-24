@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferStrategy;
 
+import main.java.javatest.blocks.util.BlockProperties;
 import main.java.javatest.client.Camera;
 import main.java.javatest.client.KeyInput;
 import main.java.javatest.client.MouseInput;
@@ -67,6 +68,7 @@ public class Main extends Canvas implements Runnable {
 	
 	private void preInit() {
 		Console.print(Console.WarningType.Info, "Pre-Initialization started...");
+		new BlockProperties();
 		new Items();
 		
 		renderer.findTextures();
@@ -98,9 +100,9 @@ public class Main extends Canvas implements Runnable {
 	private void init() {
 		Console.print(Console.WarningType.Info, "Initialization started...");
 		
-		new CommandGiveItem();
-		new CommandDebug();
-		new CommandHelp();
+		CONSOLE.registerCommand(new CommandGiveItem());
+		CONSOLE.registerCommand(new CommandDebug());
+		CONSOLE.registerCommand(new CommandHelp());
 		
 		Console.print(Console.WarningType.Info, "Initialization Finished!");
 	}

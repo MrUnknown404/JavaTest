@@ -6,7 +6,7 @@ import java.util.List;
 import main.java.javatest.blocks.util.BlockProperties;
 
 public class Blocks {
-	public static List<BlockProperties> blocks = new ArrayList<BlockProperties>();
+	private static List<BlockProperties> blocks = new ArrayList<BlockProperties>();
 	
 	public static BlockProperties findBlock(String name) {
 		if (name.equals("") || name == null) {

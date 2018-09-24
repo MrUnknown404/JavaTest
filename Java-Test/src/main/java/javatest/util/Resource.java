@@ -6,39 +6,21 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import main.java.javatest.entity.util.EntityProperties;
-import main.java.javatest.init.Blocks;
-
 public class Resource {
 
 	private static final String BASE_LOCATION = "/main/resources/javatest/assets/textures/";
 	private static final String FILE_TYPE = ".png";
 	
-	public static BufferedImage getTexture(ResourceType location, Blocks.EnumBlocks textureName) {
-		InputStream f = Resource.class.getResourceAsStream(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName.toString().toLowerCase() + FILE_TYPE);
-		BufferedImage i = null;
-		try {
-			i = ImageIO.read(f);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return i;
-	}
-	
-	public static BufferedImage getTexture(ResourceType location, EntityProperties.EntityType textureName) {
-		InputStream f = Resource.class.getResourceAsStream(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName.toString().toLowerCase() + FILE_TYPE);
-		BufferedImage i = null;
-		try {
-			i = ImageIO.read(f);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return i;
-	}
-	
 	public static BufferedImage getTexture(ResourceType location, String textureName) {
-		InputStream f = Resource.class.getResourceAsStream(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName + FILE_TYPE);
+		InputStream f = null;;
+		if (Resource.class.getResourceAsStream(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName + FILE_TYPE) == null) {
+			Console.print(Console.WarningType.Error, "Cannot find texture : " + BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName + FILE_TYPE);
+			f = Resource.class.getResourceAsStream(BASE_LOCATION + location.toString().toLowerCase() + "/missing" + FILE_TYPE);
+		} else {
+			f = Resource.class.getResourceAsStream(BASE_LOCATION + location.toString().toLowerCase() + "/" + textureName + FILE_TYPE);
+		}
 		BufferedImage i = null;
+		
 		try {
 			i = ImageIO.read(f);
 		} catch (IOException e) {

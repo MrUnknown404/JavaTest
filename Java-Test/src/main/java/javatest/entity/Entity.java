@@ -1,12 +1,15 @@
 package main.java.javatest.entity;
 
+import java.util.List;
+
 import main.java.javatest.Main;
-import main.java.javatest.blocks.Block;
+import main.java.javatest.blocks.util.Block;
 import main.java.javatest.entity.entityliving.EntityPlayer;
 import main.java.javatest.entity.util.EntityProperties;
 import main.java.javatest.util.TickableGameObject;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2d;
+import main.java.javatest.world.util.Chunk;
 
 public abstract class Entity extends TickableGameObject {
 	
@@ -28,13 +31,20 @@ public abstract class Entity extends TickableGameObject {
 	
 	/** Gets what's below the entity plus the argument */
 	public TickableGameObject getBelow(double y) {
-		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
-			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
-			if (obj instanceof Block && obj != this) {
-				Block tObj = (Block) obj;
-				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - Main.getWorldHandler().getWorldInfo().gravity + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
-						return tObj;
+		if (Main.getWorldHandler().getChunksEntityIsIn(this).isEmpty()) {
+			return null;
+		}
+		
+		List<Chunk> cnks = Main.getWorldHandler().getChunksEntityIsIn(this);
+		for (int i2 = 0; i2 < cnks.size(); i2++) {
+			for (int i = 0; i < cnks.get(i2).getBlocks().size(); i++) {
+				TickableGameObject obj = cnks.get(i2).getBlocks().get(i);
+				if (obj instanceof Block && obj != this) {
+					Block tObj = (Block) obj;
+					if (tObj.getBlockProperties().getHasCollision()) {
+						if (getBoundsBottom().intersects(tObj.getBoundsTop().x, tObj.getBoundsTop().y - Main.getWorldHandler().getWorldInfo().gravity + y, tObj.getBoundsTop().getWidth(), tObj.getBoundsTop().getHeight())) {
+							return tObj;
+						}
 					}
 				}
 			}
@@ -44,13 +54,20 @@ public abstract class Entity extends TickableGameObject {
 
 	/** Gets what's above the entity plus the argument */
 	public TickableGameObject getAbove(double y) {
-		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
-			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
-			if (obj instanceof Block && obj != this) {
-				Block tObj = (Block) obj;
-				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - Main.getWorldHandler().getWorldInfo().gravity + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
-						return tObj;
+		if (Main.getWorldHandler().getChunksEntityIsIn(this).isEmpty()) {
+			return null;
+		}
+		
+		List<Chunk> cnks = Main.getWorldHandler().getChunksEntityIsIn(this);
+		for (int i2 = 0; i2 < cnks.size(); i2++) {
+			for (int i = 0; i < cnks.get(i2).getBlocks().size(); i++) {
+				TickableGameObject obj = cnks.get(i2).getBlocks().get(i);
+				if (obj instanceof Block && obj != this) {
+					Block tObj = (Block) obj;
+					if (tObj.getBlockProperties().getHasCollision()) {
+						if (getBoundsTop().intersects(tObj.getBoundsBottom().x, tObj.getBoundsBottom().y - Main.getWorldHandler().getWorldInfo().gravity + y, tObj.getBoundsBottom().getWidth(), tObj.getBoundsBottom().getHeight())) {
+							return tObj;
+						}
 					}
 				}
 			}
@@ -60,13 +77,20 @@ public abstract class Entity extends TickableGameObject {
 	
 	/** Gets what's left the entity plus the argument */
 	public TickableGameObject getLeft(double x) {
-		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
-			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
-			if (obj instanceof Block && obj != this) {
-				Block tObj = (Block) obj;
-				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsLeft().intersects(tObj.getBoundsRight().x + x, tObj.getBoundsRight().y, tObj.getBoundsRight().getWidth(), tObj.getBoundsRight().getHeight())) {
-						return tObj;
+		if (Main.getWorldHandler().getChunksEntityIsIn(this).isEmpty()) {
+			return null;
+		}
+		
+		List<Chunk> cnks = Main.getWorldHandler().getChunksEntityIsIn(this);
+		for (int i2 = 0; i2 < cnks.size(); i2++) {
+			for (int i = 0; i < cnks.get(i2).getBlocks().size(); i++) {
+				TickableGameObject obj = cnks.get(i2).getBlocks().get(i);
+				if (obj instanceof Block && obj != this) {
+					Block tObj = (Block) obj;
+					if (tObj.getBlockProperties().getHasCollision()) {
+						if (getBoundsLeft().intersects(tObj.getBoundsRight().x + x, tObj.getBoundsRight().y, tObj.getBoundsRight().getWidth(), tObj.getBoundsRight().getHeight())) {
+							return tObj;
+						}
 					}
 				}
 			}
@@ -76,13 +100,20 @@ public abstract class Entity extends TickableGameObject {
 	
 	/** Gets what's right the entity plus the argument */
 	public TickableGameObject getRight(double x) {
-		for (int i = 0; i < Main.getWorldHandler().getActiveBlocks().size(); i++) {
-			TickableGameObject obj = Main.getWorldHandler().getActiveBlocks().get(i);
-			if (obj instanceof Block && obj != this) {
-				Block tObj = (Block) obj;
-				if (tObj.getBlockProperties().getHasCollision()) {
-					if (getBoundsRight().intersects(tObj.getBoundsLeft().x + x, tObj.getBoundsLeft().y, tObj.getBoundsLeft().getWidth(), tObj.getBoundsLeft().getHeight())) {
-						return tObj;
+		if (Main.getWorldHandler().getChunksEntityIsIn(this).isEmpty()) {
+			return null;
+		}
+		
+		List<Chunk> cnks = Main.getWorldHandler().getChunksEntityIsIn(this);
+		for (int i2 = 0; i2 < cnks.size(); i2++) {
+			for (int i = 0; i < cnks.get(i2).getBlocks().size(); i++) {
+				TickableGameObject obj = cnks.get(i2).getBlocks().get(i);
+				if (obj instanceof Block && obj != this) {
+					Block tObj = (Block) obj;
+					if (tObj.getBlockProperties().getHasCollision()) {
+						if (getBoundsRight().intersects(tObj.getBoundsLeft().x + x, tObj.getBoundsLeft().y, tObj.getBoundsLeft().getWidth(), tObj.getBoundsLeft().getHeight())) {
+							return tObj;
+						}
 					}
 				}
 			}

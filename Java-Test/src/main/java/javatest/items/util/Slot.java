@@ -1,4 +1,4 @@
-package main.java.javatest.items;
+package main.java.javatest.items.util;
 
 import java.awt.Rectangle;
 
@@ -24,7 +24,7 @@ public class Slot {
 	}
 	
 	public String toString() {
-		return "(" + x + ", " + y + ", " + slotID + ")";
+		return "(" + x + ", " + y + " | " + slotID + ")";
 	}
 	
 	public Rectangle getBoundsAll() {

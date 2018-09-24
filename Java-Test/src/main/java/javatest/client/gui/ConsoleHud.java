@@ -40,18 +40,14 @@ public class ConsoleHud extends Canvas {
 				}
 			}
 		}
-		
 	}
 	
 	public void tick() {
 		if (ti == 0) {
 			ti = 50;
-			if (tb) {
-				tb = false;
-			} else {
-				tb = true;
-			}
+			tb = !tb;
+		} else {
+			ti--;
 		}
-		ti--;
 	}
 }

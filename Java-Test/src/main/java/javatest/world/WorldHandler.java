@@ -6,33 +6,34 @@ import java.util.List;
 import java.util.Random;
 
 import main.java.javatest.Main;
-import main.java.javatest.blocks.Block;
-import main.java.javatest.blocks.BlockStoneBrick;
+import main.java.javatest.blocks.util.Block;
+import main.java.javatest.client.MouseInput;
+import main.java.javatest.client.gui.DebugHud;
 import main.java.javatest.entity.Entity;
-import main.java.javatest.entity.EntityItem;
 import main.java.javatest.entity.entityliving.EntityDummy;
 import main.java.javatest.entity.entityliving.EntityLiving;
 import main.java.javatest.entity.entityliving.EntityPlayer;
-import main.java.javatest.init.Items;
-import main.java.javatest.items.ItemStack;
 import main.java.javatest.util.Console;
 import main.java.javatest.util.TickableGameObject;
-import main.java.javatest.util.math.BlockPos;
+import main.java.javatest.util.math.MathHelper;
+import main.java.javatest.util.math.Vec2i;
+import main.java.javatest.world.util.Chunk;
 import main.java.javatest.world.util.WorldInfo;
 
 public class WorldHandler {
 
 	//private static final String SAVE_LOC = "C:/Users/" + System.getProperty("user.name") + "/Documents/My Games/JavaTest/worlds/";
 	
-	private List<Block> allBlocks = new ArrayList<Block>();
+	private List<Chunk> allChunks = new ArrayList<Chunk>();
+	private List<Chunk> activeChunks = new ArrayList<Chunk>();
+	
 	private List<Entity> allEntities = new ArrayList<Entity>();
-	private List<Block> activeBlocks = new ArrayList<Block>();
 	private List<Entity> activeEntities = new ArrayList<Entity>();
 	
 	private boolean wasCreated;
 	private WorldInfo worldInfo = new WorldInfo();
 	private Random random;
-	private EntityPlayer player = null;;
+	private EntityPlayer player = null;
 	
 	public void generateWorld(int xSize, int ySize, int seed) {
 		Console.print(Console.WarningType.Info, "Creating a new World..");
@@ -45,19 +46,26 @@ public class WorldHandler {
 		
 		Main.getCamera().setPosition(((worldInfo.worldLength / 2) * Block.getBlockSize()), -15 * -Block.getBlockSize());
 		
-		Console.print("Placing blocks...");
-		for (int width = 0; width < worldInfo.worldLength; width++) {
-			for (int height = 0; height < worldInfo.worldHeight; height++) {
-				addObjectAll(new BlockStoneBrick(new BlockPos(width, height)));
+		int ti = 0;
+		
+		Console.print("Placing chunks...");
+		for (int height = 0; height < 200; height++) {
+			for (int width = 0; width < 500; width++) {
+				allChunks.add(new Chunk(width, height));
+				
+				ti++;
+				DebugHud.genPerc = MathHelper.percentage(ti, 500 * 200);
 			}
 		}
-		Console.print("Finished placing blocks!");
+		Console.print("Finished placing chunks!");
+		
+		ti = 0;
 		
 		Console.print("Placing player && dummy!");
-		player = new EntityPlayer(worldInfo.worldLength  / 2 * Block.getBlockSize() - 12, -64);
-		addObjectAll(new EntityDummy(worldInfo.worldLength  / 2 * Block.getBlockSize() - 60, -64));
-		addObjectAll(new EntityDummy(worldInfo.worldLength  / 2 * Block.getBlockSize() - 12, -64));
-		addObjectAll(new EntityDummy(worldInfo.worldLength  / 2 * Block.getBlockSize() + 36, -64));
+		player = new EntityPlayer(worldInfo.worldLength    / 2 * Block.getBlockSize() - 12, -64);
+		addObjectAll(new EntityDummy(worldInfo.worldLength / 2 * Block.getBlockSize() - 60, -64));
+		addObjectAll(new EntityDummy(worldInfo.worldLength / 2 * Block.getBlockSize() - 12, -64));
+		addObjectAll(new EntityDummy(worldInfo.worldLength / 2 * Block.getBlockSize() + 36, -64));
 		
 		Console.print("Checking what block need to be active...");
 		redoActives();
@@ -69,10 +77,10 @@ public class WorldHandler {
 	/** delete this */
 	public void clearWorld() {
 		Console.print(Console.WarningType.Info, "Reseting the world...");
-		Console.print("Reseting blocks...");
-		allBlocks.clear();
-		activeBlocks.clear();
-		Console.print("Finished reseting blocks!");
+		Console.print("Reseting chunks...");
+		allChunks.clear();
+		activeChunks.clear();
+		Console.print("Finished reseting chunks!");
 		Console.print("Reseting entities...");
 		allEntities.clear();
 		activeEntities.clear();
@@ -87,14 +95,14 @@ public class WorldHandler {
 			getPlayer().tickAlive();
 		}
 		
-		for (int i = 0; i < activeBlocks.size(); i++) {
-			Block obj = activeBlocks.get(i);
+		for (int i = 0; i < activeChunks.size(); i++) {
+			Chunk cnk = activeChunks.get(i);
 			
-			if (obj == null) {
+			if (cnk == null) {
 				return;
 			}
 			
-			obj.tick();
+			cnk.tick();
 		}
 		
 		for (int i = 0; i < activeEntities.size(); i++) {
@@ -112,23 +120,20 @@ public class WorldHandler {
 	}
 	
 	public void redoActives() {
-		activeBlocks.clear();
+		activeChunks.clear();
 		activeEntities.clear();
 		
 		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH_DEF, Main.HEIGHT_DEF);
 		
-		for (int i = 0; i < allBlocks.size(); i++) {
-			Block obj = allBlocks.get(i);
+		for (int i = 0; i < allChunks.size(); i++) {
+			Chunk cnk = allChunks.get(i);
 			
-			if (obj == null) {
+			if (cnk == null) {
 				continue;
 			}
 			
-			if (obj.getBoundsAll().intersects(rect)) {
-				obj.setIsActive(true);
-				activeBlocks.add(obj);
-			} else {
-				obj.setIsActive(false);
+			if (cnk.getChunkActiveBounds().intersects(rect)) {
+				activeChunks.add(cnk);
 			}
 		}
 		
@@ -155,15 +160,7 @@ public class WorldHandler {
 		
 		Rectangle rect = new Rectangle((int) -Main.getCamera().getPositionX(), (int) -Main.getCamera().getPositionY(), Main.WIDTH_DEF, Main.HEIGHT_DEF);
 		
-		if (obj instanceof Block) {
-			activeBlocks.remove(obj);
-			if (obj.getBoundsAll().intersects(rect) && !obj.getIsActive() && allBlocks.contains(obj)) {
-				obj.setIsActive(true);
-				activeBlocks.add((Block) obj);
-			} else {
-				obj.setIsActive(false);
-			}
-		} else if (obj instanceof Entity) {
+		if (obj instanceof Entity) {
 			activeEntities.remove(obj);
 			if ((((obj.getBoundsAll().intersects(rect) && !obj.getIsActive()) || ((Entity) obj).getEntityProperties().getAlwaysLoad())) && allEntities.contains(obj)) {
 				obj.setIsActive(true);
@@ -180,12 +177,7 @@ public class WorldHandler {
 			return;
 		}
 		
-		if (obj instanceof Block) {
-			if (!allBlocks.contains(obj)) {
-				allBlocks.add((Block) obj);
-				redoSpecificActiveObject(obj);
-			}
-		} else if (obj instanceof Entity) {
+		if (obj instanceof Entity) {
 			if (!allEntities.contains(obj)) {
 				allEntities.add((Entity) obj);
 				redoSpecificActiveObject(obj);
@@ -198,18 +190,7 @@ public class WorldHandler {
 			Console.print(Console.WarningType.Error, "object is null!");
 		}
 		
-		if (obj instanceof Block) {
-			if (allBlocks.contains(obj)) {
-				if (shouldDrop) {
-					Main.getWorldHandler().addObjectAll(new EntityItem(obj.getPositionX() + 2, obj.getPositionY() + 2, new ItemStack(1, Items.findItem(((Block) obj).getBlockProperties().getBlockType().toString()))));
-				}
-				allBlocks.remove(obj);
-				redoSpecificActiveObject(obj);
-				if (activeBlocks.contains(obj)) {
-					activeBlocks.remove(obj);
-				}
-			}
-		} else if (obj instanceof Entity) {
+		if (obj instanceof Entity) {
 			if (allEntities.contains(obj)) {
 				allEntities.remove(obj);
 				redoSpecificActiveObject(obj);
@@ -220,16 +201,40 @@ public class WorldHandler {
 		}
 	}
 	
-	public List<Block> getAllBlocks() {
-		return allBlocks;
+	public List<Chunk> getChunksEntityIsIn(Entity entity) {
+		List<Chunk> cnks = new ArrayList<Chunk>();
+		for (int i = 0; i < activeChunks.size(); i++) {
+			Chunk cnk = activeChunks.get(i);
+			if (cnk.getChunkActiveBounds().intersects(entity.getBoundsAll())) {
+				cnks.add(cnk);
+			}
+		}
+		return cnks;
+	}
+	
+	public Chunk getChunkAtMouse() {
+		for (int i = 0; i < activeChunks.size(); i++) {
+			Chunk cnk = activeChunks.get(i);
+			
+			Vec2i vec = new Vec2i(MouseInput.vec.x - Main.getCamera().getPositionX(), MouseInput.vec.y - Main.getCamera().getPositionY());
+			
+			if (cnk != null && cnk.getChunkBounds().intersects(new Rectangle(vec.x, vec.y, 1, 1))) {
+				return cnk;
+			}
+		}
+		return null;
+	}
+	
+	public List<Chunk> getAllChunks() {
+		return allChunks;
+	}
+	
+	public List<Chunk> getActiveChunks() {
+		return activeChunks;
 	}
 	
 	public List<Entity> getAllEntities() {
 		return allEntities;
-	}
-	
-	public List<Block> getActiveBlocks() {
-		return activeBlocks;
 	}
 	
 	public List<Entity> getActiveEntities() {

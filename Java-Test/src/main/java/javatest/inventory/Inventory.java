@@ -5,8 +5,8 @@ import java.util.List;
 
 import main.java.javatest.Main;
 import main.java.javatest.entity.EntityItem;
-import main.java.javatest.items.ItemStack;
-import main.java.javatest.items.Slot;
+import main.java.javatest.items.util.ItemStack;
+import main.java.javatest.items.util.Slot;
 
 public abstract class Inventory {
 	

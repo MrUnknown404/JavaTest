@@ -5,16 +5,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
 import main.java.javatest.Main;
-import main.java.javatest.blocks.Block;
+import main.java.javatest.blocks.util.Block;
 import main.java.javatest.client.gui.DebugHud;
-import main.java.javatest.items.ItemStack;
+import main.java.javatest.items.util.ItemStack;
 import main.java.javatest.util.math.MathHelper;
 import main.java.javatest.util.math.Vec2i;
 
 public class MouseInput extends MouseAdapter {
 
 	public static Vec2i vec = new Vec2i();
-	public static boolean leftClick;
 	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
@@ -22,18 +21,14 @@ public class MouseInput extends MouseAdapter {
 			if (e.getWheelRotation() == 1) {
 				if (Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() != Main.getWorldHandler().getPlayer().getInventory().getSlotsX() - 1) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() + 1);
-					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(0);
-					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				}
 			} else {
 				if (Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() != 0) {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(Main.getWorldHandler().getPlayer().getInventory().getSelectedSlot() - 1);
-					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				} else {
 					Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(9);
-					Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 				}
 			}
 		}
@@ -109,10 +104,10 @@ public class MouseInput extends MouseAdapter {
 					}
 				}
 			} else if (Main.getWorldHandler().getPlayer() != null && !Main.getWorldHandler().getPlayer().getInventory().getIsInventoryOpen()) {
+				Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().onRightClickPress();
 				for (int i = 0; i < Main.getWorldHandler().getPlayer().getInventory().getSlotsX(); i++) {
 					if (Main.getWorldHandler().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
 						Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(i);
-						Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().setSwingAmount(90);
 					}
 				}
 			}
@@ -121,11 +116,9 @@ public class MouseInput extends MouseAdapter {
 				return;
 			}
 			
-			boolean tb = false;
 			if (Main.getWorldHandler().getPlayer().getInventory().getIsInventoryOpen()) {
 				for (int i = 0; i < Main.getWorldHandler().getPlayer().getInventory().getSlots(); i++) {
 					if (Main.getWorldHandler().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
-						tb = true;
 						if (Main.getWorldHandler().getPlayer().getInventory().getItemInMouse() == null) {
 							if (!Main.getWorldHandler().getPlayer().getInventory().getItems().get(i).equals(ItemStack.EMPTY)) {
 								Main.getWorldHandler().getPlayer().getInventory().setItemInMouse(Main.getWorldHandler().getPlayer().getInventory().getItems().get(i));
@@ -146,16 +139,12 @@ public class MouseInput extends MouseAdapter {
 					}
 				}
 			} else if (Main.getWorldHandler().getPlayer() != null && !Main.getWorldHandler().getPlayer().getInventory().getIsInventoryOpen()) {
+				Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().onLeftClickPress();
 				for (int i = 0; i < Main.getWorldHandler().getPlayer().getInventory().getSlotsX(); i++) {
 					if (Main.getWorldHandler().getPlayer().getInventory().getSlotsList().get(i).getBoundsAll().intersects(vec.x, vec.y, 1, 1)) {
 						Main.getWorldHandler().getPlayer().getInventory().setSelectedSlot(i);
 					}
 				}
-			}
-			
-			if (!tb) {
-				leftClick = true;
-				Main.getWorldHandler().getPlayer().attack();
 			}
 		}
 	}
@@ -163,7 +152,13 @@ public class MouseInput extends MouseAdapter {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == 1) {
-			leftClick = false;
+			if (Main.getWorldHandler().getPlayer() != null) {
+				Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().onLeftClickRelease();
+			}
+		} else if (e.getButton() == 3) {
+			if (Main.getWorldHandler().getPlayer() != null) {
+				Main.getWorldHandler().getPlayer().getInventory().getSelectedItem().getItem().onRightClickRelease();
+			}
 		}
 	}
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import main.java.javatest.Main;
 import main.java.javatest.init.Items;
-import main.java.javatest.items.ItemStack;
+import main.java.javatest.items.util.ItemStack;
 
 public class CommandGiveItem extends Command {
 
